@@ -629,7 +629,7 @@ const SinistreSynthesis = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <FileText className="h-5 w-5" />
-                    Historique et documents du sinistre
+                    Documents du sinistre
                     <Badge className="bg-purple-100 text-purple-800 ml-2">
                       <Bot className="h-3 w-3 mr-1" />
                       {allDocuments.length} documents analysés par IA
