@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, FileText, AlertTriangle, Clock, CheckCircle, Send, Calendar, User, MapPin } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { TabsManager } from "@/components/TabsManager";
+import { Header } from "@/components/Header";
 
 const SinistreSynthesis = () => {
   const navigate = useNavigate();
@@ -130,7 +130,7 @@ const SinistreSynthesis = () => {
 
   return (
     <div className="min-h-screen flex flex-col w-full bg-gray-50">
-      <TabsManager />
+      <Header />
       <div className="flex items-center gap-4 px-6 py-3 bg-white border-b border-gray-200">
         <Button
           variant="ghost"
