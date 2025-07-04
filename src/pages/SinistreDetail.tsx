@@ -106,10 +106,54 @@ const mockSinistreData: SinistreData = {
   },
   
   documents: [
-    { nom: "Courrier de mise en cause", type: "Courrier", date: "25/09/2024" },
-    { nom: "Photos des dommages", type: "Photos", date: "27/09/2024" },
-    { nom: "Devis de réparation", type: "Devis", date: "28/09/2024" },
-    { nom: "Attestation RC Décennale", type: "Attestation", date: "28/09/2024" }
+    { 
+      nom: "Courrier de mise en cause", 
+      type: "Courrier", 
+      date: "25/09/2024",
+      aiClassification: {
+        originalName: "Courrier_client_plainte_092024.pdf",
+        newName: "Mise_en_cause_RC_Decennale_SAS_Commerce_Plus.pdf",
+        category: "Correspondance juridique",
+        confidence: 0.95,
+        summary: "Courrier officiel de mise en cause de la SARL Bâti Construct par SAS Commerce Plus pour dommages structurels. Document détaillant les désordres constatés et demandant réparation sous RC Décennale."
+      }
+    },
+    { 
+      nom: "Photos des dommages", 
+      type: "Photos", 
+      date: "27/09/2024",
+      aiClassification: {
+        originalName: "IMG_20240927_multiple.zip",
+        newName: "Constat_photographique_dommages_42_Rue_Commerce.zip",
+        category: "Preuves visuelles",
+        confidence: 0.98,
+        summary: "Série de 15 photographies haute résolution documentant les fissures murales, l'affaissement du plancher et les infiltrations d'eau. Images géolocalisées et horodatées conformes aux standards d'expertise."
+      }
+    },
+    { 
+      nom: "Devis de réparation", 
+      type: "Devis", 
+      date: "28/09/2024",
+      aiClassification: {
+        originalName: "Devis_reparation_urgent_v2.pdf",
+        newName: "Evaluation_travaux_reparation_Commerce_Plus_Septembre2024.pdf",
+        category: "Évaluation financière",
+        confidence: 0.92,
+        summary: "Devis détaillé de 67 000€ HT pour réparation complète des désordres. Inclut démolition partielle, reprise des fondations, étanchéité et remise en état. Délai estimé: 6 semaines."
+      }
+    },
+    { 
+      nom: "Attestation RC Décennale", 
+      type: "Attestation", 
+      date: "28/09/2024",
+      aiClassification: {
+        originalName: "Attestation_assurance_2021.pdf",
+        newName: "Attestation_RC_Decennale_SARL_Bati_Construct_2021-2024.pdf",
+        category: "Document contractuel",
+        confidence: 0.99,
+        summary: "Attestation d'assurance RC Décennale valide confirmant la couverture pour les travaux litigieux. Plafonds de garantie conformes, période de validité vérifiée. Aucune exclusion applicable au sinistre."
+      }
+    }
   ],
   
   aiGenerated: {
@@ -127,6 +171,50 @@ export default function SinistreDetail() {
 
   const AIIndicator = () => (
     <Sparkles className="w-4 h-4 text-purple-600 inline ml-1" />
+  );
+
+  const DocumentCard = ({ doc, index }: { doc: any, index: number }) => (
+    <div key={index} className="border rounded-lg p-4 hover:bg-gray-50 cursor-pointer border-blue-200 space-y-3">
+      <div className="flex items-start justify-between">
+        <div className="flex items-center gap-2 mb-2">
+          <FileText className="w-5 h-5 text-blue-600" />
+          <div>
+            <span className="text-sm font-bold text-gray-900">{doc.nom}</span>
+            <div className="text-xs text-gray-600">{doc.type} • {doc.date}</div>
+          </div>
+        </div>
+        <AIIndicator />
+      </div>
+      
+      {doc.aiClassification && (
+        <div className="space-y-2 pt-2 border-t border-gray-100">
+          <div className="flex items-center gap-2">
+            <Badge variant="outline" className="text-xs bg-purple-50 text-purple-700">
+              {doc.aiClassification.category}
+            </Badge>
+            <div className="text-xs text-gray-500">
+              Confiance: {Math.round(doc.aiClassification.confidence * 100)}%
+            </div>
+          </div>
+          
+          <div className="text-xs space-y-1">
+            <div>
+              <span className="font-medium text-gray-600">Nom original:</span>
+              <span className="text-gray-500 ml-1">{doc.aiClassification.originalName}</span>
+            </div>
+            <div>
+              <span className="font-medium text-gray-600">Renommé en:</span>
+              <span className="text-blue-600 ml-1 font-medium">{doc.aiClassification.newName}</span>
+            </div>
+          </div>
+          
+          <div className="text-xs">
+            <span className="font-medium text-gray-600">Synthèse IA:</span>
+            <p className="text-gray-700 mt-1 leading-relaxed">{doc.aiClassification.summary}</p>
+          </div>
+        </div>
+      )}
+    </div>
   );
 
   return (
@@ -411,20 +499,16 @@ export default function SinistreDetail() {
               {/* Documents */}
               <Card className="border-blue-200">
                 <CardHeader className="bg-blue-50">
-                  <CardTitle className="text-blue-800">Documents contractuels et assurantiels</CardTitle>
+                  <CardTitle className="flex items-center gap-2 text-blue-800">
+                    <FileText className="w-5 h-5" />
+                    Documents contractuels et assurantiels
+                    <AIIndicator />
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="pt-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     {sinistre.documents.map((doc, index) => (
-                      <div key={index} className="border rounded-lg p-3 hover:bg-gray-50 cursor-pointer border-blue-200">
-                        <div className="flex items-center gap-2 mb-1">
-                          <FileText className="w-4 h-4 text-blue-600" />
-                          <span className="text-sm font-bold">{doc.nom}</span>
-                        </div>
-                        <div className="text-xs text-gray-600">
-                          {doc.type} • {doc.date}
-                        </div>
-                      </div>
+                      <DocumentCard key={index} doc={doc} index={index} />
                     ))}
                   </div>
                 </CardContent>
