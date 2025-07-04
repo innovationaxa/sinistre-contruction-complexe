@@ -6,17 +6,17 @@ import { Header } from "@/components/Header";
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex flex-col w-full bg-gray-50">
-      <Header />
-      <SidebarProvider>
+    <SidebarProvider>
+      <div className="min-h-screen flex flex-col w-full bg-gray-100">
+        <Header />
         <div className="flex flex-1">
           <AppSidebar />
-          <main className="flex-1 p-4 lg:p-6">
+          <main className="flex-1 p-6">
             <ActivitiesTable />
           </main>
         </div>
-      </SidebarProvider>
-    </div>
+      </div>
+    </SidebarProvider>
   );
 };
 
