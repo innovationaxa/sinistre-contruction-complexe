@@ -253,9 +253,9 @@ const SinistreSynthesis = () => {
   };
 
   const getConfidenceColor = (confidence: number) => {
-    if (confidence >= 90) return "text-green-600 bg-green-50";
-    if (confidence >= 80) return "text-yellow-600 bg-yellow-50";
-    return "text-red-600 bg-red-50";
+    if (confidence >= 90) return "text-green-600 bg-green-50 border-green-200";
+    if (confidence >= 80) return "text-yellow-600 bg-yellow-50 border-yellow-200";
+    return "text-red-600 bg-red-50 border-red-200";
   };
 
   return (
@@ -611,19 +611,19 @@ const SinistreSynthesis = () => {
                   </p>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-6">
+                  <div className="space-y-4">
                     {allDocuments.map((doc, index) => (
-                      <div key={index} className="border-2 border-gray-200 rounded-xl p-6 bg-white shadow-sm hover:shadow-md transition-shadow">
+                      <div key={index} className="border border-gray-200 rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-shadow">
                         {/* En-tête du document avec informations contextuelles */}
-                        <div className="flex items-start justify-between mb-4">
+                        <div className="flex items-start justify-between mb-3">
                           <div className="flex-1">
-                            <div className="flex items-center gap-3 mb-2">
-                              <FileText className="h-5 w-5 text-blue-600" />
-                              <h3 className="text-lg font-semibold text-gray-900">{doc.name}</h3>
-                              <Badge variant="outline" className="text-sm">{doc.type}</Badge>
-                              <Badge variant="outline" className="text-sm text-gray-500">{doc.size}</Badge>
+                            <div className="flex items-center gap-2 mb-2">
+                              <FileText className="h-4 w-4 text-blue-600" />
+                              <h3 className="text-base font-semibold text-gray-900">{doc.name}</h3>
+                              <Badge variant="outline" className="text-xs">{doc.type}</Badge>
+                              <Badge variant="outline" className="text-xs text-gray-500">{doc.size}</Badge>
                             </div>
-                            <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
+                            <div className="flex items-center gap-3 text-xs text-gray-600 mb-2">
                               <span className="flex items-center gap-1">
                                 <Calendar className="h-3 w-3" />
                                 {doc.eventDate} {doc.eventTime && `à ${doc.eventTime}`}
@@ -635,116 +635,86 @@ const SinistreSynthesis = () => {
                             </div>
                           </div>
                           <div className="flex items-center gap-2 ml-4">
-                            <Button size="sm" variant="outline">
-                              <Eye className="h-4 w-4 mr-1" />
-                              Visualiser
+                            <Button size="sm" variant="outline" className="h-7 px-2 text-xs">
+                              <Eye className="h-3 w-3 mr-1" />
+                              Voir
                             </Button>
-                            <Button size="sm" variant="outline">
-                              <Download className="h-4 w-4 mr-1" />
-                              Télécharger
+                            <Button size="sm" variant="outline" className="h-7 px-2 text-xs">
+                              <Download className="h-3 w-3 mr-1" />
+                              DL
                             </Button>
                           </div>
                         </div>
 
-                        {/* Analyse IA complète */}
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                          {/* Classification IA */}
-                          <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
-                            <div className="flex items-center gap-2 mb-3">
-                              <Tag className="h-4 w-4 text-purple-600" />
-                              <span className="text-sm font-semibold text-purple-900">Classification IA</span>
-                              <Badge className={`text-xs ${getConfidenceColor(doc.confidence)}`}>
-                                {doc.confidence}% confiance
-                              </Badge>
+                        {/* Analyse IA compacte */}
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+                          {/* Classification IA - Compact */}
+                          <div className="bg-purple-50 border border-purple-200 rounded-md p-3">
+                            <div className="flex items-center gap-2 mb-2">
+                              <Tag className="h-3 w-3 text-purple-600" />
+                              <span className="text-xs font-medium text-purple-900">Classification IA</span>
                             </div>
-                            <p className="text-sm text-purple-800 font-medium mb-2">
+                            <p className="text-xs text-purple-800 font-medium mb-1">
                               {doc.aiClassification}
                             </p>
                             <div className="flex items-center text-xs text-purple-700">
-                              <Bot className="h-3 w-3 mr-1" />
-                              Catégorisé automatiquement
+                              <Bot className="h-2 w-2 mr-1" />
+                              Auto-catégorisé
                             </div>
                           </div>
 
-                          {/* Renommage IA */}
-                          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                            <div className="flex items-center gap-2 mb-3">
-                              <FileCheck className="h-4 w-4 text-blue-600" />
-                              <span className="text-sm font-semibold text-blue-900">Renommage IA</span>
+                          {/* Renommage IA - Compact */}
+                          <div className="bg-blue-50 border border-blue-200 rounded-md p-3">
+                            <div className="flex items-center gap-2 mb-2">
+                              <FileCheck className="h-3 w-3 text-blue-600" />
+                              <span className="text-xs font-medium text-blue-900">Renommage IA</span>
                             </div>
-                            <div className="space-y-2">
-                              <div>
-                                <p className="text-xs text-gray-600 mb-1">Nom original :</p>
-                                <p className="text-xs text-gray-800 bg-gray-100 p-2 rounded font-mono">
-                                  {doc.originalName}
-                                </p>
-                              </div>
-                              <div>
-                                <p className="text-xs text-blue-700 mb-1">Nom suggéré :</p>
-                                <p className="text-xs text-blue-800 bg-blue-100 p-2 rounded font-mono">
-                                  {doc.aiRenamed}
-                                </p>
-                              </div>
+                            <div className="space-y-1">
+                              <p className="text-xs text-blue-800 bg-blue-100 p-1 rounded text-center font-mono truncate" title={doc.aiRenamed}>
+                                {doc.aiRenamed.length > 25 ? `${doc.aiRenamed.substring(0, 25)}...` : doc.aiRenamed}
+                              </p>
                             </div>
-                            <div className="flex items-center text-xs text-blue-700 mt-2">
-                              <Bot className="h-3 w-3 mr-1" />
+                            <div className="flex items-center text-xs text-blue-700 mt-1">
+                              <Bot className="h-2 w-2 mr-1" />
                               Renommage intelligent
                             </div>
                           </div>
 
-                          {/* Score de confiance */}
-                          <div className={`border rounded-lg p-4 ${
-                            doc.confidence >= 90 ? 'bg-green-50 border-green-200' :
-                            doc.confidence >= 80 ? 'bg-yellow-50 border-yellow-200' :
-                            'bg-red-50 border-red-200'
-                          }`}>
-                            <div className="flex items-center gap-2 mb-3">
-                              <Star className="h-4 w-4 text-yellow-500" />
-                              <span className={`text-sm font-semibold ${
-                                doc.confidence >= 90 ? 'text-green-900' :
-                                doc.confidence >= 80 ? 'text-yellow-900' :
-                                'text-red-900'
-                              }`}>
-                                Score de confiance
-                              </span>
+                          {/* Score de confiance - Compact */}
+                          <div className={`border rounded-md p-3 ${getConfidenceColor(doc.confidence)}`}>
+                            <div className="flex items-center gap-2 mb-2">
+                              <Star className="h-3 w-3 text-yellow-500" />
+                              <span className="text-xs font-medium">Confiance</span>
                             </div>
                             <div className="text-center">
-                              <div className={`text-2xl font-bold mb-1 ${
-                                doc.confidence >= 90 ? 'text-green-700' :
-                                doc.confidence >= 80 ? 'text-yellow-700' :
-                                'text-red-700'
-                              }`}>
+                              <div className="text-lg font-bold mb-1">
                                 {doc.confidence}%
                               </div>
-                              <p className={`text-xs ${
-                                doc.confidence >= 90 ? 'text-green-600' :
-                                doc.confidence >= 80 ? 'text-yellow-600' :
-                                'text-red-600'
-                              }`}>
-                                {doc.confidence >= 90 ? 'Excellente analyse' :
-                                 doc.confidence >= 80 ? 'Bonne analyse' :
-                                 'Analyse à vérifier'}
+                              <p className="text-xs">
+                                {doc.confidence >= 90 ? 'Excellent' :
+                                 doc.confidence >= 80 ? 'Bon' :
+                                 'À vérifier'}
                               </p>
                             </div>
                           </div>
                         </div>
 
                         {/* Synthèse IA détaillée */}
-                        <div className="bg-green-50 border border-green-200 rounded-lg p-4 mt-4">
-                          <div className="flex items-center gap-2 mb-3">
-                            <Bot className="h-5 w-5 text-green-600" />
-                            <span className="text-base font-semibold text-green-900">Synthèse IA détaillée</span>
+                        <div className="bg-green-50 border border-green-200 rounded-md p-3 mt-3">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Bot className="h-4 w-4 text-green-600" />
+                            <span className="text-sm font-medium text-green-900">Synthèse IA</span>
                           </div>
-                          <p className="text-sm text-green-800 leading-relaxed">
+                          <p className="text-xs text-green-800 leading-relaxed">
                             {doc.aiSummary}
                           </p>
-                          <div className="flex items-center justify-between mt-3 pt-3 border-t border-green-200">
+                          <div className="flex items-center justify-between mt-2 pt-2 border-t border-green-200">
                             <div className="flex items-center text-xs text-green-700">
-                              <Bot className="h-3 w-3 mr-1" />
-                              Analyse générée automatiquement
+                              <Bot className="h-2 w-2 mr-1" />
+                              Analyse auto
                             </div>
-                            <Badge className="bg-green-100 text-green-800 text-xs">
-                              Document vérifié ✓
+                            <Badge className="bg-green-100 text-green-800 text-xs h-4">
+                              Vérifié ✓
                             </Badge>
                           </div>
                         </div>
