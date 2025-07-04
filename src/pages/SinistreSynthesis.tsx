@@ -331,7 +331,7 @@ const SinistreSynthesis = () => {
           <Tabs defaultValue="synthese" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="synthese">Synthèse</TabsTrigger>
-              <TabsTrigger value="historique">Historique et documents</TabsTrigger>
+              <TabsTrigger value="historique">Documents</TabsTrigger>
             </TabsList>
 
             {/* Onglet Synthèse */}
