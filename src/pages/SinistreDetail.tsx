@@ -1,604 +1,332 @@
-import { useParams, useNavigate } from "react-router-dom";
-import { Header } from "@/components/Header";
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, FileText, User, Building, Calendar, AlertTriangle, Sparkles, Shield, Clock, TrendingUp, CheckCircle } from "lucide-react";
+import { ArrowLeft, FileText, Calendar, MapPin, User, Building, AlertTriangle, Star, Brain, CheckCircle } from "lucide-react";
+import { Header } from "@/components/Header";
 
-interface SinistreData {
-  id: string;
-  reference: string;
-  statut: string;
-  dateDeclaration: string;
-  dateReception: string;
-  echeance: string;
-  
-  // Informations Assuré
-  assure: {
-    raisonSociale: string;
-    siret: string;
-    secteurActivite: string;
-    adresse: string;
-    telephone: string;
-    email: string;
+const SinistreDetail = () => {
+  const navigate = useNavigate();
+  const { id } = useParams();
+
+  const [status, setStatus] = useState("Ouvert");
+  const [comment, setComment] = useState("");
+
+  const sinistre = {
+    id: "SIN-2024-789456",
+    numeroContrat: "20041732073",
+    chantier: "TEST",
+    adresse: "11, RUE girardot, 93100 MONTREUIL",
+    dateSinistre: "30/06/2025",
+    dateDeclaration: "01/07/2025",
+    type: "Construction DO",
+    enjeuFinancier: "Moyen",
+    presenceVictimes: "Non",
+    nombreVictimes: 0,
+    description: "Fissures importantes sur les murs porteurs suite à un affaissement du terrain."
   };
-  
-  // Informations Contrat
-  contrat: {
-    numero: string;
-    produit: string;
-    dateEffet: string;
-    dateEcheance: string;
-    prime: string;
-    courtier: string;
-  };
-  
-  // Informations Sinistre  
-  sinistre: {
-    description: string;
-    typeChantier: string;
-    adresseTravaux: string;
-    dateReceptionTravaux: string;
-    natureDommages: string;
-    origineReclamation: string;
-    maitreOuvrage: {
-      nom: string;
-      qualite: string;
-      activite: string;
-      prejudiceImateriel: string;
-    };
-  };
-  
-  // Documents
-  documents: {
+
+  // Type pour les documents avec propriétés AI
+  type DocumentWithAI = {
     nom: string;
     type: string;
     date: string;
-  }[];
-  
-  aiGenerated: {
-    description: boolean;
-    surtype: boolean;
-    evaluation: boolean;
+    aiClassification: {
+      category: string;
+      confidence: number;
+      renamedAs: string;
+      summary: string;
+    };
   };
-}
 
-const mockSinistreData: SinistreData = {
-  id: "1",
-  reference: "RC-DECA-2024-001",
-  statut: "En cours de traitement",
-  dateDeclaration: "28/09/2024",
-  dateReception: "28/09/2024 14:30",
-  echeance: "15/10/2024",
-  
-  assure: {
-    raisonSociale: "SARL Bâti Construct",
-    siret: "123 456 789 00012",
-    secteurActivite: "Construction de bâtiments résidentiels et non résidentiels",
-    adresse: "15 Avenue de la Construction, 69000 Lyon",
-    telephone: "04 78 12 34 56",
-    email: "contact@bati-construct.fr"
-  },
-  
-  contrat: {
-    numero: "DECA-2021-4567",
-    produit: "RC Décennale Tous Corps d'État",
-    dateEffet: "01/01/2021",
-    dateEcheance: "31/12/2024",
-    prime: "8 500 € HT/an",
-    courtier: "Agent AXA Lyon Centre - M. Dubois"
-  },
-  
-  sinistre: {
-    description: "Sinistre amiable RC Décennale suite à l'apparition de dommages structurels 3 ans après la réception des travaux de rénovation d'un local commercial",
-    typeChantier: "Rénovation lourde - Local commercial",
-    adresseTravaux: "42 Rue du Commerce, 69002 Lyon",
-    dateReceptionTravaux: "15/06/2021",
-    natureDommages: "Fissures importantes dans les murs porteurs, affaissement partiel du plancher, infiltrations",
-    origineReclamation: "Courrier du maître d'ouvrage reçu par l'assuré le 25/09/2024",
-    maitreOuvrage: {
-      nom: "SAS Commerce Plus",
-      qualite: "Propriétaire exploitant",
-      activite: "Commerce de détail - Prêt-à-porter",
-      prejudiceImateriel: "Fermeture boutique 2 mois estimée = 45 000€ de CA perdu"
-    }
-  },
-  
-  documents: [
-    { 
-      nom: "Courrier de mise en cause", 
-      type: "Courrier", 
-      date: "25/09/2024",
+  const documentsWithAI: DocumentWithAI[] = [
+    {
+      nom: "Courrier_Declaration_Initial.pdf",
+      type: "Courrier",
+      date: "01/07/2025",
       aiClassification: {
-        originalName: "Courrier_client_plainte_092024.pdf",
-        newName: "Mise_en_cause_RC_Decennale_SAS_Commerce_Plus.pdf",
-        category: "Correspondance juridique",
-        confidence: 0.95,
-        summary: "Courrier officiel de mise en cause de la SARL Bâti Construct par SAS Commerce Plus pour dommages structurels. Document détaillant les désordres constatés et demandant réparation sous RC Décennale."
+        category: "Déclaration initiale",
+        confidence: 95,
+        renamedAs: "DECL_INITIALE_20250701.pdf",
+        summary: "Première déclaration du sinistre par l'assuré décrivant les désordres constatés sur l'ouvrage et les circonstances de découverte."
       }
     },
-    { 
-      nom: "Photos des dommages", 
-      type: "Photos", 
-      date: "27/09/2024",
+    {
+      nom: "Photos_Desordres_Batiment.zip",
+      type: "Photos",
+      date: "02/07/2025",
       aiClassification: {
-        originalName: "IMG_20240927_multiple.zip",
-        newName: "Constat_photographique_dommages_42_Rue_Commerce.zip",
         category: "Preuves visuelles",
-        confidence: 0.98,
-        summary: "Série de 15 photographies haute résolution documentant les fissures murales, l'affaissement du plancher et les infiltrations d'eau. Images géolocalisées et horodatées conformes aux standards d'expertise."
+        confidence: 98,
+        renamedAs: "PHOTOS_DESORDRES_20250702.zip",
+        summary: "Collection de photographies montrant l'étendue des dommages structurels, fissures murales et problèmes d'étanchéité identifiés."
       }
     },
-    { 
-      nom: "Devis de réparation", 
-      type: "Devis", 
-      date: "28/09/2024",
+    {
+      nom: "Rapport_Expert_Technique.pdf",
+      type: "Rapport",
+      date: "05/07/2025",
       aiClassification: {
-        originalName: "Devis_reparation_urgent_v2.pdf",
-        newName: "Evaluation_travaux_reparation_Commerce_Plus_Septembre2024.pdf",
+        category: "Expertise technique",
+        confidence: 92,
+        renamedAs: "EXPERTISE_TECH_20250705.pdf",
+        summary: "Analyse technique détaillée des causes probables du sinistre, évaluation des réparations nécessaires et estimation des coûts."
+      }
+    },
+    {
+      nom: "Devis_Reparations_Entreprise.pdf",
+      type: "Devis",
+      date: "08/07/2025",
+      aiClassification: {
         category: "Évaluation financière",
-        confidence: 0.92,
-        summary: "Devis détaillé de 67 000€ HT pour réparation complète des désordres. Inclut démolition partielle, reprise des fondations, étanchéité et remise en état. Délai estimé: 6 semaines."
-      }
-    },
-    { 
-      nom: "Attestation RC Décennale", 
-      type: "Attestation", 
-      date: "28/09/2024",
-      aiClassification: {
-        originalName: "Attestation_assurance_2021.pdf",
-        newName: "Attestation_RC_Decennale_SARL_Bati_Construct_2021-2024.pdf",
-        category: "Document contractuel",
-        confidence: 0.99,
-        summary: "Attestation d'assurance RC Décennale valide confirmant la couverture pour les travaux litigieux. Plafonds de garantie conformes, période de validité vérifiée. Aucune exclusion applicable au sinistre."
+        confidence: 88,
+        renamedAs: "DEVIS_REPARATIONS_20250708.pdf",
+        summary: "Estimation chiffrée des travaux de remise en état par l'entreprise spécialisée, incluant matériaux et main-d'œuvre."
       }
     }
-  ],
-  
-  aiGenerated: {
-    description: true,
-    surtype: true,
-    evaluation: true
-  }
-};
+  ];
 
-export default function SinistreDetail() {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  
-  const sinistre = mockSinistreData;
-
-  const AIIndicator = () => (
-    <Sparkles className="w-4 h-4 text-purple-600 inline ml-1" />
-  );
-
-  const DocumentCard = ({ doc, index }: { doc: any, index: number }) => (
-    <div key={index} className="border rounded-lg p-4 hover:bg-gray-50 cursor-pointer border-blue-200 space-y-3">
-      <div className="flex items-start justify-between">
-        <div className="flex items-center gap-2 mb-2">
-          <FileText className="w-5 h-5 text-blue-600" />
-          <div>
-            <span className="text-sm font-bold text-gray-900">{doc.nom}</span>
-            <div className="text-xs text-gray-600">{doc.type} • {doc.date}</div>
-          </div>
-        </div>
-        <AIIndicator />
-      </div>
-      
-      {doc.aiClassification && (
-        <div className="space-y-2 pt-2 border-t border-gray-100">
-          <div className="flex items-center gap-2">
-            <Badge variant="outline" className="text-xs bg-purple-50 text-purple-700">
-              {doc.aiClassification.category}
-            </Badge>
-            <div className="text-xs text-gray-500">
-              Confiance: {Math.round(doc.aiClassification.confidence * 100)}%
-            </div>
-          </div>
-          
-          <div className="text-xs space-y-1">
-            <div>
-              <span className="font-medium text-gray-600">Nom original:</span>
-              <span className="text-gray-500 ml-1">{doc.aiClassification.originalName}</span>
-            </div>
-            <div>
-              <span className="font-medium text-gray-600">Renommé en:</span>
-              <span className="text-blue-600 ml-1 font-medium">{doc.aiClassification.newName}</span>
-            </div>
-          </div>
-          
-          <div className="text-xs">
-            <span className="font-medium text-gray-600">Synthèse IA:</span>
-            <p className="text-gray-700 mt-1 leading-relaxed">{doc.aiClassification.summary}</p>
-          </div>
-        </div>
-      )}
-    </div>
-  );
+  const handleStatusChange = (newStatus: string) => {
+    setStatus(newStatus);
+    // Ici, vous pouvez ajouter la logique pour enregistrer le changement de statut dans votre backend
+    console.log(`Statut changé en : ${newStatus}`);
+  };
 
   return (
     <div className="min-h-screen flex flex-col w-full bg-gray-50">
       <Header />
       <div className="flex items-center gap-4 px-6 py-3 bg-white border-b border-gray-200">
         <Button
-          variant="outline"
-          size="sm"
+          variant="ghost"
           onClick={() => navigate("/")}
-          className="flex items-center gap-2"
+          className="text-gray-600 hover:text-gray-900"
         >
-          <ArrowLeft className="w-4 h-4" />
-          Retour à la corbeille
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Retour à la liste
         </Button>
-        <div>
-          <h1 className="text-xl font-bold text-gray-900">Synthèse du contrat RC Décennale</h1>
-          <p className="text-sm text-gray-600">Réf. {sinistre.reference}</p>
-        </div>
-        <div className="ml-auto">
-          <Badge variant="secondary" className="bg-orange-100 text-orange-800 font-semibold">
-            {sinistre.statut}
-          </Badge>
-        </div>
+        <h2 className="text-lg font-semibold text-gray-900">Synthèse du contrat RC Décennale</h2>
       </div>
-      
       <main className="flex-1 p-6">
-        <div className="max-w-7xl mx-auto">
-          <Tabs defaultValue="synthese" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-4 bg-blue-50 border-blue-200">
-              <TabsTrigger value="synthese" className="font-semibold data-[state=active]:bg-blue-600 data-[state=active]:text-white">Vue d'ensemble</TabsTrigger>
-              <TabsTrigger value="contrat" className="font-semibold data-[state=active]:bg-blue-600 data-[state=active]:text-white">Vie du contrat</TabsTrigger>
-              <TabsTrigger value="historique" className="font-semibold data-[state=active]:bg-blue-600 data-[state=active]:text-white">Historique & Documents</TabsTrigger>
-              <TabsTrigger value="analyse" className="font-semibold data-[state=active]:bg-blue-600 data-[state=active]:text-white">Analyse IA</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="synthese" className="space-y-6">
-              {/* Informations principales */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <Card className="border-blue-200">
-                  <CardHeader className="pb-3 bg-blue-50">
-                    <CardTitle className="flex items-center gap-2 text-lg text-blue-800">
-                      <Calendar className="w-5 h-5" />
-                      Dates clés
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-gray-600 font-medium">Déclaration:</span>
-                      <span className="font-bold">{sinistre.dateDeclaration}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600 font-medium">Réception:</span>
-                      <span className="font-bold">{sinistre.dateReception}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600 font-medium">Échéance:</span>
-                      <span className="font-bold text-red-600">{sinistre.echeance}</span>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="border-blue-200">
-                  <CardHeader className="pb-3 bg-blue-50">
-                    <CardTitle className="flex items-center gap-2 text-lg text-blue-800">
-                      <Building className="w-5 h-5" />
-                      Assuré
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-2 text-sm">
-                    <div className="font-bold text-gray-900">{sinistre.assure.raisonSociale}</div>
-                    <div className="text-gray-600">SIRET: {sinistre.assure.siret}</div>
-                    <div className="text-gray-600">{sinistre.assure.secteurActivite}</div>
-                  </CardContent>
-                </Card>
-
-                <Card className="border-blue-200">
-                  <CardHeader className="pb-3 bg-blue-50">
-                    <CardTitle className="flex items-center gap-2 text-lg text-blue-800">
-                      <FileText className="w-5 h-5" />
-                      Contrat
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-2 text-sm">
-                    <div className="font-bold text-gray-900">{sinistre.contrat.numero}</div>
-                    <div className="text-gray-600">{sinistre.contrat.produit}</div>
-                    <div className="text-gray-600 font-semibold">Prime: {sinistre.contrat.prime}</div>
-                  </CardContent>
-                </Card>
+        <Card className="mb-6">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-2xl font-bold">
+              Sinistre N° {id}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="grid grid-cols-2 gap-6">
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Informations générales</h3>
+              <div className="space-y-2">
+                <p className="text-gray-700">
+                  <span className="font-medium">Numéro de contrat:</span> {sinistre.numeroContrat}
+                </p>
+                <p className="text-gray-700">
+                  <span className="font-medium">Chantier:</span> {sinistre.chantier}
+                </p>
+                <p className="text-gray-700">
+                  <span className="font-medium">Adresse:</span> {sinistre.adresse}
+                </p>
+                <p className="text-gray-700">
+                  <span className="font-medium">Date du sinistre:</span> {sinistre.dateSinistre}
+                </p>
               </div>
-
-              {/* Description du sinistre */}
-              <Card className="border-blue-200">
-                <CardHeader className="bg-blue-50">
-                  <CardTitle className="flex items-center gap-2 text-blue-800">
-                    <AlertTriangle className="w-5 h-5" />
-                    Description du sinistre
-                    {sinistre.aiGenerated.description && <AIIndicator />}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="pt-4">
-                  <p className="text-gray-800 leading-relaxed font-medium">{sinistre.sinistre.description}</p>
-                </CardContent>
-              </Card>
-
-              {/* Détails du sinistre */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Card className="border-blue-200">
-                  <CardHeader className="bg-blue-50">
-                    <CardTitle className="text-blue-800">Informations chantier</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3 pt-4">
-                    <div>
-                      <span className="text-sm font-bold text-gray-600">Type de chantier:</span>
-                      <p className="text-gray-800 font-medium">{sinistre.sinistre.typeChantier}</p>
-                    </div>
-                    <div>
-                      <span className="text-sm font-bold text-gray-600">Adresse des travaux:</span>
-                      <p className="text-gray-800 font-medium">{sinistre.sinistre.adresseTravaux}</p>
-                    </div>
-                    <div>
-                      <span className="text-sm font-bold text-gray-600">Date de réception:</span>
-                      <p className="text-gray-800 font-medium">{sinistre.sinistre.dateReceptionTravaux}</p>
-                    </div>
-                    <div>
-                      <span className="text-sm font-bold text-gray-600">Nature des dommages:</span>
-                      <p className="text-gray-800 font-medium">{sinistre.sinistre.natureDommages}</p>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="border-blue-200">
-                  <CardHeader className="bg-blue-50">
-                    <CardTitle className="text-blue-800">Maître d'ouvrage & Préjudices</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3 pt-4">
-                    <div>
-                      <span className="text-sm font-bold text-gray-600">Nom:</span>
-                      <p className="text-gray-800 font-medium">{sinistre.sinistre.maitreOuvrage.nom}</p>
-                    </div>
-                    <div>
-                      <span className="text-sm font-bold text-gray-600">Qualité:</span>
-                      <p className="text-gray-800 font-medium">{sinistre.sinistre.maitreOuvrage.qualite}</p>
-                    </div>
-                    <div>
-                      <span className="text-sm font-bold text-gray-600">Activité:</span>
-                      <p className="text-gray-800 font-medium">{sinistre.sinistre.maitreOuvrage.activite}</p>
-                    </div>
-                    <div>
-                      <span className="text-sm font-bold text-gray-600">Préjudice immatériel:</span>
-                      <p className="text-red-600 font-bold">{sinistre.sinistre.maitreOuvrage.prejudiceImateriel}</p>
-                      {sinistre.aiGenerated.evaluation && <AIIndicator />}
-                    </div>
-                  </CardContent>
-                </Card>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Détails du sinistre</h3>
+              <div className="space-y-2">
+                <p className="text-gray-700">
+                  <span className="font-medium">Type:</span> {sinistre.type}
+                </p>
+                <p className="text-gray-700">
+                  <span className="font-medium">Enjeu financier:</span> {sinistre.enjeuFinancier}
+                </p>
+                <p className="text-gray-700">
+                  <span className="font-medium">Victimes:</span> {sinistre.presenceVictimes === "Oui" ? `${sinistre.nombreVictimes} victimes` : "Aucune victime"}
+                </p>
+                <p className="text-gray-700">
+                  <span className="font-medium">Description:</span> {sinistre.description}
+                </p>
               </div>
-            </TabsContent>
+            </div>
+          </CardContent>
+        </Card>
 
-            <TabsContent value="contrat" className="space-y-6">
-              {/* Données du contrat */}
-              <Card className="border-blue-200">
-                <CardHeader className="bg-blue-50">
-                  <CardTitle className="text-blue-800">Données du contrat</CardTitle>
-                </CardHeader>
-                <CardContent className="pt-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-3">
-                      <div>
-                        <span className="text-sm font-bold text-gray-600">Numéro de contrat:</span>
-                        <p className="text-gray-800 font-mono">{sinistre.contrat.numero}</p>
-                      </div>
-                      <div>
-                        <span className="text-sm font-bold text-gray-600">Produit:</span>
-                        <p className="text-gray-800 font-medium">{sinistre.contrat.produit}</p>
-                      </div>
-                      <div>
-                        <span className="text-sm font-bold text-gray-600">Prime annuelle:</span>
-                        <p className="text-gray-800 font-bold">{sinistre.contrat.prime}</p>
-                      </div>
+        <Tabs defaultValue="general" className="w-full">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="general">Général</TabsTrigger>
+            <TabsTrigger value="historique">Historique & Documents</TabsTrigger>
+            <TabsTrigger value="parties">Parties</TabsTrigger>
+            <TabsTrigger value="suivi">Suivi</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="general" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Informations générales</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <p>Numéro de contrat: {sinistre.numeroContrat}</p>
+                  <p>Chantier: {sinistre.chantier}</p>
+                  <p>Adresse: {sinistre.adresse}</p>
+                  {/* Ajoutez ici d'autres informations générales */}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="parties" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Parties impliquées</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <p>Assuré: Nom de l'assuré</p>
+                  <p>Expert: Nom de l'expert</p>
+                  {/* Ajoutez ici d'autres parties impliquées */}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="suivi" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Suivi du sinistre</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Statut actuel</label>
+                      <Select value={status} onValueChange={handleStatusChange}>
+                        {/* Ajoutez ici les options de statut */}
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Sélectionner un statut" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Ouvert">Ouvert</SelectItem>
+                          <SelectItem value="En cours">En cours</SelectItem>
+                          <SelectItem value="Fermé">Fermé</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
-                    <div className="space-y-3">
-                      <div>
-                        <span className="text-sm font-bold text-gray-600">Date d'effet:</span>
-                        <p className="text-gray-800 font-medium">{sinistre.contrat.dateEffet}</p>
-                      </div>
-                      <div>
-                        <span className="text-sm font-bold text-gray-600">Date d'échéance:</span>
-                        <p className="text-gray-800 font-medium">{sinistre.contrat.dateEcheance}</p>
-                      </div>
-                      <div>
-                        <span className="text-sm font-bold text-gray-600">Courtier:</span>
-                        <p className="text-gray-800 font-medium">{sinistre.contrat.courtier}</p>
-                      </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Ajouter un commentaire</label>
+                      <textarea
+                        className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                      />
+                      <Button className="mt-2">Enregistrer le commentaire</Button>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                  {/* Ajoutez ici d'autres éléments de suivi */}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-              {/* Timeline du contrat */}
-              <Card className="border-blue-200">
-                <CardHeader className="bg-blue-50">
-                  <CardTitle className="flex items-center gap-2 text-blue-800">
-                    <Clock className="w-5 h-5" />
-                    Timeline du contrat
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="pt-4">
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-4 p-3 bg-green-50 rounded-lg">
-                      <div className="w-3 h-3 bg-green-600 rounded-full"></div>
-                      <div className="flex-1">
-                        <p className="font-bold text-gray-900">Souscription du contrat</p>
-                        <p className="text-sm text-gray-600">01/01/2021 - Mise en place de la couverture RC Décennale</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-4 p-3 bg-blue-50 rounded-lg">
-                      <div className="w-3 h-3 bg-blue-600 rounded-full"></div>
-                      <div className="flex-1">
-                        <p className="font-bold text-gray-900">Réception des travaux couverts</p>
-                        <p className="text-sm text-gray-600">15/06/2021 - Début de la période de garantie décennale</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-4 p-3 bg-orange-50 rounded-lg">
-                      <div className="w-3 h-3 bg-orange-600 rounded-full"></div>
-                      <div className="flex-1">
-                        <p className="font-bold text-gray-900">Déclaration du sinistre</p>
-                        <p className="text-sm text-gray-600">28/09/2024 - Mise en cause dans les délais</p>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Garanties du contrat */}
-              <Card className="border-blue-200">
-                <CardHeader className="bg-blue-50">
-                  <CardTitle className="flex items-center gap-2 text-blue-800">
-                    <Shield className="w-5 h-5" />
-                    Garanties du contrat
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="pt-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-2 p-3 bg-green-50 rounded-lg">
-                        <CheckCircle className="w-5 h-5 text-green-600" />
-                        <div>
-                          <p className="font-bold text-gray-900">Dommages à l'ouvrage</p>
-                          <p className="text-sm text-gray-600">Plafond: 500 000 €</p>
+          <TabsContent value="historique" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <FileText className="h-5 w-5" />
+                  Documents du dossier
+                  <Badge variant="secondary" className="ml-2">
+                    <Brain className="h-3 w-3 mr-1" />
+                    Traités par IA
+                  </Badge>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {documentsWithAI.map((doc, index) => (
+                    <div key={index} className="border rounded-lg p-4 bg-gradient-to-r from-purple-50 to-blue-50 border-purple-200">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex items-center gap-3">
+                          <FileText className="h-5 w-5 text-blue-600" />
+                          <div>
+                            <div className="flex items-center gap-2 mb-1">
+                              <h4 className="font-medium text-gray-900">{doc.nom}</h4>
+                              <Star className="h-4 w-4 text-purple-600 fill-purple-600" />
+                            </div>
+                            <div className="flex items-center gap-2 text-sm text-gray-600">
+                              <Badge variant="outline" className="text-xs">
+                                {doc.type}
+                              </Badge>
+                              <span>•</span>
+                              <span>{doc.date}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <Badge 
+                            variant="secondary" 
+                            className={`mb-1 ${
+                              doc.aiClassification.confidence >= 95 
+                                ? 'bg-green-100 text-green-800' 
+                                : doc.aiClassification.confidence >= 90 
+                                ? 'bg-blue-100 text-blue-800' 
+                                : 'bg-yellow-100 text-yellow-800'
+                            }`}
+                          >
+                            <CheckCircle className="h-3 w-3 mr-1" />
+                            {doc.aiClassification.confidence}% confiance
+                          </Badge>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2 p-3 bg-green-50 rounded-lg">
-                        <CheckCircle className="w-5 h-5 text-green-600" />
-                        <div>
-                          <p className="font-bold text-gray-900">Préjudice immatériel</p>
-                          <p className="text-sm text-gray-600">Plafond: 150 000 €</p>
+                      
+                      <div className="bg-white/70 rounded-md p-3 mb-3 border-l-4 border-purple-400">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Brain className="h-4 w-4 text-purple-600" />
+                          <span className="font-medium text-purple-900 text-sm">Classification IA :</span>
+                          <Badge className="bg-purple-100 text-purple-800 text-xs">
+                            {doc.aiClassification.category}
+                          </Badge>
                         </div>
+                        <div className="text-sm text-gray-700 mb-2">
+                          <strong>Renommé en :</strong> <code className="bg-gray-100 px-1 rounded text-xs">{doc.aiClassification.renamedAs}</code>
+                        </div>
+                        <div className="text-sm text-gray-700">
+                          <strong>Synthèse :</strong> {doc.aiClassification.summary}
+                        </div>
+                      </div>
+                      
+                      <div className="flex gap-2">
+                        <Button variant="outline" size="sm">
+                          Télécharger
+                        </Button>
+                        <Button variant="outline" size="sm">
+                          Aperçu
+                        </Button>
                       </div>
                     </div>
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-2 p-3 bg-green-50 rounded-lg">
-                        <CheckCircle className="w-5 h-5 text-green-600" />
-                        <div>
-                          <p className="font-bold text-gray-900">Frais de démolition</p>
-                          <p className="text-sm text-gray-600">Inclus dans le plafond principal</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2 p-3 bg-green-50 rounded-lg">
-                        <CheckCircle className="w-5 h-5 text-green-600" />
-                        <div>
-                          <p className="font-bold text-gray-900">Frais d'expertise</p>
-                          <p className="text-sm text-gray-600">Pris en charge par AXA</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
 
-            <TabsContent value="historique" className="space-y-6">
-              {/* Documents */}
-              <Card className="border-blue-200">
-                <CardHeader className="bg-blue-50">
-                  <CardTitle className="flex items-center gap-2 text-blue-800">
-                    <FileText className="w-5 h-5" />
-                    Documents contractuels et assurantiels
-                    <AIIndicator />
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="pt-4">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                    {sinistre.documents.map((doc, index) => (
-                      <DocumentCard key={index} doc={doc} index={index} />
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Sinistres passés */}
-              <Card className="border-blue-200">
-                <CardHeader className="bg-blue-50">
-                  <CardTitle className="text-blue-800">Sinistres passés et en cours</CardTitle>
-                </CardHeader>
-                <CardContent className="pt-4">
-                  <div className="space-y-3">
-                    <div className="p-3 bg-red-50 rounded-lg border-l-4 border-red-500">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <p className="font-bold text-gray-900">Sinistre actuel - RC-DECA-2024-001</p>
-                          <p className="text-sm text-gray-600">En cours de traitement depuis le 28/09/2024</p>
-                        </div>
-                        <Badge className="bg-orange-100 text-orange-800">En cours</Badge>
-                      </div>
-                    </div>
-                    <div className="p-3 bg-gray-50 rounded-lg">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <p className="font-bold text-gray-900">Aucun sinistre antérieur</p>
-                          <p className="text-sm text-gray-600">Historique vierge sur ce contrat</p>
-                        </div>
-                        <Badge className="bg-green-100 text-green-800">Bon risque</Badge>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="analyse" className="space-y-6">
-              {/* Analyse de conformité */}
-              <Card className="border-blue-200">
-                <CardHeader className="bg-blue-50">
-                  <CardTitle className="flex items-center gap-2 text-blue-800">
-                    <TrendingUp className="w-5 h-5" />
-                    Analyse et comparaison IA
-                    <Sparkles className="w-5 h-5 text-purple-600" />
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="pt-4 space-y-4">
-                  <div className="p-4 bg-green-50 rounded-lg border-l-4 border-green-500">
-                    <h4 className="font-bold text-green-800 mb-2">✓ Conformité de la déclaration</h4>
-                    <p className="text-sm text-gray-700">La déclaration est conforme aux termes du contrat. Les dommages décrits entrent dans le champ de la garantie décennale.</p>
-                  </div>
-                  
-                  <div className="p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
-                    <h4 className="font-bold text-blue-800 mb-2">📊 Évaluation des risques</h4>
-                    <p className="text-sm text-gray-700">Préjudice immatériel évalué à 45 000€. Montant cohérent avec l'activité commerciale du maître d'ouvrage. Risque de dépassement limité.</p>
-                  </div>
-                  
-                  <div className="p-4 bg-orange-50 rounded-lg border-l-4 border-orange-500">
-                    <h4 className="font-bold text-orange-800 mb-2">⚠️ Points d'attention</h4>
-                    <ul className="text-sm text-gray-700 space-y-1">
-                      <li>• Délai entre réception (2021) et déclaration (2024) : 3 ans - dans les délais légaux</li>
-                      <li>• Nature des dommages : structurels, nécessitent expertise approfondie</li>
-                      <li>• Préjudice immatériel important à documenter précisément</li>
-                    </ul>
-                  </div>
-                  
-                  <div className="p-4 bg-purple-50 rounded-lg border-l-4 border-purple-500">
-                    <h4 className="font-bold text-purple-800 mb-2">🎯 Recommandations</h4>
-                    <ul className="text-sm text-gray-700 space-y-1">
-                      <li>• Diligenter expertise technique rapidement</li>
-                      <li>• Demander justificatifs du préjudice immatériel</li>
-                      <li>• Vérifier la couverture des autres intervenants</li>
-                      <li>• Constituer provision de 80 000€ (dommages + préjudice)</li>
-                    </ul>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
-
-          {/* Bouton d'ouverture du sinistre */}
-          <div className="flex justify-center py-6 border-t border-gray-200 mt-8">
-            <Button 
-              onClick={() => navigate('/sinistre/declaration')}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-lg font-semibold shadow-lg"
-            >
-              Ouvrir le sinistre
-            </Button>
-          </div>
-        </div>
+            <Card>
+              <CardHeader>
+                <CardTitle>Historique des actions</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {/* Ajoutez ici l'historique des actions */}
+                  <p>01/07/2025: Déclaration initiale reçue</p>
+                  <p>05/07/2025: Expertise technique demandée</p>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </main>
     </div>
   );
-}
+};
+
+export default SinistreDetail;
