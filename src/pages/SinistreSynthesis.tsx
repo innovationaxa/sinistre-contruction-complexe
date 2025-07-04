@@ -264,7 +264,7 @@ const SinistreSynthesis = () => {
       <div className="flex items-center gap-4 px-6 py-3 bg-white border-b border-gray-200">
         <Button
           variant="ghost"
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/sinistres")}
           className="text-gray-600 hover:text-gray-900"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
