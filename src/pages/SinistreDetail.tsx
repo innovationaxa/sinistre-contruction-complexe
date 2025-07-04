@@ -163,10 +163,10 @@ const mockSinistreData: SinistreData = {
   }
 };
 
-export default function SinistreDetail() {
+const SinistreDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  
+
   const sinistre = mockSinistreData;
 
   const AIIndicator = () => (
@@ -216,6 +216,29 @@ export default function SinistreDetail() {
       )}
     </div>
   );
+
+  const documents = [
+    {
+      nom: "Déclaration initiale",
+      type: "PDF",
+      date: "2024-01-15"
+    },
+    {
+      nom: "Photos des dégâts", 
+      type: "Images",
+      date: "2024-01-16"
+    },
+    {
+      nom: "Rapport d'expertise",
+      type: "PDF", 
+      date: "2024-01-20"
+    },
+    {
+      nom: "Devis de réparation",
+      type: "PDF",
+      date: "2024-01-22"
+    }
+  ];
 
   return (
     <div className="min-h-screen flex flex-col w-full bg-gray-50">
@@ -507,7 +530,7 @@ export default function SinistreDetail() {
                 </CardHeader>
                 <CardContent className="pt-4">
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                    {sinistre.documents.map((doc, index) => (
+                    {documents.map((doc, index) => (
                       <DocumentCard key={index} doc={doc} index={index} />
                     ))}
                   </div>
@@ -601,4 +624,6 @@ export default function SinistreDetail() {
       </main>
     </div>
   );
-}
+};
+
+export default SinistreDetail;
