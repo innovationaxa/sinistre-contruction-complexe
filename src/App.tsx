@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import SinistreDetail from "./pages/SinistreDetail";
 import SinistreDeclaration from "./pages/SinistreDeclaration";
+import SinistreSynthesis from "./pages/SinistreSynthesis";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -21,6 +22,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/sinistre/:id" element={<SinistreDetail />} />
           <Route path="/sinistre/declaration" element={<SinistreDeclaration />} />
+          <Route path="/sinistre/synthesis/:id" element={<SinistreSynthesis />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

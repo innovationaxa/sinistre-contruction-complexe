@@ -43,7 +43,9 @@ const SinistreDeclaration = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Formulaire soumis:", formData);
-    // Logique de soumission
+    // Redirection vers la page de synthèse avec l'ID du sinistre
+    const sinistreId = formData.numeroContrat.replace("CON-", "SIN-");
+    navigate(`/sinistre/synthesis/${sinistreId}`);
   };
 
   const AIField = ({ children, field }: { children: React.ReactNode; field: string }) => (
