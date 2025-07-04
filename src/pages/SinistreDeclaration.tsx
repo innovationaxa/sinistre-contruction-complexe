@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -107,8 +106,7 @@ const SinistreDeclaration = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const sinistreId = "SIN-2024-789456";
-    navigate(`/sinistre/synthesis/${sinistreId}`);
+    navigate("/sinistres");
   };
 
   const addDesordre = () => {
