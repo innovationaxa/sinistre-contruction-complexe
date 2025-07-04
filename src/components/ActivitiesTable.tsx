@@ -1,4 +1,3 @@
-
 import {
   Table,
   TableBody,
@@ -117,7 +116,6 @@ export function ActivitiesTable() {
       <div className="p-4 border-b border-gray-300 bg-blue-50">
         <h2 className="text-lg font-bold text-gray-900">Activités de déclaration - RC Décennale</h2>
         <div className="flex items-center gap-4 mt-2">
-          <span className="text-xs font-semibold text-blue-800 bg-blue-200 px-2 py-1 rounded">Sinistres amiables</span>
           <span className="text-xs text-gray-700">Mise en cause post-réception</span>
           <span className="text-xs text-gray-700">Préjudices immatériels</span>
         </div>
