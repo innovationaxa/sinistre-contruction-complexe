@@ -268,7 +268,7 @@ const SinistreSynthesis = () => {
           className="text-gray-600 hover:text-gray-900"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
-          Retour à la liste
+          Retour aux sinistres
         </Button>
         <h2 className="text-lg font-semibold text-gray-900">Synthèse du dossier sinistre RC Décennale</h2>
       </div>
