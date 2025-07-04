@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { ArrowLeft, FileText, AlertTriangle, Clock, CheckCircle, Send, Calendar, User, MapPin, Star, Download, Eye } from "lucide-react";
+import { ArrowLeft, FileText, AlertTriangle, Clock, CheckCircle, Send, Calendar, User, MapPin, Star, Download, Eye, Bot, FileCheck, Tag } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 
@@ -12,7 +12,7 @@ const SinistreSynthesis = () => {
   const navigate = useNavigate();
   const [chatMessage, setChatMessage] = useState("");
 
-  // Timeline des événements avec détails
+  // Timeline des événements avec détails enrichis par IA
   const timelineEvents = [
     {
       id: 1,
@@ -24,8 +24,26 @@ const SinistreSynthesis = () => {
       details: {
         importance: "Étape initiale du processus",
         documents: [
-          { name: "Déclaration de sinistre", type: "PDF", size: "1.2 MB" },
-          { name: "Photos des dégâts", type: "ZIP", size: "3.5 MB" }
+          { 
+            name: "Déclaration de sinistre", 
+            type: "PDF", 
+            size: "1.2 MB",
+            originalName: "declaration_sinistre_20240315.pdf",
+            aiRenamed: "Declaration_Sinistre_BATIMEX_DégâtEaux_15032024.pdf",
+            aiClassification: "Document juridique - Déclaration officielle",
+            aiSummary: "Déclaration complète du sinistre dégât des eaux survenu le 15/03/2024 chez BATIMEX SARL. Document contient les circonstances détaillées, l'évaluation préliminaire des dégâts et les premières photos. Tous les champs obligatoires sont remplis correctement.",
+            confidence: 95
+          },
+          { 
+            name: "Photos des dégâts", 
+            type: "ZIP", 
+            size: "3.5 MB",
+            originalName: "photos_degats.zip",
+            aiRenamed: "Photos_Dégâts_BATIMEX_Inondation_Atelier_15032024.zip",
+            aiClassification: "Documentation visuelle - Preuves dommages",
+            aiSummary: "Archive contenant 12 photos haute résolution des dégâts causés par l'inondation dans l'atelier principal. Images montrent l'étendue des dégâts sur les équipements, le sol et les stocks. Qualité suffisante pour expertise.",
+            confidence: 88
+          }
         ],
         notes: "Dossier ouvert automatiquement suite à la réception de la déclaration en ligne. Première évaluation des dégâts basée sur les photos fournies."
       }
@@ -40,8 +58,26 @@ const SinistreSynthesis = () => {
       details: {
         importance: "Évaluation initiale des dommages",
         documents: [
-          { name: "Rapport d'évaluation préliminaire", type: "PDF", size: "2.1 MB" },
-          { name: "Devis de réparation estimatif", type: "PDF", size: "0.8 MB" }
+          { 
+            name: "Rapport d'évaluation préliminaire", 
+            type: "PDF", 
+            size: "2.1 MB",
+            originalName: "rapport_eval_prelim.pdf",
+            aiRenamed: "Rapport_Evaluation_Préliminaire_Expert_Dubois_16032024.pdf",
+            aiClassification: "Rapport d'expertise - Évaluation technique",
+            aiSummary: "Rapport détaillé de l'expert M. Dubois suite à sa visite du 16/03. Analyse technique des causes de l'inondation, évaluation des dégâts par zone et estimation financière préliminaire de 15 000€. Recommandations pour les réparations urgentes.",
+            confidence: 92
+          },
+          { 
+            name: "Devis de réparation estimatif", 
+            type: "PDF", 
+            size: "0.8 MB",
+            originalName: "devis_reparation.pdf",
+            aiRenamed: "Devis_Réparation_Estimatif_Entreprise_Martin_16032024.pdf",
+            aiClassification: "Document commercial - Devis travaux",
+            aiSummary: "Devis détaillé de l'entreprise Martin BTP pour les travaux de remise en état. Inclut : assèchement, désinfection, remplacement revêtement sol, réparation équipements. Total estimé : 14 750€ HT.",
+            confidence: 90
+          }
         ],
         notes: "Montant estimé des dégâts : 15 000€. Nécessité d'une expertise approfondie confirmée."
       }
@@ -56,7 +92,16 @@ const SinistreSynthesis = () => {
       details: {
         importance: "Expertise technique détaillée",
         documents: [
-          { name: "Convocation expertise", type: "PDF", size: "0.3 MB" }
+          { 
+            name: "Convocation expertise", 
+            type: "PDF", 
+            size: "0.3 MB",
+            originalName: "convocation.pdf",
+            aiRenamed: "Convocation_Expertise_BATIMEX_Expert_Dubois_20032024.pdf",
+            aiClassification: "Document administratif - Convocation officielle",
+            aiSummary: "Convocation officielle pour l'expertise approfondie du 20/03/2024 à 14h00. Présence obligatoire de l'assuré et de son représentant. Liste des documents à apporter et procédure à suivre clairement définie.",
+            confidence: 85
+          }
         ],
         notes: "Rendez-vous fixé avec M. Dubois, expert agréé. Présence de l'assuré requise."
       }
@@ -199,6 +244,12 @@ const SinistreSynthesis = () => {
     }
   };
 
+  const getConfidenceColor = (confidence: number) => {
+    if (confidence >= 90) return "text-green-600 bg-green-50";
+    if (confidence >= 80) return "text-yellow-600 bg-yellow-50";
+    return "text-red-600 bg-red-50";
+  };
+
   return (
     <div className="min-h-screen flex flex-col w-full bg-gray-50">
       <Header />
@@ -316,14 +367,18 @@ const SinistreSynthesis = () => {
           </Card>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Timeline des événements - Interactive */}
+            {/* Timeline des événements - Interactive avec IA */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Clock className="h-5 w-5" />
                   Timeline des événements
+                  <Badge className="bg-purple-100 text-purple-800 ml-2">
+                    <Bot className="h-3 w-3 mr-1" />
+                    IA Enrichie
+                  </Badge>
                 </CardTitle>
-                <p className="text-sm text-gray-600">Cliquez sur une étape pour voir les détails</p>
+                <p className="text-sm text-gray-600">Cliquez sur une étape pour voir les détails et l'analyse IA</p>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -347,6 +402,12 @@ const SinistreSynthesis = () => {
                                 {event.status === 'completed' ? 'Terminé' :
                                  event.status === 'upcoming' ? 'À venir' : 'En attente'}
                               </Badge>
+                              {event.details.documents.length > 0 && (
+                                <Badge variant="outline" className="text-xs">
+                                  <Bot className="h-3 w-3 mr-1" />
+                                  {event.details.documents.length} doc(s) analysé(s)
+                                </Badge>
+                              )}
                             </div>
                             <p className="text-sm text-gray-600">{event.description}</p>
                             <p className="text-xs text-gray-500 mt-1">
@@ -355,38 +416,88 @@ const SinistreSynthesis = () => {
                           </div>
                         </div>
                       </DialogTrigger>
-                      <DialogContent className="max-w-2xl">
+                      <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
                         <DialogHeader>
                           <DialogTitle className="flex items-center gap-2">
                             <Star className="h-5 w-5 text-yellow-500" />
                             {event.title}
                           </DialogTitle>
                         </DialogHeader>
-                        <div className="space-y-4">
+                        <div className="space-y-6">
                           <div>
                             <h4 className="font-semibold text-sm text-gray-900 mb-2">📋 Importance</h4>
                             <p className="text-sm text-gray-700">{event.details.importance}</p>
                           </div>
                           
                           <div>
-                            <h4 className="font-semibold text-sm text-gray-900 mb-2">📄 Documents liés</h4>
+                            <h4 className="font-semibold text-sm text-gray-900 mb-4 flex items-center gap-2">
+                              📄 Documents liés 
+                              <Badge className="bg-purple-100 text-purple-800">
+                                <Bot className="h-3 w-3 mr-1" />
+                                Analyse IA
+                              </Badge>
+                            </h4>
                             {event.details.documents.length > 0 ? (
-                              <div className="space-y-2">
+                              <div className="space-y-4">
                                 {event.details.documents.map((doc, idx) => (
-                                  <div key={idx} className="flex items-center justify-between p-2 bg-gray-50 rounded">
-                                    <div className="flex items-center gap-2">
-                                      <FileText className="h-4 w-4 text-gray-500" />
-                                      <span className="text-sm">{doc.name}</span>
-                                      <Badge variant="outline" className="text-xs">{doc.type}</Badge>
+                                  <div key={idx} className="border rounded-lg p-4 bg-gray-50">
+                                    {/* En-tête du document */}
+                                    <div className="flex items-center justify-between mb-3">
+                                      <div className="flex items-center gap-2">
+                                        <FileText className="h-4 w-4 text-gray-500" />
+                                        <span className="font-medium">{doc.name}</span>
+                                        <Badge variant="outline" className="text-xs">{doc.type}</Badge>
+                                        <span className="text-xs text-gray-500">{doc.size}</span>
+                                      </div>
+                                      <div className="flex items-center gap-2">
+                                        <Button size="sm" variant="ghost">
+                                          <Eye className="h-3 w-3" />
+                                        </Button>
+                                        <Button size="sm" variant="ghost">
+                                          <Download className="h-3 w-3" />
+                                        </Button>
+                                      </div>
                                     </div>
-                                    <div className="flex items-center gap-2">
-                                      <span className="text-xs text-gray-500">{doc.size}</span>
-                                      <Button size="sm" variant="ghost">
-                                        <Eye className="h-3 w-3" />
-                                      </Button>
-                                      <Button size="sm" variant="ghost">
-                                        <Download className="h-3 w-3" />
-                                      </Button>
+
+                                    {/* Classification IA */}
+                                    <div className="mb-3">
+                                      <div className="flex items-center gap-2 mb-2">
+                                        <Tag className="h-4 w-4 text-purple-600" />
+                                        <span className="text-sm font-medium text-purple-900">Classification IA</span>
+                                        <Badge className={`text-xs ${getConfidenceColor(doc.confidence)}`}>
+                                          {doc.confidence}% confiance
+                                        </Badge>
+                                      </div>
+                                      <p className="text-sm text-purple-800 bg-purple-50 p-2 rounded">
+                                        {doc.aiClassification}
+                                      </p>
+                                    </div>
+
+                                    {/* Renommage IA */}
+                                    <div className="mb-3">
+                                      <div className="flex items-center gap-2 mb-2">
+                                        <FileCheck className="h-4 w-4 text-blue-600" />
+                                        <span className="text-sm font-medium text-blue-900">Renommage IA</span>
+                                      </div>
+                                      <div className="space-y-1">
+                                        <p className="text-xs text-gray-600">
+                                          <span className="font-medium">Original :</span> {doc.originalName}
+                                        </p>
+                                        <p className="text-xs text-blue-800 bg-blue-50 p-2 rounded">
+                                          <span className="font-medium">Suggéré :</span> {doc.aiRenamed}
+                                        </p>
+                                      </div>
+                                    </div>
+
+                                    {/* Synthèse IA */}
+                                    <div>
+                                      <div className="flex items-center gap-2 mb-2">
+                                        <Bot className="h-4 w-4 text-green-600" />
+                                        <span className="text-sm font-medium text-green-900">Synthèse IA</span>
+                                      </div>
+                                      <p className="text-sm text-green-800 bg-green-50 p-3 rounded leading-relaxed">
+                                        {doc.aiSummary}
+                                      </p>
                                     </div>
                                   </div>
                                 ))}
