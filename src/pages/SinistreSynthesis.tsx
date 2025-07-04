@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -224,12 +223,12 @@ const SinistreSynthesis = () => {
             </CardHeader>
           </Card>
 
-          {/* Alertes critiques - Mise en avant */}
+          {/* Alertes - Mise en avant */}
           <Card className="border-l-4 border-l-red-500 shadow-lg">
             <CardHeader className="bg-red-50">
               <CardTitle className="flex items-center gap-2 text-red-900">
                 <AlertTriangle className="h-6 w-6" />
-                🚨 Alertes critiques
+                🚨 Alertes
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-4">
