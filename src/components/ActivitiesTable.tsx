@@ -7,6 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sparkles } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -113,84 +114,86 @@ export function ActivitiesTable() {
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-300">
-      <div className="p-6 border-b border-gray-300">
-        <h2 className="text-xl font-semibold text-gray-900">Activités de déclaration - RC Décennale</h2>
-        <div className="flex items-center gap-6 mt-3">
-          <span className="text-sm font-medium text-gray-800">Sinistres amiables</span>
-          <span className="text-sm text-gray-700">Mise en cause post-réception</span>
-          <span className="text-sm text-gray-700">Préjudices immatériels</span>
+      <div className="p-4 border-b border-gray-300 bg-blue-50">
+        <h2 className="text-lg font-bold text-gray-900">Activités de déclaration - RC Décennale</h2>
+        <div className="flex items-center gap-4 mt-2">
+          <span className="text-xs font-semibold text-blue-800 bg-blue-200 px-2 py-1 rounded">Sinistres amiables</span>
+          <span className="text-xs text-gray-700">Mise en cause post-réception</span>
+          <span className="text-xs text-gray-700">Préjudices immatériels</span>
         </div>
       </div>
 
-      <div className="overflow-x-auto">
-        <Table>
-          <TableHeader>
-            <TableRow className="bg-gray-100 hover:bg-gray-100">
-              <TableHead className="w-12 font-semibold text-gray-900">
-                <input type="checkbox" className="rounded border-2 border-gray-400" />
-              </TableHead>
-              <TableHead className="font-semibold text-gray-900">Libellé</TableHead>
-              <TableHead className="font-semibold text-gray-900">Description</TableHead>
-              <TableHead className="font-semibold text-gray-900">Type</TableHead>
-              <TableHead className="font-semibold text-gray-900">Référence</TableHead>
-              <TableHead className="font-semibold text-gray-900">Motif</TableHead>
-              <TableHead className="font-semibold text-gray-900">Surtype</TableHead>
-              <TableHead className="font-semibold text-gray-900">Contrat</TableHead>
-              <TableHead className="font-semibold text-gray-900">Produit</TableHead>
-              <TableHead className="font-semibold text-gray-900">Courtier/Agent</TableHead>
-              <TableHead className="font-semibold text-gray-900">Assuré</TableHead>
-              <TableHead className="font-semibold text-gray-900">Date déclaration</TableHead>
-              <TableHead className="font-semibold text-gray-900">Échéance</TableHead>
-              <TableHead className="font-semibold text-gray-900">Date affectation</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {activities.map((activity) => (
-              <TableRow 
-                key={activity.id} 
-                className="hover:bg-blue-50 border-b border-gray-200 cursor-pointer"
-                onClick={() => handleRowClick(activity.id)}
-              >
-                <TableCell onClick={(e) => e.stopPropagation()}>
+      <ScrollArea className="w-full">
+        <div className="min-w-[1400px]">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-gray-100 hover:bg-gray-100">
+                <TableHead className="w-8 font-bold text-gray-900 text-xs">
                   <input type="checkbox" className="rounded border-2 border-gray-400" />
-                </TableCell>
-                <TableCell className="font-medium text-blue-700 hover:text-blue-900 hover:underline">
-                  {activity.libelle}
-                </TableCell>
-                <TableCell className="max-w-xs">
-                  <div className="flex items-start">
-                    <span className="text-sm text-gray-800 line-clamp-2">
-                      {activity.description}
-                    </span>
-                    {activity.aiGenerated.description && <AIIndicator />}
-                  </div>
-                </TableCell>
-                <TableCell className="text-gray-800">{activity.type}</TableCell>
-                <TableCell className="font-mono text-sm text-gray-800">{activity.reference}</TableCell>
-                <TableCell className="text-gray-800">
-                  <div className="flex items-center">
-                    {activity.motif}
-                    {activity.aiGenerated.motif && <AIIndicator />}
-                  </div>
-                </TableCell>
-                <TableCell className="text-gray-800">
-                  <div className="flex items-center">
-                    {activity.surtype}
-                    {activity.aiGenerated.surtype && <AIIndicator />}
-                  </div>
-                </TableCell>
-                <TableCell className="text-gray-800">{activity.numeroContrat}</TableCell>
-                <TableCell className="text-gray-800">{activity.typeProduit}</TableCell>
-                <TableCell className="text-gray-800">{activity.courtier}</TableCell>
-                <TableCell className="text-gray-800">{activity.assure}</TableCell>
-                <TableCell className="text-gray-800">{activity.dateDeclaration}</TableCell>
-                <TableCell className="text-gray-800">{activity.echeance}</TableCell>
-                <TableCell className="text-gray-800">{activity.dateAffectation}</TableCell>
+                </TableHead>
+                <TableHead className="font-bold text-gray-900 text-xs min-w-[120px]">Libellé</TableHead>
+                <TableHead className="font-bold text-gray-900 text-xs min-w-[200px]">Description</TableHead>
+                <TableHead className="font-bold text-gray-900 text-xs min-w-[80px]">Type</TableHead>
+                <TableHead className="font-bold text-gray-900 text-xs min-w-[120px]">Référence</TableHead>
+                <TableHead className="font-bold text-gray-900 text-xs min-w-[140px]">Motif</TableHead>
+                <TableHead className="font-bold text-gray-900 text-xs min-w-[160px]">Surtype</TableHead>
+                <TableHead className="font-bold text-gray-900 text-xs min-w-[100px]">Contrat</TableHead>
+                <TableHead className="font-bold text-gray-900 text-xs min-w-[80px]">Produit</TableHead>
+                <TableHead className="font-bold text-gray-900 text-xs min-w-[140px]">Courtier/Agent</TableHead>
+                <TableHead className="font-bold text-gray-900 text-xs min-w-[140px]">Assuré</TableHead>
+                <TableHead className="font-bold text-gray-900 text-xs min-w-[100px]">Date déclaration</TableHead>
+                <TableHead className="font-bold text-gray-900 text-xs min-w-[80px]">Échéance</TableHead>
+                <TableHead className="font-bold text-gray-900 text-xs min-w-[100px]">Date affectation</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+            </TableHeader>
+            <TableBody>
+              {activities.map((activity) => (
+                <TableRow 
+                  key={activity.id} 
+                  className="hover:bg-blue-50 border-b border-gray-200 cursor-pointer text-xs"
+                  onClick={() => handleRowClick(activity.id)}
+                >
+                  <TableCell onClick={(e) => e.stopPropagation()}>
+                    <input type="checkbox" className="rounded border-2 border-gray-400" />
+                  </TableCell>
+                  <TableCell className="font-semibold text-blue-700 hover:text-blue-900 hover:underline">
+                    {activity.libelle}
+                  </TableCell>
+                  <TableCell className="max-w-[200px]">
+                    <div className="flex items-start">
+                      <span className="text-xs text-gray-800 line-clamp-2">
+                        {activity.description}
+                      </span>
+                      {activity.aiGenerated.description && <AIIndicator />}
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-gray-800 font-medium">{activity.type}</TableCell>
+                  <TableCell className="font-mono text-xs text-gray-800 font-medium">{activity.reference}</TableCell>
+                  <TableCell className="text-gray-800">
+                    <div className="flex items-center">
+                      {activity.motif}
+                      {activity.aiGenerated.motif && <AIIndicator />}
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-gray-800">
+                    <div className="flex items-center">
+                      {activity.surtype}
+                      {activity.aiGenerated.surtype && <AIIndicator />}
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-gray-800 font-medium">{activity.numeroContrat}</TableCell>
+                  <TableCell className="text-gray-800">{activity.typeProduit}</TableCell>
+                  <TableCell className="text-gray-800">{activity.courtier}</TableCell>
+                  <TableCell className="text-gray-800 font-medium">{activity.assure}</TableCell>
+                  <TableCell className="text-gray-800 font-medium">{activity.dateDeclaration}</TableCell>
+                  <TableCell className="text-gray-800 font-medium">{activity.echeance}</TableCell>
+                  <TableCell className="text-gray-800">{activity.dateAffectation}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      </ScrollArea>
     </div>
   );
 }
