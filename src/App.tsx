@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import SinistreDetail from "./pages/SinistreDetail";
 import SinistreDeclaration from "./pages/SinistreDeclaration";
 import SinistreSynthesis from "./pages/SinistreSynthesis";
+import SinistresOuverts from "./pages/SinistresOuverts";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -20,6 +21,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/sinistres" element={<SinistresOuverts />} />
           <Route path="/sinistre/:id" element={<SinistreDetail />} />
           <Route path="/sinistre/declaration" element={<SinistreDeclaration />} />
           <Route path="/sinistre/synthesis/:id" element={<SinistreSynthesis />} />
