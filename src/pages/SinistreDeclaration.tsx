@@ -11,7 +11,6 @@ import { Header } from "@/components/Header";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { toast } from "@/hooks/use-toast";
 
 const SinistreDeclaration = () => {
   const navigate = useNavigate();
@@ -44,14 +43,7 @@ const SinistreDeclaration = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Formulaire soumis:", formData);
-    
-    toast({
-      title: "Déclaration soumise avec succès",
-      description: "Votre déclaration a été traitée par l'IA et le dossier de synthèse a été créé.",
-    });
-
-    // Redirection vers la page de synthèse avec les données du formulaire
-    navigate("/sinistre/synthesis", { state: { formData } });
+    // Logique de soumission
   };
 
   const AIField = ({ children, field }: { children: React.ReactNode; field: string }) => (
