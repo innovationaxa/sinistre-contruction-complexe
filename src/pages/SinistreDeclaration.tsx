@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -106,8 +107,8 @@ const SinistreDeclaration = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Rediriger vers le dashboard des sinistres au lieu de la page synthesis
-    navigate("/sinistres/dashboard");
+    const sinistreId = "SIN-2024-789456";
+    navigate(`/sinistre/synthesis/${sinistreId}`);
   };
 
   const addDesordre = () => {
