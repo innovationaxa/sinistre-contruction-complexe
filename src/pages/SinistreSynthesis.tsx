@@ -121,7 +121,6 @@ const SinistreSynthesis = () => {
     }
   ];
 
-  // Alertes critiques
   const alerts = [
     {
       id: 1,
@@ -149,7 +148,6 @@ const SinistreSynthesis = () => {
     }
   ];
 
-  // Actions recommandées
   const nextActions = [
     {
       id: 1,
@@ -177,7 +175,6 @@ const SinistreSynthesis = () => {
     }
   ];
 
-  // Suggestions de questions pour le chat
   const questionSuggestions = [
     "Quel est le montant estimé des dégâts ?",
     "Quand aura lieu la prochaine expertise ?",
