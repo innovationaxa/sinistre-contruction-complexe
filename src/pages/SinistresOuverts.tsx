@@ -11,7 +11,7 @@ const SinistresOuverts = () => {
     {
       id: "SIN-2024-001",
       dateDeclaration: "15/01/2024",
-      typeContrat: "Dégât des eaux",
+      typeContrat: "RC/RCD",
       statut: "En cours d'expertise",
       montantEstime: "3 500 €",
       expert: "Jean Dupont"
@@ -19,7 +19,7 @@ const SinistresOuverts = () => {
     {
       id: "SIN-2024-002", 
       dateDeclaration: "22/01/2024",
-      typeContrat: "Incendie",
+      typeContrat: "RC/RCD",
       statut: "Documents requis",
       montantEstime: "15 000 €",
       expert: "Marie Martin"
@@ -27,7 +27,7 @@ const SinistresOuverts = () => {
     {
       id: "SIN-2024-003",
       dateDeclaration: "28/01/2024", 
-      typeContrat: "Vol",
+      typeContrat: "RC/RCD",
       statut: "Enquête en cours",
       montantEstime: "2 800 €",
       expert: "Pierre Dubois"
