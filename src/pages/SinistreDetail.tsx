@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, FileText, AlertTriangle, Clock, User, MapPin, Phone } from "lucide-react";
+import { ArrowLeft, FileText, AlertTriangle, Clock, User, MapPin, Phone, Calendar } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { TabsManager } from "@/components/TabsManager";
 
