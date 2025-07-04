@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import SinistreDetail from "./pages/SinistreDetail";
 import SinistreDeclaration from "./pages/SinistreDeclaration";
 import SinistreSynthesis from "./pages/SinistreSynthesis";
+import SinistresDashboard from "./pages/SinistresDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,6 +24,7 @@ const App = () => (
           <Route path="/sinistre/:id" element={<SinistreDetail />} />
           <Route path="/sinistre/declaration" element={<SinistreDeclaration />} />
           <Route path="/sinistre/synthesis/:id" element={<SinistreSynthesis />} />
+          <Route path="/sinistres/dashboard" element={<SinistresDashboard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
