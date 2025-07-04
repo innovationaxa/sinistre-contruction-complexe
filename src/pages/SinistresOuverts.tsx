@@ -9,7 +9,7 @@ const SinistresOuverts = () => {
   
   const sinistres = [
     {
-      id: "RC/RCD-2024-001",
+      id: "SIN-2024-001",
       dateDeclaration: "15/01/2024",
       typeIncident: "Dégât des eaux",
       statut: "En cours d'expertise",
@@ -17,7 +17,7 @@ const SinistresOuverts = () => {
       expert: "Jean Dupont"
     },
     {
-      id: "RC/RCD-2024-002", 
+      id: "SIN-2024-002", 
       dateDeclaration: "22/01/2024",
       typeIncident: "Incendie",
       statut: "Documents requis",
@@ -25,7 +25,7 @@ const SinistresOuverts = () => {
       expert: "Marie Martin"
     },
     {
-      id: "RC/RCD-2024-003",
+      id: "SIN-2024-003",
       dateDeclaration: "28/01/2024", 
       typeIncident: "Vol",
       statut: "Enquête en cours",
