@@ -20,7 +20,7 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar className="w-64 bg-white border-r border-gray-200">
+    <Sidebar>
       <SidebarContent className="p-4">
         <SidebarGroup>
           <SidebarGroupContent>
