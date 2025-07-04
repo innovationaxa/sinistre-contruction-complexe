@@ -1,5 +1,3 @@
-
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,6 +12,9 @@ import { Header } from "@/components/Header";
 const SinistreSynthesis = () => {
   const navigate = useNavigate();
   const [chatMessage, setChatMessage] = useState("");
+  const [selectedDoc, setSelectedDoc] = useState<any>(null);
+  const [chatMessages, setChatMessages] = useState<Array<{role: 'user' | 'assistant', content: string}>>([]);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   // Timeline des événements avec détails enrichis par IA
   const timelineEvents = [
@@ -207,6 +208,32 @@ const SinistreSynthesis = () => {
 
   const handleSuggestionClick = (suggestion: string) => {
     setChatMessage(suggestion);
+  };
+
+  const handleDocumentChat = (doc: any) => {
+    setSelectedDoc(doc);
+    setChatMessages([
+      {
+        role: 'assistant',
+        content: `Bonjour ! Je peux vous aider à analyser le document "${doc.name}". Que souhaitez-vous savoir sur ce document ?`
+      }
+    ]);
+    setIsChatOpen(true);
+  };
+
+  const handleDocChatSubmit = (e: React.FormEvent, message: string) => {
+    e.preventDefault();
+    if (!message.trim()) return;
+    
+    const newMessages = [
+      ...chatMessages,
+      { role: 'user' as const, content: message },
+      { 
+        role: 'assistant' as const, 
+        content: `Concernant le document "${selectedDoc?.name}", voici ce que je peux vous dire : ${selectedDoc?.aiSummary}. Avez-vous d'autres questions spécifiques ?`
+      }
+    ];
+    setChatMessages(newMessages);
   };
 
   const getStatusColor = (status: string) => {
@@ -645,7 +672,12 @@ const SinistreSynthesis = () => {
                               <Download className="h-3 w-3 mr-1" />
                               DL
                             </Button>
-                            <Button size="sm" variant="outline" className="h-7 px-2 text-xs">
+                            <Button 
+                              size="sm" 
+                              variant="outline" 
+                              className="h-7 px-2 text-xs"
+                              onClick={() => handleDocumentChat(doc)}
+                            >
                               <MessageCircle className="h-3 w-3 mr-1" />
                               Chat
                             </Button>
@@ -741,9 +773,80 @@ const SinistreSynthesis = () => {
           </Tabs>
         </div>
       </main>
+
+      {/* Dialog de chat avec document */}
+      <Dialog open={isChatOpen} onOpenChange={setIsChatOpen}>
+        <DialogContent className="max-w-4xl max-h-[80vh] flex flex-col">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <MessageCircle className="h-5 w-5 text-blue-600" />
+              Chat avec le document : {selectedDoc?.name}
+            </DialogTitle>
+            <p className="text-sm text-gray-600">
+              Posez vos questions sur ce document et obtenez des réponses basées sur son analyse IA
+            </p>
+          </DialogHeader>
+          
+          <div className="flex-1 flex flex-col min-h-0">
+            {/* Zone de messages */}
+            <div className="flex-1 bg-gray-50 rounded-lg p-4 mb-4 overflow-y-auto min-h-[300px] max-h-[400px]">
+              <div className="space-y-4">
+                {chatMessages.map((message, index) => (
+                  <div
+                    key={index}
+                    className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                  >
+                    <div
+                      className={`max-w-[80%] p-3 rounded-lg ${
+                        message.role === 'user'
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-white border border-gray-200'
+                      }`}
+                    >
+                      <p className="text-sm">{message.content}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Informations du document */}
+            {selectedDoc && (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
+                <h4 className="text-sm font-medium text-blue-900 mb-2">À propos de ce document</h4>
+                <div className="grid grid-cols-2 gap-2 text-xs text-blue-800">
+                  <div><strong>Type :</strong> {selectedDoc.type}</div>
+                  <div><strong>Taille :</strong> {selectedDoc.size}</div>
+                  <div><strong>Classification :</strong> {selectedDoc.aiClassification}</div>
+                  <div><strong>Confiance :</strong> {selectedDoc.confidence}%</div>
+                </div>
+              </div>
+            )}
+
+            {/* Zone de saisie */}
+            <form 
+              onSubmit={(e) => {
+                const input = e.currentTarget.elements.namedItem('message') as HTMLInputElement;
+                handleDocChatSubmit(e, input.value);
+                input.value = '';
+              }}
+              className="flex gap-2"
+            >
+              <Input
+                name="message"
+                placeholder="Posez votre question sur ce document..."
+                className="flex-1"
+                autoComplete="off"
+              />
+              <Button type="submit" size="sm">
+                <Send className="h-4 w-4" />
+              </Button>
+            </form>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
 
 export default SinistreSynthesis;
-
