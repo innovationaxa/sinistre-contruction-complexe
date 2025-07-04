@@ -12,7 +12,7 @@ const SinistresOuverts = () => {
       id: "SIN-2024-001",
       dateDeclaration: "15/01/2024",
       typeContrat: "RC/RCD",
-      statut: "En cours d'expertise",
+      statut: "Nouveau",
       montantEstime: "3 500 €",
       expert: "Jean Dupont"
     },
@@ -36,6 +36,8 @@ const SinistresOuverts = () => {
 
   const getStatusBadge = (statut: string) => {
     switch (statut) {
+      case "Nouveau":
+        return <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">Nouveau</Badge>;
       case "En cours d'expertise":
         return <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">En cours d'expertise</Badge>;
       case "Documents requis":
