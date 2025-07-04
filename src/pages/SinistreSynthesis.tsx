@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft, FileText, AlertTriangle, Clock, CheckCircle, Send, Calendar, User, MapPin, Star, Download, Eye, Bot, FileCheck, Tag } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
@@ -186,6 +187,16 @@ const SinistreSynthesis = () => {
     "Dois-je faire appel à un expert ?"
   ];
 
+  // Récupération de tous les documents avec analyse IA
+  const allDocuments = timelineEvents.flatMap(event => 
+    event.details.documents.map(doc => ({
+      ...doc,
+      eventTitle: event.title,
+      eventDate: event.date,
+      eventTime: event.time
+    }))
+  );
+
   const handleChatSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Message envoyé:", chatMessage);
@@ -259,7 +270,7 @@ const SinistreSynthesis = () => {
           <ArrowLeft className="w-4 h-4 mr-2" />
           Retour à la liste
         </Button>
-        <h2 className="text-lg font-semibold text-gray-900">Synthèse du dossier sinistre</h2>
+        <h2 className="text-lg font-semibold text-gray-900">Synthèse du dossier sinistre RC Décennale</h2>
       </div>
       <main className="flex-1 p-6">
         <div className="max-w-7xl mx-auto space-y-6">
@@ -281,297 +292,477 @@ const SinistreSynthesis = () => {
                 </div>
                 <div className="flex items-center gap-1">
                   <User className="h-4 w-4" />
-                  Dégâts des eaux
+                  RC Décennale - Dégâts des eaux
                 </div>
               </div>
             </CardHeader>
           </Card>
 
-          {/* Alertes - Mise en avant */}
-          <Card className="border-l-4 border-l-red-500 shadow-lg">
-            <CardHeader className="bg-red-50">
-              <CardTitle className="flex items-center gap-2 text-red-900">
-                <AlertTriangle className="h-6 w-6" />
-                🚨 Alertes
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="pt-4">
-              <div className="grid gap-4">
-                {alerts.map((alert) => (
-                  <div key={alert.id} className={`p-4 rounded-lg border-l-4 ${
-                    alert.type === 'urgent' ? 'border-l-red-500 bg-red-50' :
-                    alert.type === 'warning' ? 'border-l-yellow-500 bg-yellow-50' :
-                    'border-l-blue-500 bg-blue-50'
-                  }`}>
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <h4 className="font-semibold text-lg flex items-center gap-2">
-                          {getAlertIcon(alert.type)} {alert.title}
-                        </h4>
-                        <p className="text-gray-700 mt-1">{alert.description}</p>
-                        <p className="text-sm text-gray-600 mt-2">
-                          <strong>Impact:</strong> {alert.impact}
-                        </p>
-                        <p className="text-sm font-medium mt-2">
-                          ⏰ Échéance: {alert.dueDate}
-                        </p>
-                      </div>
-                      <Badge className={`${
-                        alert.type === 'urgent' ? 'bg-red-500' :
-                        alert.type === 'warning' ? 'bg-yellow-500' :
-                        'bg-blue-500'
-                      } text-white`}>
-                        {alert.type === 'urgent' ? 'URGENT' :
-                         alert.type === 'warning' ? 'ATTENTION' : 'INFO'}
-                      </Badge>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+          {/* Onglets principaux */}
+          <Tabs defaultValue="synthese" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="synthese">Synthèse</TabsTrigger>
+              <TabsTrigger value="historique">Historique et documents</TabsTrigger>
+            </TabsList>
 
-          {/* Actions recommandées - Mise en avant */}
-          <Card className="border-l-4 border-l-green-500 shadow-lg">
-            <CardHeader className="bg-green-50">
-              <CardTitle className="flex items-center gap-2 text-green-900">
-                <CheckCircle className="h-6 w-6" />
-                ⭐ Actions recommandées
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="pt-4">
-              <div className="grid gap-4">
-                {nextActions.map((action) => (
-                  <div key={action.id} className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                    <div className="flex items-start justify-between mb-3">
-                      <h4 className="font-semibold text-lg flex items-center gap-2">
-                        {getPriorityIcon(action.priority)} {action.title}
-                      </h4>
-                      <Badge className={getPriorityColor(action.priority)}>
-                        {action.priority === 'high' ? 'URGENT' :
-                         action.priority === 'medium' ? 'MOYEN' : 'FAIBLE'}
-                      </Badge>
-                    </div>
-                    <p className="text-gray-700 mb-2">{action.description}</p>
-                    <div className="flex gap-4 text-sm text-gray-600">
-                      <span>📅 Échéance: {action.deadline}</span>
-                      <span>👤 Assigné à: {action.assignee}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Timeline des événements - Interactive avec IA */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Clock className="h-5 w-5" />
-                  Timeline des événements
-                  <Badge className="bg-purple-100 text-purple-800 ml-2">
-                    <Bot className="h-3 w-3 mr-1" />
-                    IA Enrichie
-                  </Badge>
-                </CardTitle>
-                <p className="text-sm text-gray-600">Cliquez sur une étape pour voir les détails et l'analyse IA</p>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {timelineEvents.map((event, index) => (
-                    <Dialog key={event.id}>
-                      <DialogTrigger asChild>
-                        <div className="flex gap-4 cursor-pointer hover:bg-gray-50 p-2 rounded-lg transition-colors">
-                          <div className="flex flex-col items-center">
-                            <div className={`w-4 h-4 rounded-full ${
-                              event.status === 'completed' ? 'bg-green-500' :
-                              event.status === 'upcoming' ? 'bg-blue-500' : 'bg-yellow-500'
-                            }`} />
-                            {index < timelineEvents.length - 1 && (
-                              <div className="w-px h-12 bg-gray-300 mt-2" />
-                            )}
-                          </div>
-                          <div className="flex-1 pb-4">
-                            <div className="flex items-center gap-2 mb-1">
-                              <span className="font-medium">{event.title}</span>
-                              <Badge className={getStatusColor(event.status)}>
-                                {event.status === 'completed' ? 'Terminé' :
-                                 event.status === 'upcoming' ? 'À venir' : 'En attente'}
-                              </Badge>
-                              {event.details.documents.length > 0 && (
-                                <Badge variant="outline" className="text-xs">
-                                  <Bot className="h-3 w-3 mr-1" />
-                                  {event.details.documents.length} doc(s) analysé(s)
-                                </Badge>
-                              )}
-                            </div>
-                            <p className="text-sm text-gray-600">{event.description}</p>
-                            <p className="text-xs text-gray-500 mt-1">
-                              {event.date} {event.time && `à ${event.time}`}
+            {/* Onglet Synthèse */}
+            <TabsContent value="synthese" className="space-y-6">
+              {/* Alertes - Mise en avant */}
+              <Card className="border-l-4 border-l-red-500 shadow-lg">
+                <CardHeader className="bg-red-50">
+                  <CardTitle className="flex items-center gap-2 text-red-900">
+                    <AlertTriangle className="h-6 w-6" />
+                    🚨 Alertes
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-4">
+                  <div className="grid gap-4">
+                    {alerts.map((alert) => (
+                      <div key={alert.id} className={`p-4 rounded-lg border-l-4 ${
+                        alert.type === 'urgent' ? 'border-l-red-500 bg-red-50' :
+                        alert.type === 'warning' ? 'border-l-yellow-500 bg-yellow-50' :
+                        'border-l-blue-500 bg-blue-50'
+                      }`}>
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <h4 className="font-semibold text-lg flex items-center gap-2">
+                              {getAlertIcon(alert.type)} {alert.title}
+                            </h4>
+                            <p className="text-gray-700 mt-1">{alert.description}</p>
+                            <p className="text-sm text-gray-600 mt-2">
+                              <strong>Impact:</strong> {alert.impact}
+                            </p>
+                            <p className="text-sm font-medium mt-2">
+                              ⏰ Échéance: {alert.dueDate}
                             </p>
                           </div>
+                          <Badge className={`${
+                            alert.type === 'urgent' ? 'bg-red-500' :
+                            alert.type === 'warning' ? 'bg-yellow-500' :
+                            'bg-blue-500'
+                          } text-white`}>
+                            {alert.type === 'urgent' ? 'URGENT' :
+                             alert.type === 'warning' ? 'ATTENTION' : 'INFO'}
+                          </Badge>
                         </div>
-                      </DialogTrigger>
-                      <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-                        <DialogHeader>
-                          <DialogTitle className="flex items-center gap-2">
-                            <Star className="h-5 w-5 text-yellow-500" />
-                            {event.title}
-                          </DialogTitle>
-                        </DialogHeader>
-                        <div className="space-y-6">
-                          <div>
-                            <h4 className="font-semibold text-sm text-gray-900 mb-2">📋 Importance</h4>
-                            <p className="text-sm text-gray-700">{event.details.importance}</p>
-                          </div>
-                          
-                          <div>
-                            <h4 className="font-semibold text-sm text-gray-900 mb-4 flex items-center gap-2">
-                              📄 Documents liés 
-                              <Badge className="bg-purple-100 text-purple-800">
-                                <Bot className="h-3 w-3 mr-1" />
-                                Analyse IA
-                              </Badge>
-                            </h4>
-                            {event.details.documents.length > 0 ? (
-                              <div className="space-y-4">
-                                {event.details.documents.map((doc, idx) => (
-                                  <div key={idx} className="border rounded-lg p-4 bg-gray-50">
-                                    {/* En-tête du document */}
-                                    <div className="flex items-center justify-between mb-3">
-                                      <div className="flex items-center gap-2">
-                                        <FileText className="h-4 w-4 text-gray-500" />
-                                        <span className="font-medium">{doc.name}</span>
-                                        <Badge variant="outline" className="text-xs">{doc.type}</Badge>
-                                        <span className="text-xs text-gray-500">{doc.size}</span>
-                                      </div>
-                                      <div className="flex items-center gap-2">
-                                        <Button size="sm" variant="ghost">
-                                          <Eye className="h-3 w-3" />
-                                        </Button>
-                                        <Button size="sm" variant="ghost">
-                                          <Download className="h-3 w-3" />
-                                        </Button>
-                                      </div>
-                                    </div>
-
-                                    {/* Classification IA */}
-                                    <div className="mb-3">
-                                      <div className="flex items-center gap-2 mb-2">
-                                        <Tag className="h-4 w-4 text-purple-600" />
-                                        <span className="text-sm font-medium text-purple-900">Classification IA</span>
-                                        <Badge className={`text-xs ${getConfidenceColor(doc.confidence)}`}>
-                                          {doc.confidence}% confiance
-                                        </Badge>
-                                      </div>
-                                      <p className="text-sm text-purple-800 bg-purple-50 p-2 rounded">
-                                        {doc.aiClassification}
-                                      </p>
-                                    </div>
-
-                                    {/* Renommage IA */}
-                                    <div className="mb-3">
-                                      <div className="flex items-center gap-2 mb-2">
-                                        <FileCheck className="h-4 w-4 text-blue-600" />
-                                        <span className="text-sm font-medium text-blue-900">Renommage IA</span>
-                                      </div>
-                                      <div className="space-y-1">
-                                        <p className="text-xs text-gray-600">
-                                          <span className="font-medium">Original :</span> {doc.originalName}
-                                        </p>
-                                        <p className="text-xs text-blue-800 bg-blue-50 p-2 rounded">
-                                          <span className="font-medium">Suggéré :</span> {doc.aiRenamed}
-                                        </p>
-                                      </div>
-                                    </div>
-
-                                    {/* Synthèse IA */}
-                                    <div>
-                                      <div className="flex items-center gap-2 mb-2">
-                                        <Bot className="h-4 w-4 text-green-600" />
-                                        <span className="text-sm font-medium text-green-900">Synthèse IA</span>
-                                      </div>
-                                      <p className="text-sm text-green-800 bg-green-50 p-3 rounded leading-relaxed">
-                                        {doc.aiSummary}
-                                      </p>
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            ) : (
-                              <p className="text-sm text-gray-500 italic">Aucun document associé</p>
-                            )}
-                          </div>
-
-                          <div>
-                            <h4 className="font-semibold text-sm text-gray-900 mb-2">📝 Notes importantes</h4>
-                            <p className="text-sm text-gray-700">{event.details.notes}</p>
-                          </div>
-
-                          <div className="flex items-center gap-2 text-sm text-gray-500 pt-2 border-t">
-                            <Calendar className="h-4 w-4" />
-                            <span>{event.date} {event.time && `à ${event.time}`}</span>
-                          </div>
-                        </div>
-                      </DialogContent>
-                    </Dialog>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Chat avec le dossier */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Send className="h-5 w-5" />
-                  Chat avec le dossier
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="h-64 bg-gray-50 rounded-lg p-4 overflow-y-auto">
-                    <div className="space-y-3">
-                      <div className="bg-blue-100 p-3 rounded-lg">
-                        <p className="text-sm">Bonjour ! Je peux vous aider à analyser ce dossier sinistre. Que souhaitez-vous savoir ?</p>
                       </div>
-                    </div>
+                    ))}
                   </div>
+                </CardContent>
+              </Card>
 
-                  {/* Suggestions de questions */}
-                  <div className="space-y-2">
-                    <p className="text-sm font-medium text-gray-700">💡 Questions suggérées :</p>
-                    <div className="grid grid-cols-1 gap-2">
-                      {questionSuggestions.map((suggestion, index) => (
-                        <Button
-                          key={index}
-                          variant="outline"
-                          size="sm"
-                          className="justify-start text-left h-auto py-2 px-3 text-sm hover:bg-blue-50 hover:border-blue-200"
-                          onClick={() => handleSuggestionClick(suggestion)}
-                        >
-                          {suggestion}
-                        </Button>
+              {/* Actions recommandées - Mise en avant */}
+              <Card className="border-l-4 border-l-green-500 shadow-lg">
+                <CardHeader className="bg-green-50">
+                  <CardTitle className="flex items-center gap-2 text-green-900">
+                    <CheckCircle className="h-6 w-6" />
+                    ⭐ Actions recommandées
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-4">
+                  <div className="grid gap-4">
+                    {nextActions.map((action) => (
+                      <div key={action.id} className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
+                        <div className="flex items-start justify-between mb-3">
+                          <h4 className="font-semibold text-lg flex items-center gap-2">
+                            {getPriorityIcon(action.priority)} {action.title}
+                          </h4>
+                          <Badge className={getPriorityColor(action.priority)}>
+                            {action.priority === 'high' ? 'URGENT' :
+                             action.priority === 'medium' ? 'MOYEN' : 'FAIBLE'}
+                          </Badge>
+                        </div>
+                        <p className="text-gray-700 mb-2">{action.description}</p>
+                        <div className="flex gap-4 text-sm text-gray-600">
+                          <span>📅 Échéance: {action.deadline}</span>
+                          <span>👤 Assigné à: {action.assignee}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Timeline des événements - Interactive avec IA */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Clock className="h-5 w-5" />
+                      Timeline des événements
+                      <Badge className="bg-purple-100 text-purple-800 ml-2">
+                        <Bot className="h-3 w-3 mr-1" />
+                        IA Enrichie
+                      </Badge>
+                    </CardTitle>
+                    <p className="text-sm text-gray-600">Cliquez sur une étape pour voir les détails et l'analyse IA</p>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      {timelineEvents.map((event, index) => (
+                        <Dialog key={event.id}>
+                          <DialogTrigger asChild>
+                            <div className="flex gap-4 cursor-pointer hover:bg-gray-50 p-2 rounded-lg transition-colors">
+                              <div className="flex flex-col items-center">
+                                <div className={`w-4 h-4 rounded-full ${
+                                  event.status === 'completed' ? 'bg-green-500' :
+                                  event.status === 'upcoming' ? 'bg-blue-500' : 'bg-yellow-500'
+                                }`} />
+                                {index < timelineEvents.length - 1 && (
+                                  <div className="w-px h-12 bg-gray-300 mt-2" />
+                                )}
+                              </div>
+                              <div className="flex-1 pb-4">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <span className="font-medium">{event.title}</span>
+                                  <Badge className={getStatusColor(event.status)}>
+                                    {event.status === 'completed' ? 'Terminé' :
+                                     event.status === 'upcoming' ? 'À venir' : 'En attente'}
+                                  </Badge>
+                                  {event.details.documents.length > 0 && (
+                                    <Badge variant="outline" className="text-xs">
+                                      <Bot className="h-3 w-3 mr-1" />
+                                      {event.details.documents.length} doc(s) analysé(s)
+                                    </Badge>
+                                  )}
+                                </div>
+                                <p className="text-sm text-gray-600">{event.description}</p>
+                                <p className="text-xs text-gray-500 mt-1">
+                                  {event.date} {event.time && `à ${event.time}`}
+                                </p>
+                              </div>
+                            </div>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+                            <DialogHeader>
+                              <DialogTitle className="flex items-center gap-2">
+                                <Star className="h-5 w-5 text-yellow-500" />
+                                {event.title}
+                              </DialogTitle>
+                            </DialogHeader>
+                            <div className="space-y-6">
+                              <div>
+                                <h4 className="font-semibold text-sm text-gray-900 mb-2">📋 Importance</h4>
+                                <p className="text-sm text-gray-700">{event.details.importance}</p>
+                              </div>
+                              
+                              <div>
+                                <h4 className="font-semibold text-sm text-gray-900 mb-4 flex items-center gap-2">
+                                  📄 Documents liés 
+                                  <Badge className="bg-purple-100 text-purple-800">
+                                    <Bot className="h-3 w-3 mr-1" />
+                                    Analyse IA
+                                  </Badge>
+                                </h4>
+                                {event.details.documents.length > 0 ? (
+                                  <div className="space-y-4">
+                                    {event.details.documents.map((doc, idx) => (
+                                      <div key={idx} className="border rounded-lg p-4 bg-gray-50">
+                                        {/* En-tête du document */}
+                                        <div className="flex items-center justify-between mb-3">
+                                          <div className="flex items-center gap-2">
+                                            <FileText className="h-4 w-4 text-gray-500" />
+                                            <span className="font-medium">{doc.name}</span>
+                                            <Badge variant="outline" className="text-xs">{doc.type}</Badge>
+                                            <span className="text-xs text-gray-500">{doc.size}</span>
+                                          </div>
+                                          <div className="flex items-center gap-2">
+                                            <Button size="sm" variant="ghost">
+                                              <Eye className="h-3 w-3" />
+                                            </Button>
+                                            <Button size="sm" variant="ghost">
+                                              <Download className="h-3 w-3" />
+                                            </Button>
+                                          </div>
+                                        </div>
+
+                                        {/* Classification IA */}
+                                        <div className="mb-3">
+                                          <div className="flex items-center gap-2 mb-2">
+                                            <Tag className="h-4 w-4 text-purple-600" />
+                                            <span className="text-sm font-medium text-purple-900">Classification IA</span>
+                                            <Badge className={`text-xs ${getConfidenceColor(doc.confidence)}`}>
+                                              {doc.confidence}% confiance
+                                            </Badge>
+                                          </div>
+                                          <p className="text-sm text-purple-800 bg-purple-50 p-2 rounded">
+                                            {doc.aiClassification}
+                                          </p>
+                                        </div>
+
+                                        {/* Renommage IA */}
+                                        <div className="mb-3">
+                                          <div className="flex items-center gap-2 mb-2">
+                                            <FileCheck className="h-4 w-4 text-blue-600" />
+                                            <span className="text-sm font-medium text-blue-900">Renommage IA</span>
+                                          </div>
+                                          <div className="space-y-1">
+                                            <p className="text-xs text-gray-600">
+                                              <span className="font-medium">Original :</span> {doc.originalName}
+                                            </p>
+                                            <p className="text-xs text-blue-800 bg-blue-50 p-2 rounded">
+                                              <span className="font-medium">Suggéré :</span> {doc.aiRenamed}
+                                            </p>
+                                          </div>
+                                        </div>
+
+                                        {/* Synthèse IA */}
+                                        <div>
+                                          <div className="flex items-center gap-2 mb-2">
+                                            <Bot className="h-4 w-4 text-green-600" />
+                                            <span className="text-sm font-medium text-green-900">Synthèse IA</span>
+                                          </div>
+                                          <p className="text-sm text-green-800 bg-green-50 p-3 rounded leading-relaxed">
+                                            {doc.aiSummary}
+                                          </p>
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                ) : (
+                                  <p className="text-sm text-gray-500 italic">Aucun document associé</p>
+                                )}
+                              </div>
+
+                              <div>
+                                <h4 className="font-semibold text-sm text-gray-900 mb-2">📝 Notes importantes</h4>
+                                <p className="text-sm text-gray-700">{event.details.notes}</p>
+                              </div>
+
+                              <div className="flex items-center gap-2 text-sm text-gray-500 pt-2 border-t">
+                                <Calendar className="h-4 w-4" />
+                                <span>{event.date} {event.time && `à ${event.time}`}</span>
+                              </div>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
                       ))}
                     </div>
-                  </div>
+                  </CardContent>
+                </Card>
 
-                  <form onSubmit={handleChatSubmit} className="flex gap-2">
-                    <Input
-                      value={chatMessage}
-                      onChange={(e) => setChatMessage(e.target.value)}
-                      placeholder="Posez votre question sur le dossier..."
-                      className="flex-1"
-                    />
-                    <Button type="submit" size="sm">
-                      <Send className="h-4 w-4" />
-                    </Button>
-                  </form>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+                {/* Chat avec le dossier */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Send className="h-5 w-5" />
+                      Chat avec le dossier
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="h-64 bg-gray-50 rounded-lg p-4 overflow-y-auto">
+                        <div className="space-y-3">
+                          <div className="bg-blue-100 p-3 rounded-lg">
+                            <p className="text-sm">Bonjour ! Je peux vous aider à analyser ce dossier sinistre RC Décennale. Que souhaitez-vous savoir ?</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Suggestions de questions */}
+                      <div className="space-y-2">
+                        <p className="text-sm font-medium text-gray-700">💡 Questions suggérées :</p>
+                        <div className="grid grid-cols-1 gap-2">
+                          {questionSuggestions.map((suggestion, index) => (
+                            <Button
+                              key={index}
+                              variant="outline"
+                              size="sm"
+                              className="justify-start text-left h-auto py-2 px-3 text-sm hover:bg-blue-50 hover:border-blue-200"
+                              onClick={() => handleSuggestionClick(suggestion)}
+                            >
+                              {suggestion}
+                            </Button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <form onSubmit={handleChatSubmit} className="flex gap-2">
+                        <Input
+                          value={chatMessage}
+                          onChange={(e) => setChatMessage(e.target.value)}
+                          placeholder="Posez votre question sur le dossier..."
+                          className="flex-1"
+                        />
+                        <Button type="submit" size="sm">
+                          <Send className="h-4 w-4" />
+                        </Button>
+                      </form>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
+
+            {/* Onglet Historique et documents */}
+            <TabsContent value="historique" className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <FileText className="h-5 w-5" />
+                    Historique et documents du sinistre
+                    <Badge className="bg-purple-100 text-purple-800 ml-2">
+                      <Bot className="h-3 w-3 mr-1" />
+                      {allDocuments.length} documents analysés par IA
+                    </Badge>
+                  </CardTitle>
+                  <p className="text-sm text-gray-600">
+                    Tous les documents du dossier avec analyse IA complète : classification, renommage intelligent et synthèse détaillée
+                  </p>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-6">
+                    {allDocuments.map((doc, index) => (
+                      <div key={index} className="border-2 border-gray-200 rounded-xl p-6 bg-white shadow-sm hover:shadow-md transition-shadow">
+                        {/* En-tête du document avec informations contextuelles */}
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-2">
+                              <FileText className="h-5 w-5 text-blue-600" />
+                              <h3 className="text-lg font-semibold text-gray-900">{doc.name}</h3>
+                              <Badge variant="outline" className="text-sm">{doc.type}</Badge>
+                              <Badge variant="outline" className="text-sm text-gray-500">{doc.size}</Badge>
+                            </div>
+                            <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
+                              <span className="flex items-center gap-1">
+                                <Calendar className="h-3 w-3" />
+                                {doc.eventDate} {doc.eventTime && `à ${doc.eventTime}`}
+                              </span>
+                              <span className="flex items-center gap-1">
+                                <Clock className="h-3 w-3" />
+                                {doc.eventTitle}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2 ml-4">
+                            <Button size="sm" variant="outline">
+                              <Eye className="h-4 w-4 mr-1" />
+                              Visualiser
+                            </Button>
+                            <Button size="sm" variant="outline">
+                              <Download className="h-4 w-4 mr-1" />
+                              Télécharger
+                            </Button>
+                          </div>
+                        </div>
+
+                        {/* Analyse IA complète */}
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                          {/* Classification IA */}
+                          <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                            <div className="flex items-center gap-2 mb-3">
+                              <Tag className="h-4 w-4 text-purple-600" />
+                              <span className="text-sm font-semibold text-purple-900">Classification IA</span>
+                              <Badge className={`text-xs ${getConfidenceColor(doc.confidence)}`}>
+                                {doc.confidence}% confiance
+                              </Badge>
+                            </div>
+                            <p className="text-sm text-purple-800 font-medium mb-2">
+                              {doc.aiClassification}
+                            </p>
+                            <div className="flex items-center text-xs text-purple-700">
+                              <Bot className="h-3 w-3 mr-1" />
+                              Catégorisé automatiquement
+                            </div>
+                          </div>
+
+                          {/* Renommage IA */}
+                          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                            <div className="flex items-center gap-2 mb-3">
+                              <FileCheck className="h-4 w-4 text-blue-600" />
+                              <span className="text-sm font-semibold text-blue-900">Renommage IA</span>
+                            </div>
+                            <div className="space-y-2">
+                              <div>
+                                <p className="text-xs text-gray-600 mb-1">Nom original :</p>
+                                <p className="text-xs text-gray-800 bg-gray-100 p-2 rounded font-mono">
+                                  {doc.originalName}
+                                </p>
+                              </div>
+                              <div>
+                                <p className="text-xs text-blue-700 mb-1">Nom suggéré :</p>
+                                <p className="text-xs text-blue-800 bg-blue-100 p-2 rounded font-mono">
+                                  {doc.aiRenamed}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="flex items-center text-xs text-blue-700 mt-2">
+                              <Bot className="h-3 w-3 mr-1" />
+                              Renommage intelligent
+                            </div>
+                          </div>
+
+                          {/* Score de confiance */}
+                          <div className={`border rounded-lg p-4 ${
+                            doc.confidence >= 90 ? 'bg-green-50 border-green-200' :
+                            doc.confidence >= 80 ? 'bg-yellow-50 border-yellow-200' :
+                            'bg-red-50 border-red-200'
+                          }`}>
+                            <div className="flex items-center gap-2 mb-3">
+                              <Star className="h-4 w-4 text-yellow-500" />
+                              <span className={`text-sm font-semibold ${
+                                doc.confidence >= 90 ? 'text-green-900' :
+                                doc.confidence >= 80 ? 'text-yellow-900' :
+                                'text-red-900'
+                              }`}>
+                                Score de confiance
+                              </span>
+                            </div>
+                            <div className="text-center">
+                              <div className={`text-2xl font-bold mb-1 ${
+                                doc.confidence >= 90 ? 'text-green-700' :
+                                doc.confidence >= 80 ? 'text-yellow-700' :
+                                'text-red-700'
+                              }`}>
+                                {doc.confidence}%
+                              </div>
+                              <p className={`text-xs ${
+                                doc.confidence >= 90 ? 'text-green-600' :
+                                doc.confidence >= 80 ? 'text-yellow-600' :
+                                'text-red-600'
+                              }`}>
+                                {doc.confidence >= 90 ? 'Excellente analyse' :
+                                 doc.confidence >= 80 ? 'Bonne analyse' :
+                                 'Analyse à vérifier'}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Synthèse IA détaillée */}
+                        <div className="bg-green-50 border border-green-200 rounded-lg p-4 mt-4">
+                          <div className="flex items-center gap-2 mb-3">
+                            <Bot className="h-5 w-5 text-green-600" />
+                            <span className="text-base font-semibold text-green-900">Synthèse IA détaillée</span>
+                          </div>
+                          <p className="text-sm text-green-800 leading-relaxed">
+                            {doc.aiSummary}
+                          </p>
+                          <div className="flex items-center justify-between mt-3 pt-3 border-t border-green-200">
+                            <div className="flex items-center text-xs text-green-700">
+                              <Bot className="h-3 w-3 mr-1" />
+                              Analyse générée automatiquement
+                            </div>
+                            <Badge className="bg-green-100 text-green-800 text-xs">
+                              Document vérifié ✓
+                            </Badge>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+
+                    {allDocuments.length === 0 && (
+                      <div className="text-center py-12 text-gray-500">
+                        <FileText className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                        <p className="text-lg font-medium mb-2">Aucun document trouvé</p>
+                        <p className="text-sm">Les documents apparaîtront ici une fois ajoutés au dossier.</p>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
         </div>
       </main>
     </div>
