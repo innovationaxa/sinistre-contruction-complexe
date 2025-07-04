@@ -810,19 +810,6 @@ const SinistreSynthesis = () => {
               </div>
             </div>
 
-            {/* Informations du document */}
-            {selectedDoc && (
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
-                <h4 className="text-sm font-medium text-blue-900 mb-2">À propos de ce document</h4>
-                <div className="grid grid-cols-2 gap-2 text-xs text-blue-800">
-                  <div><strong>Type :</strong> {selectedDoc.type}</div>
-                  <div><strong>Taille :</strong> {selectedDoc.size}</div>
-                  <div><strong>Classification :</strong> {selectedDoc.aiClassification}</div>
-                  <div><strong>Confiance :</strong> {selectedDoc.confidence}%</div>
-                </div>
-              </div>
-            )}
-
             {/* Zone de saisie */}
             <form 
               onSubmit={(e) => {
