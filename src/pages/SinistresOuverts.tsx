@@ -11,7 +11,7 @@ const SinistresOuverts = () => {
     {
       id: "SIN-2024-001",
       dateDeclaration: "15/01/2024",
-      typeIncident: "Dégât des eaux",
+      typeContrat: "Dégât des eaux",
       statut: "En cours d'expertise",
       montantEstime: "3 500 €",
       expert: "Jean Dupont"
@@ -19,7 +19,7 @@ const SinistresOuverts = () => {
     {
       id: "SIN-2024-002", 
       dateDeclaration: "22/01/2024",
-      typeIncident: "Incendie",
+      typeContrat: "Incendie",
       statut: "Documents requis",
       montantEstime: "15 000 €",
       expert: "Marie Martin"
@@ -27,7 +27,7 @@ const SinistresOuverts = () => {
     {
       id: "SIN-2024-003",
       dateDeclaration: "28/01/2024", 
-      typeIncident: "Vol",
+      typeContrat: "Vol",
       statut: "Enquête en cours",
       montantEstime: "2 800 €",
       expert: "Pierre Dubois"
@@ -64,7 +64,7 @@ const SinistresOuverts = () => {
               <TableRow>
                 <TableHead>N° Sinistre</TableHead>
                 <TableHead>Date de déclaration</TableHead>
-                <TableHead>Type d'incident</TableHead>
+                <TableHead>Type de contrat</TableHead>
                 <TableHead>Statut</TableHead>
                 <TableHead>Montant estimé</TableHead>
                 <TableHead>Expert assigné</TableHead>
@@ -79,7 +79,7 @@ const SinistresOuverts = () => {
                 >
                   <TableCell className="font-medium text-blue-600">{sinistre.id}</TableCell>
                   <TableCell>{sinistre.dateDeclaration}</TableCell>
-                  <TableCell>{sinistre.typeIncident}</TableCell>
+                  <TableCell>{sinistre.typeContrat}</TableCell>
                   <TableCell>{getStatusBadge(sinistre.statut)}</TableCell>
                   <TableCell className="font-semibold">{sinistre.montantEstime}</TableCell>
                   <TableCell>{sinistre.expert}</TableCell>
