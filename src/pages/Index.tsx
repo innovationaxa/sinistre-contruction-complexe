@@ -10,15 +10,17 @@ const Index = () => {
     <SidebarProvider>
       <div className="min-h-screen flex flex-col w-full bg-gray-50">
         <Header />
-        <div className="flex items-center gap-4 px-6 py-3 bg-white border-b border-gray-200">
-          <SidebarTrigger className="border-2 border-blue-600 hover:bg-blue-50 text-blue-700" />
-          <h2 className="text-lg font-semibold text-gray-900">Ma Corbeille - Activités de déclaration</h2>
-        </div>
         <div className="flex flex-1">
           <AppSidebar />
-          <main className="flex-1 p-6">
-            <ActivitiesTable />
-          </main>
+          <div className="flex-1 flex flex-col">
+            <div className="flex items-center gap-4 px-6 py-3 bg-white border-b border-gray-200">
+              <SidebarTrigger className="border-2 border-blue-600 hover:bg-blue-50 text-blue-700" />
+              <h2 className="text-lg font-semibold text-gray-900">Ma Corbeille - Activités de déclaration</h2>
+            </div>
+            <main className="flex-1 p-6">
+              <ActivitiesTable />
+            </main>
+          </div>
         </div>
       </div>
     </SidebarProvider>
