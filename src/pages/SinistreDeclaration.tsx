@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,7 +9,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ArrowLeft, Plus, Sparkles } from "lucide-react";
+import { ArrowLeft, Plus, Sparkles, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 
@@ -114,6 +115,20 @@ const SinistreDeclaration = () => {
     setDesordres([...desordres, { libelle: "", nature: "", localisation: "" }]);
   };
 
+  // Composant pour les champs pré-remplis par IA
+  const AIField = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
+    <div className={`relative ${className}`}>
+      <div className="absolute -top-1 -right-1 z-10">
+        <div className="bg-purple-100 rounded-full p-1">
+          <Star className="w-3 h-3 text-purple-600 fill-purple-600" />
+        </div>
+      </div>
+      <div className="border-l-2 border-purple-400 pl-2 bg-purple-50/30 rounded-r">
+        {children}
+      </div>
+    </div>
+  );
+
   return (
     <div className="min-h-screen flex flex-col w-full bg-gray-50">
       <Header />
@@ -130,10 +145,14 @@ const SinistreDeclaration = () => {
       </div>
       <main className="flex-1 p-4">
         <Card className="max-w-6xl mx-auto">
-          <CardHeader className="bg-blue-50 border-b border-blue-200 pb-4">
-            <CardTitle className="text-xl text-blue-900 flex items-center gap-2">
-              <Sparkles className="h-5 w-5" />
+          <CardHeader className="bg-gradient-to-r from-purple-50 to-blue-50 border-b border-purple-200 pb-4">
+            <CardTitle className="text-xl text-purple-900 flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-purple-600" />
               Déclaration de sinistre - Pré-rempli par IA
+              <div className="flex items-center gap-1 text-sm font-normal text-purple-700 ml-2">
+                <Star className="w-4 h-4 fill-purple-600 text-purple-600" />
+                <span>Champs pré-remplis par IA</span>
+              </div>
             </CardTitle>
           </CardHeader>
           <CardContent className="p-4">
@@ -149,19 +168,21 @@ const SinistreDeclaration = () => {
                   <div>
                     <h4 className="font-medium mb-2">Déclaration</h4>
                     <div className="grid grid-cols-4 gap-3 text-sm">
-                      <div>
-                        <Label>Mode de déclaration</Label>
-                        <Select value={declaration.modeDeclaration} onValueChange={(value) => setDeclaration({...declaration, modeDeclaration: value})}>
-                          <SelectTrigger className="h-8">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="Courrier">Courrier</SelectItem>
-                            <SelectItem value="Email">Email</SelectItem>
-                            <SelectItem value="Téléphone">Téléphone</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
+                      <AIField>
+                        <div>
+                          <Label>Mode de déclaration</Label>
+                          <Select value={declaration.modeDeclaration} onValueChange={(value) => setDeclaration({...declaration, modeDeclaration: value})}>
+                            <SelectTrigger className="h-8 bg-purple-50/50">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Courrier">Courrier</SelectItem>
+                              <SelectItem value="Email">Email</SelectItem>
+                              <SelectItem value="Téléphone">Téléphone</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </AIField>
                       <div>
                         <Label>Déclarant</Label>
                         <Select value={declaration.declarant} onValueChange={(value) => setDeclaration({...declaration, declarant: value})}>
@@ -174,32 +195,36 @@ const SinistreDeclaration = () => {
                           </SelectContent>
                         </Select>
                       </div>
-                      <div>
-                        <Label>Déclaration sensible</Label>
-                        <RadioGroup value={declaration.declarationSensible} onValueChange={(value) => setDeclaration({...declaration, declarationSensible: value})} className="flex gap-4">
-                          <div className="flex items-center space-x-1">
-                            <RadioGroupItem value="Oui" id="sens-oui" className="h-3 w-3" />
-                            <Label htmlFor="sens-oui" className="text-xs">Oui</Label>
-                          </div>
-                          <div className="flex items-center space-x-1">
-                            <RadioGroupItem value="Non" id="sens-non" className="h-3 w-3" />
-                            <Label htmlFor="sens-non" className="text-xs">Non</Label>
-                          </div>
-                        </RadioGroup>
-                      </div>
-                      <div>
-                        <Label>Contact Plus</Label>
-                        <RadioGroup value={declaration.contactPlus} onValueChange={(value) => setDeclaration({...declaration, contactPlus: value})} className="flex gap-4">
-                          <div className="flex items-center space-x-1">
-                            <RadioGroupItem value="Oui" id="cp-oui" className="h-3 w-3" />
-                            <Label htmlFor="cp-oui" className="text-xs">Oui</Label>
-                          </div>
-                          <div className="flex items-center space-x-1">
-                            <RadioGroupItem value="Non" id="cp-non" className="h-3 w-3" />
-                            <Label htmlFor="cp-non" className="text-xs">Non</Label>
-                          </div>
-                        </RadioGroup>
-                      </div>
+                      <AIField>
+                        <div>
+                          <Label>Déclaration sensible</Label>
+                          <RadioGroup value={declaration.declarationSensible} onValueChange={(value) => setDeclaration({...declaration, declarationSensible: value})} className="flex gap-4">
+                            <div className="flex items-center space-x-1">
+                              <RadioGroupItem value="Oui" id="sens-oui" className="h-3 w-3" />
+                              <Label htmlFor="sens-oui" className="text-xs">Oui</Label>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <RadioGroupItem value="Non" id="sens-non" className="h-3 w-3" />
+                              <Label htmlFor="sens-non" className="text-xs">Non</Label>
+                            </div>
+                          </RadioGroup>
+                        </div>
+                      </AIField>
+                      <AIField>
+                        <div>
+                          <Label>Contact Plus</Label>
+                          <RadioGroup value={declaration.contactPlus} onValueChange={(value) => setDeclaration({...declaration, contactPlus: value})} className="flex gap-4">
+                            <div className="flex items-center space-x-1">
+                              <RadioGroupItem value="Oui" id="cp-oui" className="h-3 w-3" />
+                              <Label htmlFor="cp-oui" className="text-xs">Oui</Label>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <RadioGroupItem value="Non" id="cp-non" className="h-3 w-3" />
+                              <Label htmlFor="cp-non" className="text-xs">Non</Label>
+                            </div>
+                          </RadioGroup>
+                        </div>
+                      </AIField>
                     </div>
                   </div>
 
@@ -207,19 +232,21 @@ const SinistreDeclaration = () => {
                   <div>
                     <h4 className="font-medium mb-2">Bénéficiaire principal</h4>
                     <div className="grid grid-cols-5 gap-3 text-sm">
-                      <div>
-                        <Label>Type</Label>
-                        <RadioGroup value={beneficiaire.type} onValueChange={(value) => setBeneficiaire({...beneficiaire, type: value})}>
-                          <div className="flex items-center space-x-1">
-                            <RadioGroupItem value="Même personne" id="meme" className="h-3 w-3" />
-                            <Label htmlFor="meme" className="text-xs">Même personne</Label>
-                          </div>
-                          <div className="flex items-center space-x-1">
-                            <RadioGroupItem value="Personne différente" id="diff" className="h-3 w-3" />
-                            <Label htmlFor="diff" className="text-xs">Personne différente</Label>
-                          </div>
-                        </RadioGroup>
-                      </div>
+                      <AIField>
+                        <div>
+                          <Label>Type</Label>
+                          <RadioGroup value={beneficiaire.type} onValueChange={(value) => setBeneficiaire({...beneficiaire, type: value})}>
+                            <div className="flex items-center space-x-1">
+                              <RadioGroupItem value="Même personne" id="meme" className="h-3 w-3" />
+                              <Label htmlFor="meme" className="text-xs">Même personne</Label>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <RadioGroupItem value="Personne différente" id="diff" className="h-3 w-3" />
+                              <Label htmlFor="diff" className="text-xs">Personne différente</Label>
+                            </div>
+                          </RadioGroup>
+                        </div>
+                      </AIField>
                       <div>
                         <Label>Nom</Label>
                         <Input className="h-8 text-xs" value={beneficiaire.nom} onChange={(e) => setBeneficiaire({...beneficiaire, nom: e.target.value})} />
@@ -243,26 +270,36 @@ const SinistreDeclaration = () => {
                   <div>
                     <h4 className="font-medium mb-2">Intermédiaire</h4>
                     <div className="grid grid-cols-5 gap-3 text-sm">
-                      <div>
-                        <Label>Type</Label>
-                        <Input className="h-8 text-xs" value={intermediaire.type} readOnly />
-                      </div>
-                      <div>
-                        <Label>Code population</Label>
-                        <Input className="h-8 text-xs" value={intermediaire.codePopulation} readOnly />
-                      </div>
-                      <div>
-                        <Label>Nom</Label>
-                        <Input className="h-8 text-xs" value={intermediaire.nom} readOnly />
-                      </div>
-                      <div>
-                        <Label>Adresse</Label>
-                        <Input className="h-8 text-xs" value={intermediaire.adresse} readOnly />
-                      </div>
-                      <div>
-                        <Label>Téléphone</Label>
-                        <Input type="tel" className="h-8 text-xs" value={intermediaire.telephone} readOnly />
-                      </div>
+                      <AIField>
+                        <div>
+                          <Label>Type</Label>
+                          <Input className="h-8 text-xs bg-purple-50/50" value={intermediaire.type} readOnly />
+                        </div>
+                      </AIField>
+                      <AIField>
+                        <div>
+                          <Label>Code population</Label>
+                          <Input className="h-8 text-xs bg-purple-50/50" value={intermediaire.codePopulation} readOnly />
+                        </div>
+                      </AIField>
+                      <AIField>
+                        <div>
+                          <Label>Nom</Label>
+                          <Input className="h-8 text-xs bg-purple-50/50" value={intermediaire.nom} readOnly />
+                        </div>
+                      </AIField>
+                      <AIField>
+                        <div>
+                          <Label>Adresse</Label>
+                          <Input className="h-8 text-xs bg-purple-50/50" value={intermediaire.adresse} readOnly />
+                        </div>
+                      </AIField>
+                      <AIField>
+                        <div>
+                          <Label>Téléphone</Label>
+                          <Input type="tel" className="h-8 text-xs bg-purple-50/50" value={intermediaire.telephone} readOnly />
+                        </div>
+                      </AIField>
                     </div>
                   </div>
 
@@ -270,22 +307,30 @@ const SinistreDeclaration = () => {
                   <div>
                     <h4 className="font-medium mb-2">Assuré</h4>
                     <div className="grid grid-cols-4 gap-3 text-sm">
-                      <div>
-                        <Label>Nom</Label>
-                        <Input className="h-8 text-xs" value={assure.nom} readOnly />
-                      </div>
-                      <div>
-                        <Label>Adresse</Label>
-                        <Input className="h-8 text-xs" value={assure.adresse} readOnly />
-                      </div>
-                      <div>
-                        <Label>Email</Label>
-                        <Input type="email" className="h-8 text-xs" value={assure.email} readOnly />
-                      </div>
-                      <div>
-                        <Label>Téléphone</Label>
-                        <Input type="tel" className="h-8 text-xs" value={assure.telephone} readOnly />
-                      </div>
+                      <AIField>
+                        <div>
+                          <Label>Nom</Label>
+                          <Input className="h-8 text-xs bg-purple-50/50" value={assure.nom} readOnly />
+                        </div>
+                      </AIField>
+                      <AIField>
+                        <div>
+                          <Label>Adresse</Label>
+                          <Input className="h-8 text-xs bg-purple-50/50" value={assure.adresse} readOnly />
+                        </div>
+                      </AIField>
+                      <AIField>
+                        <div>
+                          <Label>Email</Label>
+                          <Input type="email" className="h-8 text-xs bg-purple-50/50" value={assure.email} readOnly />
+                        </div>
+                      </AIField>
+                      <AIField>
+                        <div>
+                          <Label>Téléphone</Label>
+                          <Input type="tel" className="h-8 text-xs bg-purple-50/50" value={assure.telephone} readOnly />
+                        </div>
+                      </AIField>
                     </div>
                   </div>
                 </CardContent>
@@ -301,18 +346,24 @@ const SinistreDeclaration = () => {
                   <div>
                     <h4 className="font-medium mb-2">Détails</h4>
                     <div className="grid grid-cols-4 gap-3 text-sm mb-3">
-                      <div>
-                        <Label>Code chantier</Label>
-                        <Input className="h-8 text-xs" value={contexte.codeChantier} readOnly />
-                      </div>
-                      <div>
-                        <Label>DOC</Label>
-                        <Input type="date" className="h-8 text-xs" value={contexte.doc} readOnly />
-                      </div>
-                      <div>
-                        <Label>Montant du chantier</Label>
-                        <Input type="number" className="h-8 text-xs" value={contexte.montantChantier} readOnly />
-                      </div>
+                      <AIField>
+                        <div>
+                          <Label>Code chantier</Label>
+                          <Input className="h-8 text-xs bg-purple-50/50" value={contexte.codeChantier} readOnly />
+                        </div>
+                      </AIField>
+                      <AIField>
+                        <div>
+                          <Label>DOC</Label>
+                          <Input type="date" className="h-8 text-xs bg-purple-50/50" value={contexte.doc} readOnly />
+                        </div>
+                      </AIField>
+                      <AIField>
+                        <div>
+                          <Label>Montant du chantier</Label>
+                          <Input type="number" className="h-8 text-xs bg-purple-50/50" value={contexte.montantChantier} readOnly />
+                        </div>
+                      </AIField>
                       <div>
                         <Label>Type d'ouvrage</Label>
                         <Select value={contexte.typeOuvrage} onValueChange={(value) => setContexte({...contexte, typeOuvrage: value})}>
@@ -337,22 +388,30 @@ const SinistreDeclaration = () => {
                       </div>
                     </div>
                     <div className="grid grid-cols-4 gap-3 text-sm">
-                      <div>
-                        <Label>Adresse sinistre</Label>
-                        <Input className="h-8 text-xs" value={contexte.adresseSinistre} readOnly />
-                      </div>
-                      <div>
-                        <Label>Date du sinistre</Label>
-                        <Input type="date" className="h-8 text-xs" value={contexte.dateSinistre} readOnly />
-                      </div>
-                      <div>
-                        <Label>Date d'ouverture</Label>
-                        <Input type="date" className="h-8 text-xs" value={contexte.dateOuverture} readOnly />
-                      </div>
-                      <div>
-                        <Label>Événement</Label>
-                        <Input className="h-8 text-xs" value={contexte.evenement} readOnly />
-                      </div>
+                      <AIField>
+                        <div>
+                          <Label>Adresse sinistre</Label>
+                          <Input className="h-8 text-xs bg-purple-50/50" value={contexte.adresseSinistre} readOnly />
+                        </div>
+                      </AIField>
+                      <AIField>
+                        <div>
+                          <Label>Date du sinistre</Label>
+                          <Input type="date" className="h-8 text-xs bg-purple-50/50" value={contexte.dateSinistre} readOnly />
+                        </div>
+                      </AIField>
+                      <AIField>
+                        <div>
+                          <Label>Date d'ouverture</Label>
+                          <Input type="date" className="h-8 text-xs bg-purple-50/50" value={contexte.dateOuverture} readOnly />
+                        </div>
+                      </AIField>
+                      <AIField>
+                        <div>
+                          <Label>Événement</Label>
+                          <Input className="h-8 text-xs bg-purple-50/50" value={contexte.evenement} readOnly />
+                        </div>
+                      </AIField>
                     </div>
                   </div>
 
@@ -388,23 +447,27 @@ const SinistreDeclaration = () => {
                   <div>
                     <h4 className="font-medium mb-2">Dommages corporels</h4>
                     <div className="grid grid-cols-2 gap-3 text-sm">
-                      <div>
-                        <Label>Présence de victimes</Label>
-                        <RadioGroup value={contexte.presenceVictimes} onValueChange={(value) => setContexte({...contexte, presenceVictimes: value})} className="flex gap-4">
-                          <div className="flex items-center space-x-1">
-                            <RadioGroupItem value="Oui" id="vic-oui" className="h-3 w-3" />
-                            <Label htmlFor="vic-oui" className="text-xs">Oui</Label>
-                          </div>
-                          <div className="flex items-center space-x-1">
-                            <RadioGroupItem value="Non" id="vic-non" className="h-3 w-3" />
-                            <Label htmlFor="vic-non" className="text-xs">Non</Label>
-                          </div>
-                        </RadioGroup>
-                      </div>
-                      <div>
-                        <Label>Nombre de victimes</Label>
-                        <Input type="number" className="h-8 text-xs" value={contexte.nombreVictimes} onChange={(e) => setContexte({...contexte, nombreVictimes: e.target.value})} />
-                      </div>
+                      <AIField>
+                        <div>
+                          <Label>Présence de victimes</Label>
+                          <RadioGroup value={contexte.presenceVictimes} onValueChange={(value) => setContexte({...contexte, presenceVictimes: value})} className="flex gap-4">
+                            <div className="flex items-center space-x-1">
+                              <RadioGroupItem value="Oui" id="vic-oui" className="h-3 w-3" />
+                              <Label htmlFor="vic-oui" className="text-xs">Oui</Label>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <RadioGroupItem value="Non" id="vic-non" className="h-3 w-3" />
+                              <Label htmlFor="vic-non" className="text-xs">Non</Label>
+                            </div>
+                          </RadioGroup>
+                        </div>
+                      </AIField>
+                      <AIField>
+                        <div>
+                          <Label>Nombre de victimes</Label>
+                          <Input type="number" className="h-8 text-xs bg-purple-50/50" value={contexte.nombreVictimes} onChange={(e) => setContexte({...contexte, nombreVictimes: e.target.value})} />
+                        </div>
+                      </AIField>
                     </div>
                   </div>
 
@@ -456,15 +519,17 @@ const SinistreDeclaration = () => {
                   {/* Garanties */}
                   <div>
                     <h4 className="font-medium mb-2">Garanties</h4>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox 
-                        id="garantie" 
-                        checked={contexte.garantieObligatoire} 
-                        onCheckedChange={(checked) => setContexte({...contexte, garantieObligatoire: checked as boolean})}
-                        className="h-3 w-3"
-                      />
-                      <Label htmlFor="garantie" className="text-xs">Garantie obligatoire</Label>
-                    </div>
+                    <AIField className="inline-block">
+                      <div className="flex items-center space-x-2">
+                        <Checkbox 
+                          id="garantie" 
+                          checked={contexte.garantieObligatoire} 
+                          onCheckedChange={(checked) => setContexte({...contexte, garantieObligatoire: checked as boolean})}
+                          className="h-3 w-3"
+                        />
+                        <Label htmlFor="garantie" className="text-xs">Garantie obligatoire</Label>
+                      </div>
+                    </AIField>
                   </div>
                 </CardContent>
               </Card>
@@ -475,28 +540,30 @@ const SinistreDeclaration = () => {
                   <CardTitle className="text-lg">3. Parties en cause</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="h-8 text-xs">Nom</TableHead>
-                        <TableHead className="h-8 text-xs">Rôles</TableHead>
-                        <TableHead className="h-8 text-xs">Adresse</TableHead>
-                        <TableHead className="h-8 text-xs">Ville</TableHead>
-                        <TableHead className="h-8 text-xs">Code postal</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {parties.map((partie, index) => (
-                        <TableRow key={index}>
-                          <TableCell className="text-xs">{partie.nom}</TableCell>
-                          <TableCell className="text-xs">{partie.roles}</TableCell>
-                          <TableCell className="text-xs">{partie.adresse}</TableCell>
-                          <TableCell className="text-xs">{partie.ville}</TableCell>
-                          <TableCell className="text-xs">{partie.codePostal}</TableCell>
+                  <AIField>
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="h-8 text-xs">Nom</TableHead>
+                          <TableHead className="h-8 text-xs">Rôles</TableHead>
+                          <TableHead className="h-8 text-xs">Adresse</TableHead>
+                          <TableHead className="h-8 text-xs">Ville</TableHead>
+                          <TableHead className="h-8 text-xs">Code postal</TableHead>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
+                      </TableHeader>
+                      <TableBody>
+                        {parties.map((partie, index) => (
+                          <TableRow key={index} className="bg-purple-50/30">
+                            <TableCell className="text-xs">{partie.nom}</TableCell>
+                            <TableCell className="text-xs">{partie.roles}</TableCell>
+                            <TableCell className="text-xs">{partie.adresse}</TableCell>
+                            <TableCell className="text-xs">{partie.ville}</TableCell>
+                            <TableCell className="text-xs">{partie.codePostal}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </AIField>
                   <div className="flex gap-4 mt-4">
                     <Button type="button" variant="outline" size="sm">
                       <Plus className="h-3 w-3 mr-1" />
@@ -526,60 +593,64 @@ const SinistreDeclaration = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-2 gap-6">
-                    <div>
-                      <Label className="text-sm font-medium">Potentiellement grave</Label>
-                      <RadioGroup value={potentiellementGrave} onValueChange={setPotentiellementGrave} className="flex gap-4 mt-2">
-                        <div className="flex items-center space-x-1">
-                          <RadioGroupItem value="Oui" id="grave-oui" className="h-3 w-3" />
-                          <Label htmlFor="grave-oui" className="text-xs">Oui</Label>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <RadioGroupItem value="Non" id="grave-non" className="h-3 w-3" />
-                          <Label htmlFor="grave-non" className="text-xs">Non</Label>
-                        </div>
-                      </RadioGroup>
-                    </div>
-                    <div>
-                      <Label className="text-sm font-medium">Filière retenue</Label>
-                      <RadioGroup value={filiereRetenue} onValueChange={setFiliereRetenue} className="grid grid-cols-2 gap-2 mt-2">
-                        <div className="flex items-center space-x-1">
-                          <RadioGroupItem value="Arrêté" id="arrete" className="h-3 w-3" />
-                          <Label htmlFor="arrete" className="text-xs">Arrêté</Label>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <RadioGroupItem value="Sinistre avec Téléexpertise" id="teleexp" className="h-3 w-3" />
-                          <Label htmlFor="teleexp" className="text-xs">Sinistre avec Téléexpertise</Label>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <RadioGroupItem value="Sinistre avec expertise" id="expertise" className="h-3 w-3" />
-                          <Label htmlFor="expertise" className="text-xs">Sinistre avec expertise</Label>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <RadioGroupItem value="Sinistre Avenant1" id="avenant" className="h-3 w-3" />
-                          <Label htmlFor="avenant" className="text-xs">Sinistre Avenant1</Label>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <RadioGroupItem value="Contentieux : hors Grave" id="cont-hors" className="h-3 w-3" />
-                          <Label htmlFor="cont-hors" className="text-xs">Contentieux : hors Grave</Label>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <RadioGroupItem value="Contentieux : Grave" id="cont-grave" className="h-3 w-3" />
-                          <Label htmlFor="cont-grave" className="text-xs">Contentieux : Grave</Label>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <RadioGroupItem value="Gestion RCD CRAC" id="rcd-crac" className="h-3 w-3" />
-                          <Label htmlFor="rcd-crac" className="text-xs">Gestion RCD CRAC</Label>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <RadioGroupItem value="RC/RCD : Avec expertise" id="rc-avec" className="h-3 w-3" />
-                          <Label htmlFor="rc-avec" className="text-xs">RC/RCD : Avec expertise</Label>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <RadioGroupItem value="RC/RCD : Sans expertise" id="rc-sans" className="h-3 w-3" />
-                          <Label htmlFor="rc-sans" className="text-xs">RC/RCD : Sans expertise</Label>
-                        </div>
-                      </RadioGroup>
-                    </div>
+                    <AIField>
+                      <div>
+                        <Label className="text-sm font-medium">Potentiellement grave</Label>
+                        <RadioGroup value={potentiellementGrave} onValueChange={setPotentiellementGrave} className="flex gap-4 mt-2">
+                          <div className="flex items-center space-x-1">
+                            <RadioGroupItem value="Oui" id="grave-oui" className="h-3 w-3" />
+                            <Label htmlFor="grave-oui" className="text-xs">Oui</Label>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <RadioGroupItem value="Non" id="grave-non" className="h-3 w-3" />
+                            <Label htmlFor="grave-non" className="text-xs">Non</Label>
+                          </div>
+                        </RadioGroup>
+                      </div>
+                    </AIField>
+                    <AIField>
+                      <div>
+                        <Label className="text-sm font-medium">Filière retenue</Label>
+                        <RadioGroup value={filiereRetenue} onValueChange={setFiliereRetenue} className="grid grid-cols-2 gap-2 mt-2">
+                          <div className="flex items-center space-x-1">
+                            <RadioGroupItem value="Arrêté" id="arrete" className="h-3 w-3" />
+                            <Label htmlFor="arrete" className="text-xs">Arrêté</Label>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <RadioGroupItem value="Sinistre avec Téléexpertise" id="teleexp" className="h-3 w-3" />
+                            <Label htmlFor="teleexp" className="text-xs">Sinistre avec Téléexpertise</Label>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <RadioGroupItem value="Sinistre avec expertise" id="expertise" className="h-3 w-3" />
+                            <Label htmlFor="expertise" className="text-xs">Sinistre avec expertise</Label>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <RadioGroupItem value="Sinistre Avenant1" id="avenant" className="h-3 w-3" />
+                            <Label htmlFor="avenant" className="text-xs">Sinistre Avenant1</Label>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <RadioGroupItem value="Contentieux : hors Grave" id="cont-hors" className="h-3 w-3" />
+                            <Label htmlFor="cont-hors" className="text-xs">Contentieux : hors Grave</Label>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <RadioGroupItem value="Contentieux : Grave" id="cont-grave" className="h-3 w-3" />
+                            <Label htmlFor="cont-grave" className="text-xs">Contentieux : Grave</Label>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <RadioGroupItem value="Gestion RCD CRAC" id="rcd-crac" className="h-3 w-3" />
+                            <Label htmlFor="rcd-crac" className="text-xs">Gestion RCD CRAC</Label>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <RadioGroupItem value="RC/RCD : Avec expertise" id="rc-avec" className="h-3 w-3" />
+                            <Label htmlFor="rc-avec" className="text-xs">RC/RCD : Avec expertise</Label>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <RadioGroupItem value="RC/RCD : Sans expertise" id="rc-sans" className="h-3 w-3" />
+                            <Label htmlFor="rc-sans" className="text-xs">RC/RCD : Sans expertise</Label>
+                          </div>
+                        </RadioGroup>
+                      </div>
+                    </AIField>
                   </div>
                 </CardContent>
               </Card>
@@ -591,44 +662,52 @@ const SinistreDeclaration = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-2 gap-3 text-sm mb-4">
-                    <div>
-                      <Label>Mode de gestion</Label>
-                      <Select value={affectation.modeGestion}>
-                        <SelectTrigger className="h-8">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Collectif">Collectif</SelectItem>
-                          <SelectItem value="Individuel">Individuel</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div>
-                      <Label>Groupe d'affectation</Label>
-                      <Select value={affectation.groupeAffectation}>
-                        <SelectTrigger className="h-8">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Corpo APA XPC 154233">Corpo APA XPC 154233</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div>
-                      <Label>UG d'ouverture</Label>
-                      <Select value={affectation.ugOuverture}>
-                        <SelectTrigger className="h-8">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="XPC - Auto Corpo DC AXA Partenaires">XPC - Auto Corpo DC AXA Partenaires</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div>
-                      <Label>UG Courante</Label>
-                      <Input className="h-8 text-xs" value={affectation.ugCourante} readOnly />
-                    </div>
+                    <AIField>
+                      <div>
+                        <Label>Mode de gestion</Label>
+                        <Select value={affectation.modeGestion}>
+                          <SelectTrigger className="h-8 bg-purple-50/50">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Collectif">Collectif</SelectItem>
+                            <SelectItem value="Individuel">Individuel</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </AIField>
+                    <AIField>
+                      <div>
+                        <Label>Groupe d'affectation</Label>
+                        <Select value={affectation.groupeAffectation}>
+                          <SelectTrigger className="h-8 bg-purple-50/50">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Corpo APA XPC 154233">Corpo APA XPC 154233</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </AIField>
+                    <AIField>
+                      <div>
+                        <Label>UG d'ouverture</Label>
+                        <Select value={affectation.ugOuverture}>
+                          <SelectTrigger className="h-8 bg-purple-50/50">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="XPC - Auto Corpo DC AXA Partenaires">XPC - Auto Corpo DC AXA Partenaires</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </AIField>
+                    <AIField>
+                      <div>
+                        <Label>UG Courante</Label>
+                        <Input className="h-8 text-xs bg-purple-50/50" value={affectation.ugCourante} readOnly />
+                      </div>
+                    </AIField>
                     <div>
                       <Label>Délégation de gestion en DO</Label>
                       <Select value={affectation.delegationGestionDO}>
