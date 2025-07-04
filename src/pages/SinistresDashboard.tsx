@@ -41,7 +41,18 @@ const SinistresDashboard = () => {
       enjeuFinancier: "Moyen",
       expert: "Non assigné",
       derniereAction: "Déclaration initiale",
-      isNew: true
+      isNew: true,
+      isClickable: true,
+      details: {
+        fluxEcrit: "mail, courrier",
+        typeDeclaration: "Sinistre amiable",
+        distributeur: "Agent courtier ayant reçu un courrier/mail de l'assuré",
+        clientAssure: "Entreprise de bâtiment",
+        misEnCause: "Par un maître d'ouvrage",
+        contexte: "Contrat avec propriétaire (société morale ou physique) pour travaux",
+        problematique: "Travaux réceptionnés, dommages observés plusieurs années après (<10 ans)",
+        prejudice: "Propriétaire commerçant subissant perte de CA - Préjudice immatériel"
+      }
     },
     {
       id: "SIN-2024-789455",
@@ -54,7 +65,8 @@ const SinistresDashboard = () => {
       type: "Construction DO",
       enjeuFinancier: "Élevé",
       expert: "EXPERTISE CONSEIL",
-      derniereAction: "Rapport d'expertise reçu"
+      derniereAction: "Rapport d'expertise reçu",
+      isClickable: false
     },
     {
       id: "SIN-2024-789454",
@@ -67,7 +79,8 @@ const SinistresDashboard = () => {
       type: "Rénovation",
       enjeuFinancier: "Faible",
       expert: "EXPERT BATIMENT SAS",
-      derniereAction: "Provision accordée"
+      derniereAction: "Provision accordée",
+      isClickable: false
     },
     {
       id: "SIN-2024-789453",
@@ -80,7 +93,8 @@ const SinistresDashboard = () => {
       type: "Construction DO",
       enjeuFinancier: "Moyen",
       expert: "CABINET EXPERTISE",
-      derniereAction: "Dossier clôturé"
+      derniereAction: "Dossier clôturé",
+      isClickable: false
     }
   ];
 
@@ -131,6 +145,8 @@ const SinistresDashboard = () => {
   };
 
   const handleSinistreClick = (sinistre: any) => {
+    if (!sinistre.isClickable) return;
+    
     // Pour le contrat 20041732072, rediriger vers la page de synthèse
     if (sinistre.numeroContrat === "20041732072") {
       navigate(`/sinistre/synthesis/${sinistre.id}`);
@@ -143,6 +159,7 @@ const SinistresDashboard = () => {
   return (
     <div className="min-h-screen flex flex-col w-full bg-gray-50">
       <Header />
+      
       <div className="flex items-center justify-between px-6 py-3 bg-white border-b border-gray-200">
         <div className="flex items-center gap-4">
           <h2 className="text-lg font-semibold text-gray-900">Dashboard Sinistres</h2>
@@ -278,7 +295,11 @@ const SinistresDashboard = () => {
               </TableHeader>
               <TableBody>
                 {filteredSinistres.map((sinistre) => (
-                  <TableRow key={sinistre.id} className={sinistre.isNew ? "bg-blue-50" : ""}>
+                  <TableRow 
+                    key={sinistre.id} 
+                    className={`${sinistre.isNew ? "bg-blue-50" : ""} ${sinistre.isClickable ? "cursor-pointer hover:bg-gray-50" : ""}`}
+                    onClick={sinistre.isClickable ? () => handleSinistreClick(sinistre) : undefined}
+                  >
                     <TableCell className="font-medium">
                       <div className="flex items-center gap-2">
                         {sinistre.numeroContrat}
@@ -323,14 +344,23 @@ const SinistresDashboard = () => {
                       {sinistre.derniereAction}
                     </TableCell>
                     <TableCell>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleSinistreClick(sinistre)}
-                      >
-                        <Eye className="h-4 w-4 mr-1" />
-                        Voir
-                      </Button>
+                      {sinistre.isClickable ? (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleSinistreClick(sinistre);
+                          }}
+                        >
+                          <Eye className="h-4 w-4 mr-1" />
+                          Voir
+                        </Button>
+                      ) : (
+                        <Badge variant="secondary" className="text-xs">
+                          Non disponible
+                        </Badge>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}
