@@ -321,7 +321,7 @@ const SinistreSynthesis = () => {
                 </div>
                 <div className="flex items-center gap-1">
                   <User className="h-4 w-4" />
-                  RC Décennale - Dégâts des eaux
+                  RC Décennale
                 </div>
               </div>
             </CardHeader>
