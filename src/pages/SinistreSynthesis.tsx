@@ -132,10 +132,26 @@ const SinistreSynthesis = () => {
     }
   ];
 
+  // Suggestions de questions pour le chat
+  const questionSuggestions = [
+    "Quel est le montant estimé des dégâts ?",
+    "Quand aura lieu la prochaine expertise ?",
+    "Quels documents sont encore manquants ?",
+    "Quel est le délai de traitement prévu ?",
+    "Y a-t-il des risques de franchise ?",
+    "Le sinistre est-il couvert par la garantie ?",
+    "Quand puis-je espérer le règlement ?",
+    "Dois-je faire appel à un expert ?"
+  ];
+
   const handleChatSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Message envoyé:", chatMessage);
     setChatMessage("");
+  };
+
+  const handleSuggestionClick = (suggestion: string) => {
+    setChatMessage(suggestion);
   };
 
   const getStatusColor = (status: string) => {
@@ -414,6 +430,25 @@ const SinistreSynthesis = () => {
                       </div>
                     </div>
                   </div>
+
+                  {/* Suggestions de questions */}
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium text-gray-700">💡 Questions suggérées :</p>
+                    <div className="grid grid-cols-1 gap-2">
+                      {questionSuggestions.map((suggestion, index) => (
+                        <Button
+                          key={index}
+                          variant="outline"
+                          size="sm"
+                          className="justify-start text-left h-auto py-2 px-3 text-sm hover:bg-blue-50 hover:border-blue-200"
+                          onClick={() => handleSuggestionClick(suggestion)}
+                        >
+                          {suggestion}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+
                   <form onSubmit={handleChatSubmit} className="flex gap-2">
                     <Input
                       value={chatMessage}
