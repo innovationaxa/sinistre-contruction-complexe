@@ -143,7 +143,7 @@ export default function SinistreDetail() {
           Retour à la corbeille
         </Button>
         <div>
-          <h1 className="text-xl font-bold text-gray-900">Synthèse Sinistre RC Décennale</h1>
+          <h1 className="text-xl font-bold text-gray-900">Synthèse du contrat RC Décennale</h1>
           <p className="text-sm text-gray-600">Réf. {sinistre.reference}</p>
         </div>
         <div className="ml-auto">
