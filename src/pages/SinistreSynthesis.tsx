@@ -1,4 +1,5 @@
 
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, FileText, AlertTriangle, Clock, CheckCircle, Send, Calendar, User, MapPin, Star, Download, Eye, Bot, FileCheck, Tag } from "lucide-react";
+import { ArrowLeft, FileText, AlertTriangle, Clock, CheckCircle, Send, Calendar, User, MapPin, Star, Download, Eye, Bot, FileCheck, Tag, MessageCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 
@@ -644,6 +645,10 @@ const SinistreSynthesis = () => {
                               <Download className="h-3 w-3 mr-1" />
                               DL
                             </Button>
+                            <Button size="sm" variant="outline" className="h-7 px-2 text-xs">
+                              <MessageCircle className="h-3 w-3 mr-1" />
+                              Chat
+                            </Button>
                           </div>
                         </div>
 
@@ -741,3 +746,4 @@ const SinistreSynthesis = () => {
 };
 
 export default SinistreSynthesis;
+
