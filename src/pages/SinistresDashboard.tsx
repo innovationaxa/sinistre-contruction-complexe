@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -29,7 +28,6 @@ const SinistresDashboard = () => {
   const [filterStatus, setFilterStatus] = useState("all");
   const [filterType, setFilterType] = useState("all");
 
-  // Données de test des sinistres
   const sinistres = [
     {
       id: "SIN-2024-789456",
@@ -132,6 +130,16 @@ const SinistresDashboard = () => {
     reglement: sinistres.filter(s => s.statut === "Règlement").length
   };
 
+  const handleSinistreClick = (sinistre: any) => {
+    // Pour le contrat 20041732072, rediriger vers la page de synthèse
+    if (sinistre.numeroContrat === "20041732072") {
+      navigate(`/sinistre/synthesis/${sinistre.id}`);
+    } else {
+      // Pour les autres, rediriger vers la page détail
+      navigate(`/sinistre/${sinistre.id}`);
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col w-full bg-gray-50">
       <Header />
@@ -155,7 +163,6 @@ const SinistresDashboard = () => {
       </div>
 
       <main className="flex-1 p-6">
-        {/* Statistiques */}
         <div className="grid grid-cols-4 gap-4 mb-6">
           <Card>
             <CardContent className="p-4">
@@ -203,7 +210,6 @@ const SinistresDashboard = () => {
           </Card>
         </div>
 
-        {/* Filtres et recherche */}
         <Card className="mb-6">
           <CardHeader>
             <CardTitle className="text-lg">Filtres</CardTitle>
@@ -247,7 +253,6 @@ const SinistresDashboard = () => {
           </CardContent>
         </Card>
 
-        {/* Tableau des sinistres */}
         <Card>
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2">
@@ -321,7 +326,7 @@ const SinistresDashboard = () => {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => navigate(`/sinistre/${sinistre.id}`)}
+                        onClick={() => handleSinistreClick(sinistre)}
                       >
                         <Eye className="h-4 w-4 mr-1" />
                         Voir
