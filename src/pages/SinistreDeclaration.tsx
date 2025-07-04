@@ -1,11 +1,15 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Sparkles, ArrowLeft } from "lucide-react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { ArrowLeft, Plus, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -14,46 +18,105 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 
 const SinistreDeclaration = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    numeroContrat: "CON-2024-789456",
-    nomAssure: "Société BATIMEX SARL",
-    adresseSinistre: "15 Avenue des Chantiers, 75015 Paris",
-    dateSinistre: "2024-03-15",
-    heureSinistre: "14:30",
-    typeSinistre: "degats-eaux",
-    circonstances: "Rupture de canalisation dans les fondations du bâtiment en construction causant un affaissement du terrain et endommageant les structures adjacentes. L'incident s'est produit pendant les travaux de terrassement.",
-    degatsConstates: "Affaissement du sol sur 20m², fissures dans le mur de soutènement, inondation du sous-sol du bâtiment voisin",
-    estimationDommages: "125000",
-    temoinNom: "Jean MARTIN",
-    temoinTelephone: "06.12.34.56.78",
-    temoinAdresse: "22 Rue de la Paix, 75015 Paris",
-    interventionSecours: "oui",
-    organismeSecours: "Pompiers de Paris - Intervention n°2024-0315-142",
-    photosJointes: "oui",
-    documentsJoints: "Rapport d'expertise préliminaire, photos des dégâts, plan de situation"
+  
+  // Section 1: Contacts
+  const [declaration, setDeclaration] = useState({
+    modeDeclaration: "Courrier",
+    declarant: "",
+    declarationSensible: "Non",
+    contactPlus: "Non"
   });
 
-  const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
-  };
+  const [beneficiaire, setBeneficiaire] = useState({
+    type: "Même personne",
+    nom: "",
+    adresse: "",
+    email: "",
+    telephone: ""
+  });
+
+  const [intermediaire] = useState({
+    type: "CABINET",
+    codePopulation: "COURTAGE",
+    nom: "ASS COURT CONSEILS SERVIC",
+    adresse: "5 RUE AZERTYAZER, 75009 PARIS",
+    telephone: "01 01 01 01 01"
+  });
+
+  const [assure] = useState({
+    nom: "LOU APOLLINARY MARIAN TEDDIE",
+    adresse: "RUE DE LA MARCHE, 36200 ARGENTON SUR CREUSE",
+    email: "ohvzjirfzn.tyrklr@orange.fr",
+    telephone: "02 12 12 80 20"
+  });
+
+  // Section 2: Contexte du sinistre
+  const [contexte, setContexte] = useState({
+    codeChantier: "TEST",
+    doc: "2013-04-01",
+    montantChantier: "0",
+    typeOuvrage: "",
+    dateReceptionOuvrage: "",
+    description: "",
+    adresseSinistre: "11, RUE girardot, 93100 MONTREUIL",
+    dateSinistre: "2025-06-30",
+    dateOuverture: "2025-07-01",
+    evenement: "Construction DO",
+    dateDeclaration: "",
+    jourJ: "",
+    enjeuFinancier: "",
+    presenceVictimes: "Oui",
+    nombreVictimes: "0",
+    garantieObligatoire: true
+  });
+
+  const [desordres, setDesordres] = useState([
+    { libelle: "", nature: "", localisation: "" }
+  ]);
+
+  // Section 3: Parties en cause
+  const [parties] = useState([
+    {
+      nom: "ASS COURT CONSEILS SERVIC",
+      roles: "Intermédiaire",
+      adresse: "5 RUE AZERTYAZER",
+      ville: "PARIS",
+      codePostal: "75009"
+    },
+    {
+      nom: "LOU APOLLINARY MARIAN TEDDIE",
+      roles: "Assuré, Déclarant, Partie lésée, Souscripteur",
+      adresse: "RUE DE LA MARCHE",
+      ville: "ARGENTON SUR CREUSE",
+      codePostal: "36200"
+    }
+  ]);
+
+  const [sinistresConnectes, setSinistresConnectes] = useState("Non");
+
+  // Section 4: Filière de traitement
+  const [potentiellementGrave, setPotentiellementGrave] = useState("Non");
+  const [filiereRetenue, setFiliereRetenue] = useState("Sinistre avec expertise");
+
+  // Section 5: Affectation
+  const [affectation] = useState({
+    modeGestion: "Collectif",
+    groupeAffectation: "Corpo APA XPC 154233",
+    ugOuverture: "XPC - Auto Corpo DC AXA Partenaires",
+    ugCourante: "XPC - Auto Corpo DC AXA Partenaires",
+    delegationGestionDO: "",
+    commentaires: ""
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Formulaire soumis:", formData);
-    // Redirection vers la page de synthèse avec l'ID du sinistre
-    const sinistreId = formData.numeroContrat.replace("CON-", "SIN-");
+    const sinistreId = "SIN-2024-789456";
     navigate(`/sinistre/synthesis/${sinistreId}`);
   };
 
-  const AIField = ({ children, field }: { children: React.ReactNode; field: string }) => (
-    <div className="relative">
-      {children}
-      <Sparkles className="absolute top-2 right-2 h-4 w-4 text-purple-500" />
-    </div>
-  );
+  const addDesordre = () => {
+    setDesordres([...desordres, { libelle: "", nature: "", localisation: "" }]);
+  };
 
   return (
     <SidebarProvider>
@@ -73,276 +136,528 @@ const SinistreDeclaration = () => {
         </div>
         <div className="flex flex-1">
           <AppSidebar />
-          <main className="flex-1 p-6">
-            <Card className="max-w-4xl mx-auto">
-              <CardHeader className="bg-blue-50 border-b border-blue-200">
-                <CardTitle className="text-2xl text-blue-900 flex items-center gap-2">
-                  <Sparkles className="h-6 w-6" />
+          <main className="flex-1 p-4">
+            <Card className="max-w-6xl mx-auto">
+              <CardHeader className="bg-blue-50 border-b border-blue-200 pb-4">
+                <CardTitle className="text-xl text-blue-900 flex items-center gap-2">
+                  <Sparkles className="h-5 w-5" />
                   Déclaration de sinistre - Pré-rempli par IA
                 </CardTitle>
-                <p className="text-blue-700 text-sm">
-                  Les champs marqués d'une étoile ✨ ont été pré-remplis par l'IA. Vous pouvez les modifier si nécessaire.
-                </p>
               </CardHeader>
-              <CardContent className="p-6">
+              <CardContent className="p-4">
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <AIField field="numeroContrat">
-                      <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                        <Label htmlFor="numeroContrat" className="text-sm font-medium">
-                          Numéro de contrat
-                        </Label>
-                        <Input
-                          id="numeroContrat"
-                          value={formData.numeroContrat}
-                          onChange={(e) => handleInputChange("numeroContrat", e.target.value)}
-                          className="mt-1"
-                        />
-                      </div>
-                    </AIField>
-
-                    <AIField field="nomAssure">
-                      <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                        <Label htmlFor="nomAssure" className="text-sm font-medium">
-                          Nom de l'assuré
-                        </Label>
-                        <Input
-                          id="nomAssure"
-                          value={formData.nomAssure}
-                          onChange={(e) => handleInputChange("nomAssure", e.target.value)}
-                          className="mt-1"
-                        />
-                      </div>
-                    </AIField>
-
-                    <AIField field="adresseSinistre">
-                      <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                        <Label htmlFor="adresseSinistre" className="text-sm font-medium">
-                          Adresse du sinistre
-                        </Label>
-                        <Input
-                          id="adresseSinistre"
-                          value={formData.adresseSinistre}
-                          onChange={(e) => handleInputChange("adresseSinistre", e.target.value)}
-                          className="mt-1"
-                        />
-                      </div>
-                    </AIField>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <AIField field="dateSinistre">
-                        <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                          <Label htmlFor="dateSinistre" className="text-sm font-medium">
-                            Date du sinistre
-                          </Label>
-                          <Input
-                            id="dateSinistre"
-                            type="date"
-                            value={formData.dateSinistre}
-                            onChange={(e) => handleInputChange("dateSinistre", e.target.value)}
-                            className="mt-1"
-                          />
+                  
+                  {/* Section 1: Contacts */}
+                  <Card>
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-lg">1. Contacts</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      {/* Déclaration */}
+                      <div>
+                        <h4 className="font-medium mb-2">Déclaration</h4>
+                        <div className="grid grid-cols-4 gap-3 text-sm">
+                          <div>
+                            <Label>Mode de déclaration</Label>
+                            <Select value={declaration.modeDeclaration} onValueChange={(value) => setDeclaration({...declaration, modeDeclaration: value})}>
+                              <SelectTrigger className="h-8">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="Courrier">Courrier</SelectItem>
+                                <SelectItem value="Email">Email</SelectItem>
+                                <SelectItem value="Téléphone">Téléphone</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div>
+                            <Label>Déclarant</Label>
+                            <Select value={declaration.declarant} onValueChange={(value) => setDeclaration({...declaration, declarant: value})}>
+                              <SelectTrigger className="h-8">
+                                <SelectValue placeholder="Sélectionner" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="assure">Assuré</SelectItem>
+                                <SelectItem value="intermediaire">Intermédiaire</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div>
+                            <Label>Déclaration sensible</Label>
+                            <RadioGroup value={declaration.declarationSensible} onValueChange={(value) => setDeclaration({...declaration, declarationSensible: value})} className="flex gap-4">
+                              <div className="flex items-center space-x-1">
+                                <RadioGroupItem value="Oui" id="sens-oui" className="h-3 w-3" />
+                                <Label htmlFor="sens-oui" className="text-xs">Oui</Label>
+                              </div>
+                              <div className="flex items-center space-x-1">
+                                <RadioGroupItem value="Non" id="sens-non" className="h-3 w-3" />
+                                <Label htmlFor="sens-non" className="text-xs">Non</Label>
+                              </div>
+                            </RadioGroup>
+                          </div>
+                          <div>
+                            <Label>Contact Plus</Label>
+                            <RadioGroup value={declaration.contactPlus} onValueChange={(value) => setDeclaration({...declaration, contactPlus: value})} className="flex gap-4">
+                              <div className="flex items-center space-x-1">
+                                <RadioGroupItem value="Oui" id="cp-oui" className="h-3 w-3" />
+                                <Label htmlFor="cp-oui" className="text-xs">Oui</Label>
+                              </div>
+                              <div className="flex items-center space-x-1">
+                                <RadioGroupItem value="Non" id="cp-non" className="h-3 w-3" />
+                                <Label htmlFor="cp-non" className="text-xs">Non</Label>
+                              </div>
+                            </RadioGroup>
+                          </div>
                         </div>
-                      </AIField>
+                      </div>
 
-                      <AIField field="heureSinistre">
-                        <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                          <Label htmlFor="heureSinistre" className="text-sm font-medium">
-                            Heure du sinistre
-                          </Label>
-                          <Input
-                            id="heureSinistre"
-                            type="time"
-                            value={formData.heureSinistre}
-                            onChange={(e) => handleInputChange("heureSinistre", e.target.value)}
-                            className="mt-1"
-                          />
+                      {/* Bénéficiaire principal */}
+                      <div>
+                        <h4 className="font-medium mb-2">Bénéficiaire principal</h4>
+                        <div className="grid grid-cols-5 gap-3 text-sm">
+                          <div>
+                            <Label>Type</Label>
+                            <RadioGroup value={beneficiaire.type} onValueChange={(value) => setBeneficiaire({...beneficiaire, type: value})}>
+                              <div className="flex items-center space-x-1">
+                                <RadioGroupItem value="Même personne" id="meme" className="h-3 w-3" />
+                                <Label htmlFor="meme" className="text-xs">Même personne</Label>
+                              </div>
+                              <div className="flex items-center space-x-1">
+                                <RadioGroupItem value="Personne différente" id="diff" className="h-3 w-3" />
+                                <Label htmlFor="diff" className="text-xs">Personne différente</Label>
+                              </div>
+                            </RadioGroup>
+                          </div>
+                          <div>
+                            <Label>Nom</Label>
+                            <Input className="h-8 text-xs" value={beneficiaire.nom} onChange={(e) => setBeneficiaire({...beneficiaire, nom: e.target.value})} />
+                          </div>
+                          <div>
+                            <Label>Adresse</Label>
+                            <Input className="h-8 text-xs" value={beneficiaire.adresse} onChange={(e) => setBeneficiaire({...beneficiaire, adresse: e.target.value})} />
+                          </div>
+                          <div>
+                            <Label>Email</Label>
+                            <Input type="email" className="h-8 text-xs" value={beneficiaire.email} onChange={(e) => setBeneficiaire({...beneficiaire, email: e.target.value})} />
+                          </div>
+                          <div>
+                            <Label>Téléphone</Label>
+                            <Input type="tel" className="h-8 text-xs" value={beneficiaire.telephone} onChange={(e) => setBeneficiaire({...beneficiaire, telephone: e.target.value})} />
+                          </div>
                         </div>
-                      </AIField>
-                    </div>
-
-                    <AIField field="typeSinistre">
-                      <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                        <Label htmlFor="typeSinistre" className="text-sm font-medium">
-                          Type de sinistre
-                        </Label>
-                        <Select value={formData.typeSinistre} onValueChange={(value) => handleInputChange("typeSinistre", value)}>
-                          <SelectTrigger className="mt-1">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="incendie">Incendie</SelectItem>
-                            <SelectItem value="degats-eaux">Dégâts des eaux</SelectItem>
-                            <SelectItem value="vol">Vol</SelectItem>
-                            <SelectItem value="vandalisme">Vandalisme</SelectItem>
-                            <SelectItem value="catastrophe-naturelle">Catastrophe naturelle</SelectItem>
-                            <SelectItem value="autre">Autre</SelectItem>
-                          </SelectContent>
-                        </Select>
                       </div>
-                    </AIField>
-                  </div>
 
-                  <AIField field="circonstances">
-                    <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                      <Label htmlFor="circonstances" className="text-sm font-medium">
-                        Circonstances du sinistre
-                      </Label>
-                      <Textarea
-                        id="circonstances"
-                        value={formData.circonstances}
-                        onChange={(e) => handleInputChange("circonstances", e.target.value)}
-                        className="mt-1 min-h-[100px]"
-                        placeholder="Décrivez les circonstances du sinistre..."
-                      />
-                    </div>
-                  </AIField>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <AIField field="degatsConstates">
-                      <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                        <Label htmlFor="degatsConstates" className="text-sm font-medium">
-                          Dégâts constatés
-                        </Label>
-                        <Textarea
-                          id="degatsConstates"
-                          value={formData.degatsConstates}
-                          onChange={(e) => handleInputChange("degatsConstates", e.target.value)}
-                          className="mt-1"
-                          placeholder="Décrivez les dégâts constatés..."
-                        />
+                      {/* Intermédiaire */}
+                      <div>
+                        <h4 className="font-medium mb-2">Intermédiaire</h4>
+                        <div className="grid grid-cols-5 gap-3 text-sm">
+                          <div>
+                            <Label>Type</Label>
+                            <Input className="h-8 text-xs" value={intermediaire.type} readOnly />
+                          </div>
+                          <div>
+                            <Label>Code population</Label>
+                            <Input className="h-8 text-xs" value={intermediaire.codePopulation} readOnly />
+                          </div>
+                          <div>
+                            <Label>Nom</Label>
+                            <Input className="h-8 text-xs" value={intermediaire.nom} readOnly />
+                          </div>
+                          <div>
+                            <Label>Adresse</Label>
+                            <Input className="h-8 text-xs" value={intermediaire.adresse} readOnly />
+                          </div>
+                          <div>
+                            <Label>Téléphone</Label>
+                            <Input type="tel" className="h-8 text-xs" value={intermediaire.telephone} readOnly />
+                          </div>
+                        </div>
                       </div>
-                    </AIField>
 
-                    <AIField field="estimationDommages">
-                      <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                        <Label htmlFor="estimationDommages" className="text-sm font-medium">
-                          Estimation des dommages (€)
-                        </Label>
-                        <Input
-                          id="estimationDommages"
-                          type="number"
-                          value={formData.estimationDommages}
-                          onChange={(e) => handleInputChange("estimationDommages", e.target.value)}
-                          className="mt-1"
-                          placeholder="Montant estimé"
-                        />
+                      {/* Assuré */}
+                      <div>
+                        <h4 className="font-medium mb-2">Assuré</h4>
+                        <div className="grid grid-cols-4 gap-3 text-sm">
+                          <div>
+                            <Label>Nom</Label>
+                            <Input className="h-8 text-xs" value={assure.nom} readOnly />
+                          </div>
+                          <div>
+                            <Label>Adresse</Label>
+                            <Input className="h-8 text-xs" value={assure.adresse} readOnly />
+                          </div>
+                          <div>
+                            <Label>Email</Label>
+                            <Input type="email" className="h-8 text-xs" value={assure.email} readOnly />
+                          </div>
+                          <div>
+                            <Label>Téléphone</Label>
+                            <Input type="tel" className="h-8 text-xs" value={assure.telephone} readOnly />
+                          </div>
+                        </div>
                       </div>
-                    </AIField>
-                  </div>
+                    </CardContent>
+                  </Card>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <AIField field="temoinNom">
-                      <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                        <Label htmlFor="temoinNom" className="text-sm font-medium">
-                          Nom du témoin
-                        </Label>
-                        <Input
-                          id="temoinNom"
-                          value={formData.temoinNom}
-                          onChange={(e) => handleInputChange("temoinNom", e.target.value)}
-                          className="mt-1"
-                        />
+                  {/* Section 2: Contexte du sinistre */}
+                  <Card>
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-lg">2. Contexte du sinistre</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      {/* Détails */}
+                      <div>
+                        <h4 className="font-medium mb-2">Détails</h4>
+                        <div className="grid grid-cols-4 gap-3 text-sm mb-3">
+                          <div>
+                            <Label>Code chantier</Label>
+                            <Input className="h-8 text-xs" value={contexte.codeChantier} readOnly />
+                          </div>
+                          <div>
+                            <Label>DOC</Label>
+                            <Input type="date" className="h-8 text-xs" value={contexte.doc} readOnly />
+                          </div>
+                          <div>
+                            <Label>Montant du chantier</Label>
+                            <Input type="number" className="h-8 text-xs" value={contexte.montantChantier} readOnly />
+                          </div>
+                          <div>
+                            <Label>Type d'ouvrage</Label>
+                            <Select value={contexte.typeOuvrage} onValueChange={(value) => setContexte({...contexte, typeOuvrage: value})}>
+                              <SelectTrigger className="h-8">
+                                <SelectValue placeholder="Sélectionner" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="batiment">Bâtiment</SelectItem>
+                                <SelectItem value="infrastructure">Infrastructure</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3 text-sm mb-3">
+                          <div>
+                            <Label>Date réception ouvrage</Label>
+                            <Input type="date" className="h-8 text-xs" value={contexte.dateReceptionOuvrage} onChange={(e) => setContexte({...contexte, dateReceptionOuvrage: e.target.value})} />
+                          </div>
+                          <div>
+                            <Label>Description</Label>
+                            <Textarea className="h-8 text-xs resize-none" value={contexte.description} onChange={(e) => setContexte({...contexte, description: e.target.value})} />
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-4 gap-3 text-sm">
+                          <div>
+                            <Label>Adresse sinistre</Label>
+                            <Input className="h-8 text-xs" value={contexte.adresseSinistre} readOnly />
+                          </div>
+                          <div>
+                            <Label>Date du sinistre</Label>
+                            <Input type="date" className="h-8 text-xs" value={contexte.dateSinistre} readOnly />
+                          </div>
+                          <div>
+                            <Label>Date d'ouverture</Label>
+                            <Input type="date" className="h-8 text-xs" value={contexte.dateOuverture} readOnly />
+                          </div>
+                          <div>
+                            <Label>Événement</Label>
+                            <Input className="h-8 text-xs" value={contexte.evenement} readOnly />
+                          </div>
+                        </div>
                       </div>
-                    </AIField>
 
-                    <AIField field="temoinTelephone">
-                      <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                        <Label htmlFor="temoinTelephone" className="text-sm font-medium">
-                          Téléphone du témoin
-                        </Label>
-                        <Input
-                          id="temoinTelephone"
-                          value={formData.temoinTelephone}
-                          onChange={(e) => handleInputChange("temoinTelephone", e.target.value)}
-                          className="mt-1"
-                        />
+                      {/* Informations complémentaires */}
+                      <div>
+                        <h4 className="font-medium mb-2">Informations complémentaires</h4>
+                        <div className="grid grid-cols-3 gap-3 text-sm">
+                          <div>
+                            <Label>Date de déclaration</Label>
+                            <Input type="date" className="h-8 text-xs" value={contexte.dateDeclaration} onChange={(e) => setContexte({...contexte, dateDeclaration: e.target.value})} />
+                          </div>
+                          <div>
+                            <Label>Jour J</Label>
+                            <Input type="date" className="h-8 text-xs" value={contexte.jourJ} onChange={(e) => setContexte({...contexte, jourJ: e.target.value})} />
+                          </div>
+                          <div>
+                            <Label>Enjeu Financier</Label>
+                            <Select value={contexte.enjeuFinancier} onValueChange={(value) => setContexte({...contexte, enjeuFinancier: value})}>
+                              <SelectTrigger className="h-8">
+                                <SelectValue placeholder="Sélectionner" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="faible">Faible</SelectItem>
+                                <SelectItem value="moyen">Moyen</SelectItem>
+                                <SelectItem value="eleve">Élevé</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
                       </div>
-                    </AIField>
 
-                    <AIField field="temoinAdresse">
-                      <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                        <Label htmlFor="temoinAdresse" className="text-sm font-medium">
-                          Adresse du témoin
-                        </Label>
-                        <Input
-                          id="temoinAdresse"
-                          value={formData.temoinAdresse}
-                          onChange={(e) => handleInputChange("temoinAdresse", e.target.value)}
-                          className="mt-1"
-                        />
+                      {/* Dommages corporels */}
+                      <div>
+                        <h4 className="font-medium mb-2">Dommages corporels</h4>
+                        <div className="grid grid-cols-2 gap-3 text-sm">
+                          <div>
+                            <Label>Présence de victimes</Label>
+                            <RadioGroup value={contexte.presenceVictimes} onValueChange={(value) => setContexte({...contexte, presenceVictimes: value})} className="flex gap-4">
+                              <div className="flex items-center space-x-1">
+                                <RadioGroupItem value="Oui" id="vic-oui" className="h-3 w-3" />
+                                <Label htmlFor="vic-oui" className="text-xs">Oui</Label>
+                              </div>
+                              <div className="flex items-center space-x-1">
+                                <RadioGroupItem value="Non" id="vic-non" className="h-3 w-3" />
+                                <Label htmlFor="vic-non" className="text-xs">Non</Label>
+                              </div>
+                            </RadioGroup>
+                          </div>
+                          <div>
+                            <Label>Nombre de victimes</Label>
+                            <Input type="number" className="h-8 text-xs" value={contexte.nombreVictimes} onChange={(e) => setContexte({...contexte, nombreVictimes: e.target.value})} />
+                          </div>
+                        </div>
                       </div>
-                    </AIField>
-                  </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <AIField field="interventionSecours">
-                      <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                        <Label htmlFor="interventionSecours" className="text-sm font-medium">
-                          Intervention des secours
-                        </Label>
-                        <Select value={formData.interventionSecours} onValueChange={(value) => handleInputChange("interventionSecours", value)}>
-                          <SelectTrigger className="mt-1">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="oui">Oui</SelectItem>
-                            <SelectItem value="non">Non</SelectItem>
-                          </SelectContent>
-                        </Select>
+                      {/* Désordres */}
+                      <div>
+                        <h4 className="font-medium mb-2">Désordres</h4>
+                        <Table>
+                          <TableHeader>
+                            <TableRow>
+                              <TableHead className="h-8 text-xs">Libellé</TableHead>
+                              <TableHead className="h-8 text-xs">Nature</TableHead>
+                              <TableHead className="h-8 text-xs">Localisation</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {desordres.map((desordre, index) => (
+                              <TableRow key={index}>
+                                <TableCell>
+                                  <Input className="h-8 text-xs" value={desordre.libelle} onChange={(e) => {
+                                    const newDesordres = [...desordres];
+                                    newDesordres[index].libelle = e.target.value;
+                                    setDesordres(newDesordres);
+                                  }} />
+                                </TableCell>
+                                <TableCell>
+                                  <Input className="h-8 text-xs" value={desordre.nature} onChange={(e) => {
+                                    const newDesordres = [...desordres];
+                                    newDesordres[index].nature = e.target.value;
+                                    setDesordres(newDesordres);
+                                  }} />
+                                </TableCell>
+                                <TableCell>
+                                  <Input className="h-8 text-xs" value={desordre.localisation} onChange={(e) => {
+                                    const newDesordres = [...desordres];
+                                    newDesordres[index].localisation = e.target.value;
+                                    setDesordres(newDesordres);
+                                  }} />
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                        <Button type="button" variant="outline" size="sm" onClick={addDesordre} className="mt-2">
+                          <Plus className="h-3 w-3 mr-1" />
+                          Ajouter ligne
+                        </Button>
                       </div>
-                    </AIField>
 
-                    <AIField field="organismeSecours">
-                      <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                        <Label htmlFor="organismeSecours" className="text-sm font-medium">
-                          Organisme de secours
-                        </Label>
-                        <Input
-                          id="organismeSecours"
-                          value={formData.organismeSecours}
-                          onChange={(e) => handleInputChange("organismeSecours", e.target.value)}
-                          className="mt-1"
-                        />
+                      {/* Garanties */}
+                      <div>
+                        <h4 className="font-medium mb-2">Garanties</h4>
+                        <div className="flex items-center space-x-2">
+                          <Checkbox 
+                            id="garantie" 
+                            checked={contexte.garantieObligatoire} 
+                            onCheckedChange={(checked) => setContexte({...contexte, garantieObligatoire: checked as boolean})}
+                            className="h-3 w-3"
+                          />
+                          <Label htmlFor="garantie" className="text-xs">Garantie obligatoire</Label>
+                        </div>
                       </div>
-                    </AIField>
-                  </div>
+                    </CardContent>
+                  </Card>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <AIField field="photosJointes">
-                      <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                        <Label htmlFor="photosJointes" className="text-sm font-medium">
-                          Photos jointes
-                        </Label>
-                        <Select value={formData.photosJointes} onValueChange={(value) => handleInputChange("photosJointes", value)}>
-                          <SelectTrigger className="mt-1">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="oui">Oui</SelectItem>
-                            <SelectItem value="non">Non</SelectItem>
-                          </SelectContent>
-                        </Select>
+                  {/* Section 3: Parties en cause */}
+                  <Card>
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-lg">3. Parties en cause</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead className="h-8 text-xs">Nom</TableHead>
+                            <TableHead className="h-8 text-xs">Rôles</TableHead>
+                            <TableHead className="h-8 text-xs">Adresse</TableHead>
+                            <TableHead className="h-8 text-xs">Ville</TableHead>
+                            <TableHead className="h-8 text-xs">Code postal</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {parties.map((partie, index) => (
+                            <TableRow key={index}>
+                              <TableCell className="text-xs">{partie.nom}</TableCell>
+                              <TableCell className="text-xs">{partie.roles}</TableCell>
+                              <TableCell className="text-xs">{partie.adresse}</TableCell>
+                              <TableCell className="text-xs">{partie.ville}</TableCell>
+                              <TableCell className="text-xs">{partie.codePostal}</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                      <div className="flex gap-4 mt-4">
+                        <Button type="button" variant="outline" size="sm">
+                          <Plus className="h-3 w-3 mr-1" />
+                          Ajouter contact
+                        </Button>
+                        <div className="flex items-center gap-2">
+                          <Label className="text-xs">Sinistres connectés :</Label>
+                          <RadioGroup value={sinistresConnectes} onValueChange={setSinistresConnectes} className="flex gap-4">
+                            <div className="flex items-center space-x-1">
+                              <RadioGroupItem value="Oui" id="conn-oui" className="h-3 w-3" />
+                              <Label htmlFor="conn-oui" className="text-xs">Oui</Label>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <RadioGroupItem value="Non" id="conn-non" className="h-3 w-3" />
+                              <Label htmlFor="conn-non" className="text-xs">Non</Label>
+                            </div>
+                          </RadioGroup>
+                        </div>
                       </div>
-                    </AIField>
+                    </CardContent>
+                  </Card>
 
-                    <AIField field="documentsJoints">
-                      <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                        <Label htmlFor="documentsJoints" className="text-sm font-medium">
-                          Documents joints
-                        </Label>
-                        <Textarea
-                          id="documentsJoints"
-                          value={formData.documentsJoints}
-                          onChange={(e) => handleInputChange("documentsJoints", e.target.value)}
-                          className="mt-1"
-                          placeholder="Liste des documents joints..."
-                        />
+                  {/* Section 4: Filière de traitement */}
+                  <Card>
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-lg">4. Filière de traitement</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-2 gap-6">
+                        <div>
+                          <Label className="text-sm font-medium">Potentiellement grave</Label>
+                          <RadioGroup value={potentiellementGrave} onValueChange={setPotentiellementGrave} className="flex gap-4 mt-2">
+                            <div className="flex items-center space-x-1">
+                              <RadioGroupItem value="Oui" id="grave-oui" className="h-3 w-3" />
+                              <Label htmlFor="grave-oui" className="text-xs">Oui</Label>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <RadioGroupItem value="Non" id="grave-non" className="h-3 w-3" />
+                              <Label htmlFor="grave-non" className="text-xs">Non</Label>
+                            </div>
+                          </RadioGroup>
+                        </div>
+                        <div>
+                          <Label className="text-sm font-medium">Filière retenue</Label>
+                          <RadioGroup value={filiereRetenue} onValueChange={setFiliereRetenue} className="grid grid-cols-2 gap-2 mt-2">
+                            <div className="flex items-center space-x-1">
+                              <RadioGroupItem value="Arrêté" id="arrete" className="h-3 w-3" />
+                              <Label htmlFor="arrete" className="text-xs">Arrêté</Label>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <RadioGroupItem value="Sinistre avec Téléexpertise" id="teleexp" className="h-3 w-3" />
+                              <Label htmlFor="teleexp" className="text-xs">Sinistre avec Téléexpertise</Label>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <RadioGroupItem value="Sinistre avec expertise" id="expertise" className="h-3 w-3" />
+                              <Label htmlFor="expertise" className="text-xs">Sinistre avec expertise</Label>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <RadioGroupItem value="Sinistre Avenant1" id="avenant" className="h-3 w-3" />
+                              <Label htmlFor="avenant" className="text-xs">Sinistre Avenant1</Label>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <RadioGroupItem value="Contentieux : hors Grave" id="cont-hors" className="h-3 w-3" />
+                              <Label htmlFor="cont-hors" className="text-xs">Contentieux : hors Grave</Label>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <RadioGroupItem value="Contentieux : Grave" id="cont-grave" className="h-3 w-3" />
+                              <Label htmlFor="cont-grave" className="text-xs">Contentieux : Grave</Label>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <RadioGroupItem value="Gestion RCD CRAC" id="rcd-crac" className="h-3 w-3" />
+                              <Label htmlFor="rcd-crac" className="text-xs">Gestion RCD CRAC</Label>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <RadioGroupItem value="RC/RCD : Avec expertise" id="rc-avec" className="h-3 w-3" />
+                              <Label htmlFor="rc-avec" className="text-xs">RC/RCD : Avec expertise</Label>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <RadioGroupItem value="RC/RCD : Sans expertise" id="rc-sans" className="h-3 w-3" />
+                              <Label htmlFor="rc-sans" className="text-xs">RC/RCD : Sans expertise</Label>
+                            </div>
+                          </RadioGroup>
+                        </div>
                       </div>
-                    </AIField>
-                  </div>
+                    </CardContent>
+                  </Card>
 
-                  <div className="flex justify-end gap-4 pt-6 border-t">
+                  {/* Section 5: Affectation */}
+                  <Card>
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-lg">5. Affectation</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-2 gap-3 text-sm mb-4">
+                        <div>
+                          <Label>Mode de gestion</Label>
+                          <Select value={affectation.modeGestion}>
+                            <SelectTrigger className="h-8">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Collectif">Collectif</SelectItem>
+                              <SelectItem value="Individuel">Individuel</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <Label>Groupe d'affectation</Label>
+                          <Select value={affectation.groupeAffectation}>
+                            <SelectTrigger className="h-8">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Corpo APA XPC 154233">Corpo APA XPC 154233</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <Label>UG d'ouverture</Label>
+                          <Select value={affectation.ugOuverture}>
+                            <SelectTrigger className="h-8">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="XPC - Auto Corpo DC AXA Partenaires">XPC - Auto Corpo DC AXA Partenaires</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <Label>UG Courante</Label>
+                          <Input className="h-8 text-xs" value={affectation.ugCourante} readOnly />
+                        </div>
+                        <div>
+                          <Label>Délégation de gestion en DO</Label>
+                          <Select value={affectation.delegationGestionDO}>
+                            <SelectTrigger className="h-8">
+                              <SelectValue placeholder="Sélectionner" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="oui">Oui</SelectItem>
+                              <SelectItem value="non">Non</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                      <div>
+                        <Label>Commentaires</Label>
+                        <Textarea className="text-xs resize-none" rows={3} value={affectation.commentaires} placeholder="Commentaires additionnels..." />
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <div className="flex justify-end gap-4 pt-4">
                     <Button type="button" variant="outline" onClick={() => navigate("/")}>
                       Annuler
                     </Button>
