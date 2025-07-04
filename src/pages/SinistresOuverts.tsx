@@ -2,8 +2,11 @@
 import { Header } from "@/components/Header";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { useNavigate } from "react-router-dom";
 
 const SinistresOuverts = () => {
+  const navigate = useNavigate();
+  
   const sinistres = [
     {
       id: "SIN-2024-001",
@@ -44,6 +47,10 @@ const SinistresOuverts = () => {
     }
   };
 
+  const handleRowClick = (sinistreId: string) => {
+    navigate(`/sinistre/synthesis/${sinistreId}`);
+  };
+
   return (
     <div className="min-h-screen flex flex-col w-full bg-gray-50">
       <Header />
@@ -65,7 +72,11 @@ const SinistresOuverts = () => {
             </TableHeader>
             <TableBody>
               {sinistres.map((sinistre) => (
-                <TableRow key={sinistre.id} className="hover:bg-gray-50 cursor-pointer">
+                <TableRow 
+                  key={sinistre.id} 
+                  className="hover:bg-gray-50 cursor-pointer"
+                  onClick={() => handleRowClick(sinistre.id)}
+                >
                   <TableCell className="font-medium text-blue-600">{sinistre.id}</TableCell>
                   <TableCell>{sinistre.dateDeclaration}</TableCell>
                   <TableCell>{sinistre.typeIncident}</TableCell>
