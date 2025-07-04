@@ -7,10 +7,10 @@ import { Header } from "@/components/Header";
 const Index = () => {
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-gray-50">
-        <AppSidebar />
-        <div className="flex-1 flex flex-col">
-          <Header />
+      <div className="min-h-screen flex flex-col w-full bg-gray-100">
+        <Header />
+        <div className="flex flex-1">
+          <AppSidebar />
           <main className="flex-1 p-6">
             <ActivitiesTable />
           </main>
