@@ -1,3 +1,4 @@
+
 import { useParams, useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
@@ -191,7 +192,7 @@ export default function SinistreDetail() {
           Retour à la corbeille
         </Button>
         <div>
-          <h1 className="text-xl font-bold text-gray-900">Synthèse du contrat RC Décennale</h1>
+          <h1 className="text-xl font-bold text-gray-900">Synthèse de la déclaration et du contrat</h1>
           <p className="text-sm text-gray-600">Réf. {sinistre.reference}</p>
         </div>
         <div className="ml-auto">
