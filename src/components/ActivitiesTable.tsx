@@ -104,7 +104,7 @@ export function ActivitiesTable() {
   const navigate = useNavigate();
 
   const AIIndicator = () => (
-    <Sparkles className="w-3 h-3 text-purple-600 inline ml-1" />
+    <Sparkles className="w-3 h-3 text-purple-700 inline ml-1" />
   );
 
   const handleRowClick = (activityId: string) => {
@@ -112,80 +112,80 @@ export function ActivitiesTable() {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-300">
-      <div className="p-6 border-b border-gray-300">
-        <h2 className="text-xl font-semibold text-gray-900">Activités de déclaration - RC Décennale</h2>
-        <div className="flex items-center gap-6 mt-3">
-          <span className="text-sm font-medium text-gray-800">Sinistres amiables</span>
-          <span className="text-sm text-gray-700">Mise en cause post-réception</span>
-          <span className="text-sm text-gray-700">Préjudices immatériels</span>
+    <div className="bg-white rounded-lg shadow-md border border-gray-200">
+      <div className="p-4 lg:p-6 border-b border-gray-200">
+        <h2 className="text-xl font-bold text-gray-900">Activités de déclaration - RC Décennale</h2>
+        <div className="flex items-center gap-4 lg:gap-6 mt-3 flex-wrap">
+          <span className="text-sm font-bold text-gray-900">Sinistres amiables</span>
+          <span className="text-sm font-medium text-gray-700">Mise en cause post-réception</span>
+          <span className="text-sm font-medium text-gray-700">Préjudices immatériels</span>
         </div>
       </div>
 
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>
-            <TableRow className="bg-gray-100 hover:bg-gray-100">
-              <TableHead className="w-12 font-semibold text-gray-900">
-                <input type="checkbox" className="rounded border-2 border-gray-400" />
+            <TableRow className="bg-gray-50 hover:bg-gray-50">
+              <TableHead className="w-8 font-bold text-gray-900 text-xs">
+                <input type="checkbox" className="rounded border-2 border-gray-500" />
               </TableHead>
-              <TableHead className="font-semibold text-gray-900">Libellé</TableHead>
-              <TableHead className="font-semibold text-gray-900">Description</TableHead>
-              <TableHead className="font-semibold text-gray-900">Type</TableHead>
-              <TableHead className="font-semibold text-gray-900">Référence</TableHead>
-              <TableHead className="font-semibold text-gray-900">Motif</TableHead>
-              <TableHead className="font-semibold text-gray-900">Surtype</TableHead>
-              <TableHead className="font-semibold text-gray-900">Contrat</TableHead>
-              <TableHead className="font-semibold text-gray-900">Produit</TableHead>
-              <TableHead className="font-semibold text-gray-900">Courtier/Agent</TableHead>
-              <TableHead className="font-semibold text-gray-900">Assuré</TableHead>
-              <TableHead className="font-semibold text-gray-900">Date déclaration</TableHead>
-              <TableHead className="font-semibold text-gray-900">Échéance</TableHead>
-              <TableHead className="font-semibold text-gray-900">Date affectation</TableHead>
+              <TableHead className="font-bold text-gray-900 text-xs min-w-[120px]">Libellé</TableHead>
+              <TableHead className="font-bold text-gray-900 text-xs min-w-[200px]">Description</TableHead>
+              <TableHead className="font-bold text-gray-900 text-xs min-w-[100px]">Type</TableHead>
+              <TableHead className="font-bold text-gray-900 text-xs min-w-[140px]">Référence</TableHead>
+              <TableHead className="font-bold text-gray-900 text-xs min-w-[180px]">Motif</TableHead>
+              <TableHead className="font-bold text-gray-900 text-xs min-w-[200px]">Surtype</TableHead>
+              <TableHead className="font-bold text-gray-900 text-xs min-w-[120px]">Contrat</TableHead>
+              <TableHead className="font-bold text-gray-900 text-xs min-w-[100px]">Produit</TableHead>
+              <TableHead className="font-bold text-gray-900 text-xs min-w-[150px]">Courtier/Agent</TableHead>
+              <TableHead className="font-bold text-gray-900 text-xs min-w-[140px]">Assuré</TableHead>
+              <TableHead className="font-bold text-gray-900 text-xs min-w-[110px]">Date déclaration</TableHead>
+              <TableHead className="font-bold text-gray-900 text-xs min-w-[90px]">Échéance</TableHead>
+              <TableHead className="font-bold text-gray-900 text-xs min-w-[110px]">Date affectation</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {activities.map((activity) => (
               <TableRow 
                 key={activity.id} 
-                className="hover:bg-blue-50 border-b border-gray-200 cursor-pointer"
+                className="hover:bg-blue-50 border-b border-gray-100 cursor-pointer"
                 onClick={() => handleRowClick(activity.id)}
               >
-                <TableCell onClick={(e) => e.stopPropagation()}>
-                  <input type="checkbox" className="rounded border-2 border-gray-400" />
+                <TableCell onClick={(e) => e.stopPropagation()} className="py-3">
+                  <input type="checkbox" className="rounded border-2 border-gray-500" />
                 </TableCell>
-                <TableCell className="font-medium text-blue-700 hover:text-blue-900 hover:underline">
+                <TableCell className="font-bold text-blue-700 hover:text-blue-900 hover:underline text-xs py-3">
                   {activity.libelle}
                 </TableCell>
-                <TableCell className="max-w-xs">
+                <TableCell className="max-w-[200px] py-3">
                   <div className="flex items-start">
-                    <span className="text-sm text-gray-800 line-clamp-2">
+                    <span className="text-xs text-gray-800 line-clamp-2 font-medium">
                       {activity.description}
                     </span>
                     {activity.aiGenerated.description && <AIIndicator />}
                   </div>
                 </TableCell>
-                <TableCell className="text-gray-800">{activity.type}</TableCell>
-                <TableCell className="font-mono text-sm text-gray-800">{activity.reference}</TableCell>
-                <TableCell className="text-gray-800">
+                <TableCell className="text-gray-800 font-medium text-xs py-3">{activity.type}</TableCell>
+                <TableCell className="font-mono text-xs text-gray-800 font-bold py-3">{activity.reference}</TableCell>
+                <TableCell className="text-gray-800 font-medium text-xs py-3">
                   <div className="flex items-center">
                     {activity.motif}
                     {activity.aiGenerated.motif && <AIIndicator />}
                   </div>
                 </TableCell>
-                <TableCell className="text-gray-800">
+                <TableCell className="text-gray-800 font-medium text-xs py-3">
                   <div className="flex items-center">
                     {activity.surtype}
                     {activity.aiGenerated.surtype && <AIIndicator />}
                   </div>
                 </TableCell>
-                <TableCell className="text-gray-800">{activity.numeroContrat}</TableCell>
-                <TableCell className="text-gray-800">{activity.typeProduit}</TableCell>
-                <TableCell className="text-gray-800">{activity.courtier}</TableCell>
-                <TableCell className="text-gray-800">{activity.assure}</TableCell>
-                <TableCell className="text-gray-800">{activity.dateDeclaration}</TableCell>
-                <TableCell className="text-gray-800">{activity.echeance}</TableCell>
-                <TableCell className="text-gray-800">{activity.dateAffectation}</TableCell>
+                <TableCell className="text-gray-800 font-medium text-xs py-3">{activity.numeroContrat}</TableCell>
+                <TableCell className="text-gray-800 font-medium text-xs py-3">{activity.typeProduit}</TableCell>
+                <TableCell className="text-gray-800 font-medium text-xs py-3">{activity.courtier}</TableCell>
+                <TableCell className="text-gray-800 font-medium text-xs py-3">{activity.assure}</TableCell>
+                <TableCell className="text-gray-800 font-medium text-xs py-3">{activity.dateDeclaration}</TableCell>
+                <TableCell className="text-gray-800 font-medium text-xs py-3">{activity.echeance}</TableCell>
+                <TableCell className="text-gray-800 font-medium text-xs py-3">{activity.dateAffectation}</TableCell>
               </TableRow>
             ))}
           </TableBody>
