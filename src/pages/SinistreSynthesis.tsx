@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -646,11 +647,11 @@ const SinistreSynthesis = () => {
                           </div>
                         </div>
 
-                        {/* Analyse IA compacte */}
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
-                          {/* Classification IA - Compact */}
-                          <div className="bg-purple-50 border border-purple-200 rounded-md p-3">
-                            <div className="flex items-center gap-2 mb-2">
+                        {/* Analyse IA - Disposition côte à côte */}
+                        <div className="grid grid-cols-3 gap-3 mb-3">
+                          {/* Classification IA */}
+                          <div className="bg-purple-50 border border-purple-200 rounded-md p-2">
+                            <div className="flex items-center gap-1 mb-1">
                               <Tag className="h-3 w-3 text-purple-600" />
                               <span className="text-xs font-medium text-purple-900">Classification IA</span>
                             </div>
@@ -663,15 +664,15 @@ const SinistreSynthesis = () => {
                             </div>
                           </div>
 
-                          {/* Renommage IA - Compact */}
-                          <div className="bg-blue-50 border border-blue-200 rounded-md p-3">
-                            <div className="flex items-center gap-2 mb-2">
+                          {/* Renommage IA */}
+                          <div className="bg-blue-50 border border-blue-200 rounded-md p-2">
+                            <div className="flex items-center gap-1 mb-1">
                               <FileCheck className="h-3 w-3 text-blue-600" />
                               <span className="text-xs font-medium text-blue-900">Renommage IA</span>
                             </div>
                             <div className="space-y-1">
                               <p className="text-xs text-blue-800 bg-blue-100 p-1 rounded text-center font-mono truncate" title={doc.aiRenamed}>
-                                {doc.aiRenamed.length > 25 ? `${doc.aiRenamed.substring(0, 25)}...` : doc.aiRenamed}
+                                {doc.aiRenamed.length > 20 ? `${doc.aiRenamed.substring(0, 20)}...` : doc.aiRenamed}
                               </p>
                             </div>
                             <div className="flex items-center text-xs text-blue-700 mt-1">
@@ -680,9 +681,9 @@ const SinistreSynthesis = () => {
                             </div>
                           </div>
 
-                          {/* Score de confiance - Compact */}
-                          <div className={`border rounded-md p-3 ${getConfidenceColor(doc.confidence)}`}>
-                            <div className="flex items-center gap-2 mb-2">
+                          {/* Score de confiance */}
+                          <div className={`border rounded-md p-2 ${getConfidenceColor(doc.confidence)}`}>
+                            <div className="flex items-center gap-1 mb-1">
                               <Star className="h-3 w-3 text-yellow-500" />
                               <span className="text-xs font-medium">Confiance</span>
                             </div>
@@ -700,7 +701,7 @@ const SinistreSynthesis = () => {
                         </div>
 
                         {/* Synthèse IA détaillée */}
-                        <div className="bg-green-50 border border-green-200 rounded-md p-3 mt-3">
+                        <div className="bg-green-50 border border-green-200 rounded-md p-3">
                           <div className="flex items-center gap-2 mb-2">
                             <Bot className="h-4 w-4 text-green-600" />
                             <span className="text-sm font-medium text-green-900">Synthèse IA</span>
