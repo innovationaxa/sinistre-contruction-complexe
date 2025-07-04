@@ -115,9 +115,6 @@ export function ActivitiesTable() {
     <div className="bg-white rounded-lg shadow-sm border border-gray-300">
       <div className="p-4 border-b border-gray-300 bg-blue-50">
         <h2 className="text-lg font-bold text-gray-900">Activités de déclaration - RC Décennale</h2>
-        <div className="flex items-center gap-4 mt-2">
-          <span className="text-xs text-gray-700">Préjudices immatériels</span>
-        </div>
       </div>
 
       <ScrollArea className="w-full">
