@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, FileText, User, Building, Calendar, AlertTriangle, Sparkles, Shield, Clock, TrendingUp, CheckCircle } from "lucide-react";
+import { ArrowLeft, FileText, User, Building, Calendar, AlertTriangle, Sparkles, Shield, Clock, TrendingUp, CheckCircle, Bot, Tag, FileCheck, Star } from "lucide-react";
 
 interface SinistreData {
   id: string;
@@ -55,6 +55,11 @@ interface SinistreData {
     nom: string;
     type: string;
     date: string;
+    originalName: string;
+    aiRenamed: string;
+    aiClassification: string;
+    aiSummary: string;
+    confidence: number;
   }[];
   
   aiGenerated: {
@@ -106,10 +111,46 @@ const mockSinistreData: SinistreData = {
   },
   
   documents: [
-    { nom: "Courrier de mise en cause", type: "Courrier", date: "25/09/2024" },
-    { nom: "Photos des dommages", type: "Photos", date: "27/09/2024" },
-    { nom: "Devis de réparation", type: "Devis", date: "28/09/2024" },
-    { nom: "Attestation RC Décennale", type: "Attestation", date: "28/09/2024" }
+    { 
+      nom: "Courrier de mise en cause", 
+      type: "Courrier", 
+      date: "25/09/2024",
+      originalName: "courrier_mise_en_cause.pdf",
+      aiRenamed: "Courrier_MiseEnCause_CommercePlus_BatiConstruct_25092024.pdf",
+      aiClassification: "Document juridique - Mise en demeure",
+      aiSummary: "Courrier officiel de mise en cause de la société SARL Bâti Construct par SAS Commerce Plus. Document détaillant les dommages constatés 3 ans après réception des travaux de rénovation du local commercial. Mentions légales conformes, délais respectés. Demande d'indemnisation chiffrée incluant les préjudices matériels et immatériels.",
+      confidence: 95
+    },
+    { 
+      nom: "Photos des dommages", 
+      type: "Photos", 
+      date: "27/09/2024",
+      originalName: "photos_degats.zip",
+      aiRenamed: "Photos_Dommages_LocalCommercial_RueCommerce_27092024.zip",
+      aiClassification: "Documentation visuelle - Preuves dommages",
+      aiSummary: "Archive photographique complète des dommages structurels. 15 photos haute résolution montrant les fissures dans les murs porteurs, l'affaissement du plancher et les infiltrations d'eau. Documentation technique exploitable pour expertise. Géolocalisation et métadonnées temporelles présentes.",
+      confidence: 92
+    },
+    { 
+      nom: "Devis de réparation", 
+      type: "Devis", 
+      date: "28/09/2024",
+      originalName: "devis_reparation.pdf",
+      aiRenamed: "Devis_Réparation_Structurelle_EntrepriseBTP_Lyon_28092024.pdf",
+      aiClassification: "Document commercial - Estimation travaux",
+      aiSummary: "Devis détaillé établi par entreprise spécialisée en réparation structurelle. Montant total : 85 000€ HT incluant reprises en sous-œuvre, renforcement structure, étanchéité. Délais d'exécution : 6 semaines. Entreprise certifiée RGE, garanties décennales à jour.",
+      confidence: 88
+    },
+    { 
+      nom: "Attestation RC Décennale", 
+      type: "Attestation", 
+      date: "28/09/2024",
+      originalName: "attestation_assurance.pdf",
+      aiRenamed: "Attestation_RCDecennale_BatiConstruct_AXA_Validite2024.pdf",
+      aiClassification: "Document contractuel - Attestation assurance",
+      aiSummary: "Attestation d'assurance RC Décennale valide couvrant la période des travaux litigieux (2021-2031). Plafonds de garantie conformes : 500 000€ dommages ouvrage, 150 000€ préjudice immatériel. Aucune exclusion particulière identifiée. Document authentifié par signature électronique AXA.",
+      confidence: 98
+    }
   ],
   
   aiGenerated: {
@@ -128,6 +169,13 @@ export default function SinistreDetail() {
   const AIIndicator = () => (
     <Sparkles className="w-4 h-4 text-purple-600 inline ml-1" />
   );
+
+  const getConfidenceColor = (confidence: number) => {
+    if (confidence >= 95) return "text-green-600 bg-green-50 border-green-200";
+    if (confidence >= 90) return "text-blue-600 bg-blue-50 border-blue-200";
+    if (confidence >= 85) return "text-yellow-600 bg-yellow-50 border-yellow-200";
+    return "text-red-600 bg-red-50 border-red-200";
+  };
 
   return (
     <div className="min-h-screen flex flex-col w-full bg-gray-50">
@@ -408,21 +456,142 @@ export default function SinistreDetail() {
             </TabsContent>
 
             <TabsContent value="historique" className="space-y-6">
-              {/* Documents */}
+              {/* Documents avec analyse IA */}
               <Card className="border-blue-200">
                 <CardHeader className="bg-blue-50">
-                  <CardTitle className="text-blue-800">Documents contractuels et assurantiels</CardTitle>
+                  <CardTitle className="flex items-center gap-2 text-blue-800">
+                    <FileText className="w-5 h-5" />
+                    Documents contractuels et assurantiels
+                    <Badge className="bg-purple-100 text-purple-800 ml-2">
+                      <Bot className="h-3 w-3 mr-1" />
+                      Analyse IA
+                    </Badge>
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="pt-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+                  <div className="space-y-6">
                     {sinistre.documents.map((doc, index) => (
-                      <div key={index} className="border rounded-lg p-3 hover:bg-gray-50 cursor-pointer border-blue-200">
-                        <div className="flex items-center gap-2 mb-1">
-                          <FileText className="w-4 h-4 text-blue-600" />
-                          <span className="text-sm font-bold">{doc.nom}</span>
+                      <div key={index} className="border-2 border-gray-200 rounded-xl p-6 bg-white shadow-sm hover:shadow-md transition-shadow">
+                        {/* En-tête du document */}
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-2">
+                              <FileText className="h-5 w-5 text-blue-600" />
+                              <h3 className="text-lg font-semibold text-gray-900">{doc.nom}</h3>
+                              <Badge variant="outline" className="text-sm">{doc.type}</Badge>
+                              <Badge variant="outline" className="text-sm text-gray-500">{doc.date}</Badge>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2 ml-4">
+                            <Badge className={`text-xs border ${getConfidenceColor(doc.confidence)}`}>
+                              {doc.confidence}% confiance
+                            </Badge>
+                          </div>
                         </div>
-                        <div className="text-xs text-gray-600">
-                          {doc.type} • {doc.date}
+
+                        {/* Analyse IA complète */}
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
+                          {/* Classification IA */}
+                          <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                            <div className="flex items-center gap-2 mb-3">
+                              <Tag className="h-4 w-4 text-purple-600" />
+                              <span className="text-sm font-semibold text-purple-900">Classification IA</span>
+                            </div>
+                            <p className="text-sm text-purple-800 font-medium">
+                              {doc.aiClassification}
+                            </p>
+                            <div className="flex items-center text-xs text-purple-700 mt-2">
+                              <Bot className="h-3 w-3 mr-1" />
+                              Catégorisé automatiquement
+                            </div>
+                          </div>
+
+                          {/* Renommage IA */}
+                          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                            <div className="flex items-center gap-2 mb-3">
+                              <FileCheck className="h-4 w-4 text-blue-600" />
+                              <span className="text-sm font-semibold text-blue-900">Renommage IA</span>
+                            </div>
+                            <div className="space-y-2">
+                              <div>
+                                <p className="text-xs text-gray-600 mb-1">Nom original :</p>
+                                <p className="text-xs text-gray-800 bg-gray-100 p-2 rounded font-mono">
+                                  {doc.originalName}
+                                </p>
+                              </div>
+                              <div>
+                                <p className="text-xs text-blue-700 mb-1">Nom suggéré :</p>
+                                <p className="text-xs text-blue-800 bg-blue-100 p-2 rounded font-mono">
+                                  {doc.aiRenamed}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="flex items-center text-xs text-blue-700 mt-2">
+                              <Bot className="h-3 w-3 mr-1" />
+                              Renommage intelligent
+                            </div>
+                          </div>
+
+                          {/* Score de confiance */}
+                          <div className={`border rounded-lg p-4 ${
+                            doc.confidence >= 95 ? 'bg-green-50 border-green-200' :
+                            doc.confidence >= 90 ? 'bg-blue-50 border-blue-200' :
+                            doc.confidence >= 85 ? 'bg-yellow-50 border-yellow-200' :
+                            'bg-red-50 border-red-200'
+                          }`}>
+                            <div className="flex items-center gap-2 mb-3">
+                              <Star className="h-4 w-4 text-yellow-500" />
+                              <span className={`text-sm font-semibold ${
+                                doc.confidence >= 95 ? 'text-green-900' :
+                                doc.confidence >= 90 ? 'text-blue-900' :
+                                doc.confidence >= 85 ? 'text-yellow-900' :
+                                'text-red-900'
+                              }`}>
+                                Score de confiance
+                              </span>
+                            </div>
+                            <div className="text-center">
+                              <div className={`text-2xl font-bold mb-1 ${
+                                doc.confidence >= 95 ? 'text-green-700' :
+                                doc.confidence >= 90 ? 'text-blue-700' :
+                                doc.confidence >= 85 ? 'text-yellow-700' :
+                                'text-red-700'
+                              }`}>
+                                {doc.confidence}%
+                              </div>
+                              <p className={`text-xs ${
+                                doc.confidence >= 95 ? 'text-green-600' :
+                                doc.confidence >= 90 ? 'text-blue-600' :
+                                doc.confidence >= 85 ? 'text-yellow-600' :
+                                'text-red-600'
+                              }`}>
+                                {doc.confidence >= 95 ? 'Excellente analyse' :
+                                 doc.confidence >= 90 ? 'Très bonne analyse' :
+                                 doc.confidence >= 85 ? 'Bonne analyse' :
+                                 'Analyse à vérifier'}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Synthèse IA détaillée */}
+                        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                          <div className="flex items-center gap-2 mb-3">
+                            <Bot className="h-5 w-5 text-green-600" />
+                            <span className="text-base font-semibold text-green-900">Synthèse IA détaillée</span>
+                          </div>
+                          <p className="text-sm text-green-800 leading-relaxed">
+                            {doc.aiSummary}
+                          </p>
+                          <div className="flex items-center justify-between mt-3 pt-3 border-t border-green-200">
+                            <div className="flex items-center text-xs text-green-700">
+                              <Bot className="h-3 w-3 mr-1" />
+                              Analyse générée automatiquement
+                            </div>
+                            <Badge className="bg-green-100 text-green-800 text-xs">
+                              Document analysé ✓
+                            </Badge>
+                          </div>
                         </div>
                       </div>
                     ))}
