@@ -43,7 +43,8 @@ const SinistreDeclaration = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Formulaire soumis:", formData);
-    // Logique de soumission
+    // Rediriger vers la page de synthèse
+    navigate('/sinistre/synthese');
   };
 
   const AIField = ({ children, field }: { children: React.ReactNode; field: string }) => (
