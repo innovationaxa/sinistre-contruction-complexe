@@ -43,7 +43,7 @@ const SinistreDeclaration = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Formulaire soumis:", formData);
-    // Rediriger vers la page de synthèse
+    // Redirection vers la page de synthèse
     navigate('/sinistre/synthese');
   };
 
