@@ -1423,16 +1423,6 @@ export default function SinistreDetail() {
               </Card>
             </TabsContent>
           </Tabs>
-
-          {/* Bouton d'ouverture du sinistre */}
-          <div className="flex justify-center py-6 border-t border-gray-200 mt-8">
-            <Button 
-              onClick={() => navigate('/sinistre/declaration')}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-lg font-semibold shadow-lg"
-            >
-              Ouvrir le sinistre
-            </Button>
-          </div>
         </div>
       </main>
     </div>
