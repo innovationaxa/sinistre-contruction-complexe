@@ -1,4 +1,3 @@
-
 export interface DossierInfo {
   reference: string;
   assure: string;
@@ -42,14 +41,21 @@ export interface DossierAssocie {
   syntheseIA: string;
 }
 
+export interface ChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
 export interface TimelineEvent {
   date: string;
   titre: string;
   description: string;
   statut: "completed" | "upcoming" | "pending";
-}
-
-export interface ChatMessage {
-  role: 'user' | 'assistant';
-  content: string;
+  acteur: string;
+  duree: string;
+  details: {
+    montant: string | null;
+    documents: string[];
+    delaiReglementaire: string;
+  };
 }

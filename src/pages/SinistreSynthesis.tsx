@@ -111,37 +111,72 @@ const SinistreSynthesis = () => {
     }
   ];
 
-  // Timeline simplifiée à 5 macro étapes
+  // Timeline enrichie avec données réalistes
   const timeline: TimelineEvent[] = [
     {
       date: "15/03/2024",
-      titre: "Déclaration",
-      description: "Sinistre déclaré et dossier ouvert",
-      statut: "completed"
+      titre: "Déclaration du sinistre",
+      description: "Réception déclaration par téléphone puis confirmation écrite",
+      statut: "completed",
+      acteur: "Marie Dubois",
+      duree: "Immédiat",
+      details: {
+        montant: null,
+        documents: ["Déclaration initiale", "Photos des dégâts"],
+        delaiReglementaire: "Respecté (J+1)"
+      }
     },
     {
       date: "18/03/2024",
-      titre: "Expertise",
-      description: "Mission d'expertise confiée",
-      statut: "completed"
+      titre: "Mission d'expertise",
+      description: "Mandat expert et prise de contact avec l'assuré",
+      statut: "completed",
+      acteur: "Expert Technique",
+      duree: "3 jours",
+      details: {
+        montant: "2 500€",
+        documents: ["Lettre de mission", "Contact assuré"],
+        delaiReglementaire: "Standard (J+3)"
+      }
     },
     {
       date: "20/03/2024",
-      titre: "Évaluation",
-      description: "Visite et évaluation des dégâts",
-      statut: "upcoming"
+      titre: "Expertise sur site",
+      description: "Évaluation des dégâts et chiffrage des réparations",
+      statut: "upcoming",
+      acteur: "Expert + Assuré",
+      duree: "1 jour",
+      details: {
+        montant: "15 000€ (estimé)",
+        documents: ["Rapport d'expertise", "Devis réparations"],
+        delaiReglementaire: "En cours"
+      }
     },
     {
-      date: "30/03/2024",
-      titre: "Décision",
-      description: "Validation du règlement",
-      statut: "pending"
+      date: "25/03/2024",
+      titre: "Validation du règlement",
+      description: "Analyse du rapport et décision de prise en charge",
+      statut: "pending",
+      acteur: "Service Indemnisation",
+      duree: "5 jours",
+      details: {
+        montant: "À confirmer",
+        documents: ["Rapport final", "Décision de règlement"],
+        delaiReglementaire: "J+10 après expertise"
+      }
     },
     {
       date: "05/04/2024",
-      titre: "Clôture",
-      description: "Paiement et archivage",
-      statut: "pending"
+      titre: "Clôture du dossier",
+      description: "Paiement effectué et archivage complet",
+      statut: "pending",
+      acteur: "Comptabilité",
+      duree: "2 jours",
+      details: {
+        montant: "Montant final",
+        documents: ["Bordereau de règlement", "Quittance"],
+        delaiReglementaire: "J+45 total"
+      }
     }
   ];
 
