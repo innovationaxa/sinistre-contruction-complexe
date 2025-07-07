@@ -1,6 +1,6 @@
 
 import { Badge } from "@/components/ui/badge";
-import { AlertTriangle, CheckCircle, Sparkles, Scale, Clock, TrendingUp, Bot } from "lucide-react";
+import { AlertTriangle, CheckCircle, Sparkles, Scale, Clock, TrendingUp, Bot, FileText, Euro, Target } from "lucide-react";
 import { ActeContentieux, AlerteIA, NextAction } from "@/types/sinistre";
 
 interface OverviewSectionProps {
@@ -46,55 +46,55 @@ export function OverviewSection({ syntheseIA, actesContentieux, alertesIA, nextA
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Colonne 1 - Synthèse IA + Actes contentieux */}
         <div className="space-y-6">
-          <div className="bg-gradient-to-br from-purple-50 to-blue-50 border border-gray-200 rounded-lg p-5">
+          <div className="bg-gradient-to-br from-purple-50 to-blue-50 border-2 border-purple-200 rounded-lg p-4">
             <div className="flex items-center gap-2 mb-4">
               <Sparkles className="h-5 w-5 text-purple-600" />
-              <h3 className="font-semibold text-gray-900 text-base">Synthèse IA détaillée</h3>
+              <h3 className="font-semibold text-gray-900 text-base">Synthèse IA du dossier</h3>
             </div>
             
-            <div className="space-y-4 text-sm">
-              {/* Contexte du sinistre */}
-              <div className="bg-white/60 rounded-lg p-3 border border-purple-100">
-                <h4 className="font-semibold text-purple-800 mb-2 flex items-center gap-1">
-                  📋 Contexte du sinistre
-                </h4>
-                <p className="text-gray-700 leading-relaxed">
-                  Sinistre RC Décennale déclaré par BATIMEX SARL suite à des dégâts des eaux survenus dans l'atelier principal. 
-                  La déclaration intervient 3 ans après la réception des travaux, respectant les délais légaux.
+            <div className="space-y-3 text-sm">
+              {/* Section Contexte */}
+              <div className="bg-white/70 rounded-lg p-3 border-l-4 border-blue-500">
+                <div className="flex items-center gap-2 mb-2">
+                  <FileText className="h-4 w-4 text-blue-600" />
+                  <h4 className="font-semibold text-blue-800">Contexte</h4>
+                </div>
+                <p className="text-gray-700 mb-2">
+                  <strong>RC Décennale BATIMEX SARL</strong> - Dégâts des eaux atelier principal
                 </p>
+                <ul className="text-xs text-gray-600 space-y-1">
+                  <li>• Déclaration à J+3 ans (délais respectés)</li>
+                  <li>• Couverture confirmée, aucune exclusion</li>
+                </ul>
               </div>
 
-              {/* Enjeux financiers */}
-              <div className="bg-white/60 rounded-lg p-3 border border-orange-100">
-                <h4 className="font-semibold text-orange-800 mb-2 flex items-center gap-1">
-                  💰 Enjeux financiers
-                </h4>
-                <p className="text-gray-700 leading-relaxed">
-                  <span className="font-medium">Montant estimé : 15 000€</span> pour les dégâts matériels. 
-                  Risque de préjudice immatériel à évaluer. Budget expertise : 2 500€ provisionnés.
-                </p>
+              {/* Section Enjeux */}
+              <div className="bg-white/70 rounded-lg p-3 border-l-4 border-orange-500">
+                <div className="flex items-center gap-2 mb-2">
+                  <Euro className="h-4 w-4 text-orange-600" />
+                  <h4 className="font-semibold text-orange-800">Enjeux financiers</h4>
+                </div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-gray-700">Montant estimé</span>
+                  <Badge className="bg-orange-100 text-orange-800 font-medium">15 000€</Badge>
+                </div>
+                <ul className="text-xs text-gray-600 space-y-1">
+                  <li>• Budget expertise : 2 500€</li>
+                  <li>• Préjudice immatériel à évaluer</li>
+                </ul>
               </div>
 
-              {/* Défis et complexité */}
-              <div className="bg-white/60 rounded-lg p-3 border border-red-100">
-                <h4 className="font-semibold text-red-800 mb-2 flex items-center gap-1">
-                  ⚡ Défis identifiés
-                </h4>
-                <p className="text-gray-700 leading-relaxed">
-                  Nécessité d'établir la responsabilité décennale, évaluer l'étendue des dégâts et gérer 
-                  la continuité d'activité de l'assuré. Expertise contradictoire probable.
-                </p>
-              </div>
-
-              {/* Prochaines étapes */}
-              <div className="bg-white/60 rounded-lg p-3 border border-green-100">
-                <h4 className="font-semibold text-green-800 mb-2 flex items-center gap-1">
-                  🎯 Stratégie recommandée
-                </h4>
-                <p className="text-gray-700 leading-relaxed">
-                  Expertise programmée le 20/03/2024. Couverture confirmée, aucune exclusion identifiée. 
-                  Délai de traitement standard : 45 jours. Suivi proactif recommandé.
-                </p>
+              {/* Section Stratégie */}
+              <div className="bg-white/70 rounded-lg p-3 border-l-4 border-green-500">
+                <div className="flex items-center gap-2 mb-2">
+                  <Target className="h-4 w-4 text-green-600" />
+                  <h4 className="font-semibold text-green-800">Plan d'action</h4>
+                </div>
+                <ul className="text-xs text-gray-600 space-y-1">
+                  <li>• <strong>Expertise :</strong> 20/03/2024</li>
+                  <li>• <strong>Délai standard :</strong> 45 jours</li>
+                  <li>• <strong>Risque :</strong> Expertise contradictoire</li>
+                </ul>
               </div>
             </div>
           </div>
