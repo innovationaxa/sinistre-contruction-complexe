@@ -1421,47 +1421,6 @@ export default function SinistreDetail() {
                   </div>
                 </CardContent>
               </Card>
-
-              {/* Analyse de conformité existante */}
-              <Card className="border-blue-200">
-                <CardHeader className="bg-blue-50">
-                  <CardTitle className="flex items-center gap-2 text-blue-800">
-                    <TrendingUp className="w-5 h-5" />
-                    Analyse et comparaison IA
-                    <Sparkles className="w-5 h-5 text-purple-600" />
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="pt-4 space-y-4">
-                  <div className="p-4 bg-green-50 rounded-lg border-l-4 border-green-500">
-                    <h4 className="font-bold text-green-800 mb-2">✓ Conformité de la déclaration</h4>
-                    <p className="text-sm text-gray-700">La déclaration est conforme aux termes du contrat. Les dommages décrits entrent dans le champ de la garantie décennale.</p>
-                  </div>
-                  
-                  <div className="p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
-                    <h4 className="font-bold text-blue-800 mb-2">📊 Évaluation des risques</h4>
-                    <p className="text-sm text-gray-700">Préjudice immatériel évalué à 45 000€. Montant cohérent avec l'activité commerciale du maître d'ouvrage. Risque de dépassement limité.</p>
-                  </div>
-                  
-                  <div className="p-4 bg-orange-50 rounded-lg border-l-4 border-orange-500">
-                    <h4 className="font-bold text-orange-800 mb-2">⚠️ Points d'attention</h4>
-                    <ul className="text-sm text-gray-700 space-y-1">
-                      <li>• Délai entre réception (2021) et déclaration (2024) : 3 ans - dans les délais légaux</li>
-                      <li>• Nature des dommages : structurels, nécessitent expertise approfondie</li>
-                      <li>• Préjudice immatériel important à documenter précisément</li>
-                    </ul>
-                  </div>
-                  
-                  <div className="p-4 bg-purple-50 rounded-lg border-l-4 border-purple-500">
-                    <h4 className="font-bold text-purple-800 mb-2">🎯 Recommandations</h4>
-                    <ul className="text-sm text-gray-700 space-y-1">
-                      <li>• Diligenter expertise technique rapidement</li>
-                      <li>• Demander justificatifs du préjudice immatériel</li>
-                      <li>• Vérifier la couverture des autres intervenants</li>
-                      <li>• Constituer provision de 80 000€ (dommages + préjudice)</li>
-                    </ul>
-                  </div>
-                </CardContent>
-              </Card>
             </TabsContent>
           </Tabs>
 
