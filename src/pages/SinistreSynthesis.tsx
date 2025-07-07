@@ -111,30 +111,54 @@ const SinistreSynthesis = () => {
     }
   ];
 
-  // Timeline
+  // Timeline enrichie avec plus d'étapes
   const timeline: TimelineEvent[] = [
     {
       date: "15/03/2024 14:30",
-      titre: "Ouverture du dossier",
-      description: "Déclaration reçue et dossier créé",
+      titre: "Déclaration sinistre",
+      description: "Déclaration reçue de BATIMEX SARL - Dégâts des eaux atelier principal",
+      statut: "completed"
+    },
+    {
+      date: "15/03/2024 16:15",
+      titre: "Ouverture dossier",
+      description: "Dossier créé et assigné à Marie Dubois - Première analyse effectuée",
       statut: "completed"
     },
     {
       date: "16/03/2024 09:00",
-      titre: "Première évaluation",
-      description: "Évaluation préliminaire effectuée",
+      titre: "Vérification garanties",
+      description: "Contrôle de couverture RC Décennale - Aucune exclusion identifiée",
+      statut: "completed"
+    },
+    {
+      date: "18/03/2024 11:30",
+      titre: "Mission d'expertise",
+      description: "Mandat confié à l'expert M. Dubois - Visite programmée",
       statut: "completed"
     },
     {
       date: "20/03/2024 14:00",
-      titre: "Expertise programmée",
-      description: "Rendez-vous avec expert M. Dubois",
+      titre: "Expertise sur site",
+      description: "Visite de l'expert en cours - Évaluation des dégâts en atelier",
       statut: "upcoming"
     },
     {
       date: "25/03/2024",
       titre: "Rapport d'expertise",
-      description: "Réception du rapport technique",
+      description: "Réception du rapport technique et chiffrage définitif",
+      statut: "pending"
+    },
+    {
+      date: "30/03/2024",
+      titre: "Décision de règlement",
+      description: "Validation du dossier et montant d'indemnisation",
+      statut: "pending"
+    },
+    {
+      date: "05/04/2024",
+      titre: "Clôture dossier",
+      description: "Paiement effectué et dossier archivé",
       statut: "pending"
     }
   ];
