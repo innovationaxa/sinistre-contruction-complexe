@@ -61,20 +61,14 @@ export function Timeline({ timeline }: TimelineProps) {
       </CardHeader>
       <CardContent className="w-full">
         <div className="relative w-full">
+          {/* Barre verticale continue */}
+          <div className="absolute left-6 top-6 bottom-6 w-0.5 bg-gray-300" style={{ transform: 'translateX(-50%)' }} />
+          
           {timeline.map((event, index) => {
             const styles = getStatusStyles(event.statut);
-            const isLast = index === timeline.length - 1;
             
             return (
               <div key={index} className="relative flex items-start w-full mb-8 last:mb-0">
-                {/* Ligne verticale */}
-                {!isLast && (
-                  <div 
-                    className={`absolute left-6 top-12 w-0.5 h-16 ${styles.line}`}
-                    style={{ transform: 'translateX(-50%)' }}
-                  />
-                )}
-                
                 {/* Cercle avec icône */}
                 <div className={`relative z-10 flex items-center justify-center w-12 h-12 rounded-full border-2 ${styles.circle} shadow-lg`}>
                   {getStatusIcon(event.statut)}
