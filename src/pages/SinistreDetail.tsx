@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Progress } from "@/components/ui/progress";
-import { ArrowLeft, FileText, User, Building, Calendar, AlertTriangle, Sparkles, Shield, Clock, TrendingUp, CheckCircle, Bot, Tag, FileCheck, Star, AlertCircle, Users, MapPin, Euro, Hammer, Brain, Target, Zap, Trash, ArrowRight, FolderArrowRight, FolderOpen } from "lucide-react";
+import { ArrowLeft, FileText, User, Building, Calendar, AlertTriangle, Sparkles, Shield, Clock, TrendingUp, CheckCircle, Bot, Tag, FileCheck, Star, AlertCircle, Users, MapPin, Euro, Hammer, Brain, Target, Zap, Trash, ArrowRight, FolderOpen } from "lucide-react";
 
 interface SinistreData {
   id: string;
@@ -1411,7 +1411,7 @@ export default function SinistreDetail() {
                         console.log("Transférer à une autre équipe");
                       }}
                     >
-                      <FolderArrowRight className="w-4 h-4" />
+                      <ArrowRight className="w-4 h-4" />
                       Transférer à une autre équipe
                     </Button>
                     
