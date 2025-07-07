@@ -339,6 +339,84 @@ export default function SinistreDetail() {
                 </CardContent>
               </Card>
 
+              {/* Timeline de la vie du contrat */}
+              <Card className="border-blue-200">
+                <CardHeader className="pb-3 bg-blue-50">
+                  <CardTitle className="flex items-center gap-2 text-lg text-blue-800">
+                    <Clock className="w-5 h-5" />
+                    Timeline de la vie du contrat
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-4">
+                  <div className="relative">
+                    {/* Barre de progression verticale */}
+                    <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gradient-to-b from-green-500 via-blue-500 to-orange-500"></div>
+                    
+                    <div className="space-y-4 pl-10">
+                      {/* Souscription */}
+                      <div className="relative flex items-center">
+                        <div className="absolute -left-8 w-3 h-3 bg-green-600 rounded-full border-2 border-white shadow-sm"></div>
+                        <div className="bg-white rounded border border-green-200 p-3 w-full shadow-sm">
+                          <div className="flex justify-between items-start mb-1">
+                            <h4 className="font-semibold text-gray-900 text-sm">Souscription du contrat</h4>
+                            <Badge className="bg-green-100 text-green-800 text-xs">Actif</Badge>
+                          </div>
+                          <p className="text-xs text-gray-600 mb-2">Date d'effet: {sinistre.contrat.dateEffet}</p>
+                          <div className="text-xs text-gray-500">
+                            <span>Prime: {sinistre.contrat.prime} • Produit: {sinistre.contrat.produit}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Travaux couverts */}
+                      <div className="relative flex items-center">
+                        <div className="absolute -left-8 w-3 h-3 bg-blue-600 rounded-full border-2 border-white shadow-sm"></div>
+                        <div className="bg-white rounded border border-blue-200 p-3 w-full shadow-sm">
+                          <div className="flex justify-between items-start mb-1">
+                            <h4 className="font-semibold text-gray-900 text-sm">Réception des travaux</h4>
+                            <Badge className="bg-blue-100 text-blue-800 text-xs">Couvert</Badge>
+                          </div>
+                          <p className="text-xs text-gray-600 mb-2">Date de réception: {sinistre.sinistre.dateReceptionTravaux}</p>
+                          <div className="text-xs text-gray-500">
+                            <span>Début période garantie décennale • Chantier: {sinistre.sinistre.typeChantier}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Sinistre */}
+                      <div className="relative flex items-center">
+                        <div className="absolute -left-8 w-3 h-3 bg-orange-600 rounded-full border-2 border-white shadow-sm"></div>
+                        <div className="bg-white rounded border border-orange-200 p-3 w-full shadow-sm">
+                          <div className="flex justify-between items-start mb-1">
+                            <h4 className="font-semibold text-gray-900 text-sm">Déclaration du sinistre</h4>
+                            <Badge className="bg-orange-100 text-orange-800 text-xs">En cours</Badge>
+                          </div>
+                          <p className="text-xs text-gray-600 mb-2">Date de déclaration: {sinistre.dateDeclaration}</p>
+                          <div className="text-xs text-gray-500">
+                            <span>Réf: {sinistre.reference} • Échéance traitement: {sinistre.echeance}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Échéance contrat */}
+                      <div className="relative flex items-center">
+                        <div className="absolute -left-8 w-3 h-3 bg-gray-400 rounded-full border-2 border-white shadow-sm"></div>
+                        <div className="bg-white rounded border border-gray-200 p-3 w-full shadow-sm">
+                          <div className="flex justify-between items-start mb-1">
+                            <h4 className="font-semibold text-gray-900 text-sm">Échéance du contrat</h4>
+                            <Badge className="bg-gray-100 text-gray-600 text-xs">À venir</Badge>
+                          </div>
+                          <p className="text-xs text-gray-600 mb-2">Date d'échéance: {sinistre.contrat.dateEcheance}</p>
+                          <div className="text-xs text-gray-500">
+                            <span>Fin de couverture (garantie décennale continue jusqu'en 2031)</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
               {/* Liste des travaux réalisés */}
               <Card className="border-blue-200">
                 <CardHeader className="pb-3 bg-blue-50">
@@ -415,84 +493,6 @@ export default function SinistreDetail() {
                       <div className="text-center">
                         <p className="text-sm font-medium text-red-600">Travaux non couverts</p>
                         <p className="text-xl font-bold text-red-700">8 500 € HT</p>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Timeline de la vie du contrat */}
-              <Card className="border-blue-200">
-                <CardHeader className="pb-3 bg-blue-50">
-                  <CardTitle className="flex items-center gap-2 text-lg text-blue-800">
-                    <Clock className="w-5 h-5" />
-                    Timeline de la vie du contrat
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="pt-4">
-                  <div className="relative">
-                    {/* Barre de progression verticale */}
-                    <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gradient-to-b from-green-500 via-blue-500 to-orange-500"></div>
-                    
-                    <div className="space-y-4 pl-10">
-                      {/* Souscription */}
-                      <div className="relative flex items-center">
-                        <div className="absolute -left-8 w-3 h-3 bg-green-600 rounded-full border-2 border-white shadow-sm"></div>
-                        <div className="bg-white rounded border border-green-200 p-3 w-full shadow-sm">
-                          <div className="flex justify-between items-start mb-1">
-                            <h4 className="font-semibold text-gray-900 text-sm">Souscription du contrat</h4>
-                            <Badge className="bg-green-100 text-green-800 text-xs">Actif</Badge>
-                          </div>
-                          <p className="text-xs text-gray-600 mb-2">Date d'effet: {sinistre.contrat.dateEffet}</p>
-                          <div className="text-xs text-gray-500">
-                            <span>Prime: {sinistre.contrat.prime} • Produit: {sinistre.contrat.produit}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Travaux couverts */}
-                      <div className="relative flex items-center">
-                        <div className="absolute -left-8 w-3 h-3 bg-blue-600 rounded-full border-2 border-white shadow-sm"></div>
-                        <div className="bg-white rounded border border-blue-200 p-3 w-full shadow-sm">
-                          <div className="flex justify-between items-start mb-1">
-                            <h4 className="font-semibold text-gray-900 text-sm">Réception des travaux</h4>
-                            <Badge className="bg-blue-100 text-blue-800 text-xs">Couvert</Badge>
-                          </div>
-                          <p className="text-xs text-gray-600 mb-2">Date de réception: {sinistre.sinistre.dateReceptionTravaux}</p>
-                          <div className="text-xs text-gray-500">
-                            <span>Début période garantie décennale • Chantier: {sinistre.sinistre.typeChantier}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Sinistre */}
-                      <div className="relative flex items-center">
-                        <div className="absolute -left-8 w-3 h-3 bg-orange-600 rounded-full border-2 border-white shadow-sm"></div>
-                        <div className="bg-white rounded border border-orange-200 p-3 w-full shadow-sm">
-                          <div className="flex justify-between items-start mb-1">
-                            <h4 className="font-semibold text-gray-900 text-sm">Déclaration du sinistre</h4>
-                            <Badge className="bg-orange-100 text-orange-800 text-xs">En cours</Badge>
-                          </div>
-                          <p className="text-xs text-gray-600 mb-2">Date de déclaration: {sinistre.dateDeclaration}</p>
-                          <div className="text-xs text-gray-500">
-                            <span>Réf: {sinistre.reference} • Échéance traitement: {sinistre.echeance}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Échéance contrat */}
-                      <div className="relative flex items-center">
-                        <div className="absolute -left-8 w-3 h-3 bg-gray-400 rounded-full border-2 border-white shadow-sm"></div>
-                        <div className="bg-white rounded border border-gray-200 p-3 w-full shadow-sm">
-                          <div className="flex justify-between items-start mb-1">
-                            <h4 className="font-semibold text-gray-900 text-sm">Échéance du contrat</h4>
-                            <Badge className="bg-gray-100 text-gray-600 text-xs">À venir</Badge>
-                          </div>
-                          <p className="text-xs text-gray-600 mb-2">Date d'échéance: {sinistre.contrat.dateEcheance}</p>
-                          <div className="text-xs text-gray-500">
-                            <span>Fin de couverture (garantie décennale continue jusqu'en 2031)</span>
-                          </div>
-                        </div>
                       </div>
                     </div>
                   </div>
