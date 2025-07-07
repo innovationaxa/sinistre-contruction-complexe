@@ -35,31 +35,31 @@ const SinistreSynthesis = () => {
     }
   ];
 
-  // Alertes IA
+  // Alertes IA améliorées - plus minimalistes et pertinentes
   const alertesIA: AlerteIA[] = [
     {
       id: 1,
       type: "urgent",
-      titre: "Documents manquants",
-      description: "Factures de réparation non fournies",
-      impact: "Retard possible dans le règlement",
-      confidence: 92
+      titre: "Factures manquantes",
+      description: "Justificatifs de réparation non fournis",
+      impact: "Blocage du règlement",
+      confidence: 95
     },
     {
       id: 2,
       type: "warning",
-      titre: "Incohérence montants",
-      description: "Écart de 2 000€ entre devis initial et final",
-      impact: "Vérification expertise requise",
-      confidence: 87
+      titre: "Délai expertise dépassé",
+      description: "Rapport attendu depuis 5 jours",
+      impact: "Retard procédure",
+      confidence: 88
     },
     {
       id: 3,
       type: "info",
-      titre: "Délai prescription",
+      titre: "Prescription proche",
       description: "Recours possible jusqu'au 15/09/2024",
-      impact: "Action préventive recommandée",
-      confidence: 95
+      impact: "Action à programmer",
+      confidence: 92
     }
   ];
 
