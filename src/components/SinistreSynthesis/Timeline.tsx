@@ -128,7 +128,7 @@ export function Timeline({ timeline }: TimelineProps) {
                     {/* Documents associés */}
                     {event.details.documents.length > 0 && (
                       <div className="mt-3 pt-3 border-t border-gray-100">
-                        <div className="flex flex-wrap gap-1">
+                        <div className="flex flex-wrap gap-1 justify-center">
                           {event.details.documents.map((doc, docIndex) => (
                             <span key={docIndex} className="inline-block px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">
                               {doc}
