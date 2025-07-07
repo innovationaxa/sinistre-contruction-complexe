@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { MessageCircle, Bot } from "lucide-react";
+import { MessageCircle, Bot, Send } from "lucide-react";
 import { ChatMessage } from "@/types/sinistre";
 
 interface AIChatProps {
@@ -44,27 +44,27 @@ export function AIChat({ dossierReference }: AIChatProps) {
           Chat IA
         </Button>
       </SheetTrigger>
-      <SheetContent className="w-96">
-        <SheetHeader>
+      <SheetContent className="w-[500px] p-0 flex flex-col" side="right">
+        <SheetHeader className="p-4 border-b">
           <SheetTitle className="flex items-center gap-2">
             <Bot className="h-5 w-5 text-purple-600" />
             Assistant IA - Dossier {dossierReference}
           </SheetTitle>
         </SheetHeader>
         
-        <div className="flex flex-col h-full mt-6">
-          <div className="flex-1 bg-gray-50 rounded-lg p-4 mb-4 overflow-y-auto max-h-96">
-            <div className="space-y-4">
+        <div className="flex-1 flex flex-col min-h-0">
+          <div className="flex-1 p-4 overflow-y-auto">
+            <div className="space-y-3">
               {chatMessages.map((message, index) => (
                 <div
                   key={index}
                   className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    className={`max-w-[80%] p-3 rounded-lg text-sm ${
+                    className={`max-w-[85%] p-3 rounded-lg text-sm ${
                       message.role === 'user'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-white border border-gray-200'
+                        ? 'bg-blue-600 text-white rounded-br-sm'
+                        : 'bg-gray-100 text-gray-900 rounded-bl-sm'
                     }`}
                   >
                     {message.content}
@@ -74,17 +74,19 @@ export function AIChat({ dossierReference }: AIChatProps) {
             </div>
           </div>
 
-          <form onSubmit={handleChatSubmit} className="flex gap-2">
-            <Input
-              value={chatMessage}
-              onChange={(e) => setChatMessage(e.target.value)}
-              placeholder="Posez votre question sur le dossier..."
-              className="flex-1"
-            />
-            <Button type="submit" size="sm">
-              <MessageCircle className="h-4 w-4" />
-            </Button>
-          </form>
+          <div className="border-t p-4 bg-white">
+            <form onSubmit={handleChatSubmit} className="flex gap-2">
+              <Input
+                value={chatMessage}
+                onChange={(e) => setChatMessage(e.target.value)}
+                placeholder="Posez votre question sur le dossier..."
+                className="flex-1"
+              />
+              <Button type="submit" size="sm" className="px-3">
+                <Send className="h-4 w-4" />
+              </Button>
+            </form>
+          </div>
         </div>
       </SheetContent>
     </Sheet>
