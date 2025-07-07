@@ -20,27 +20,27 @@ export function AssociatedFiles({ dossiersAssocies }: AssociatedFilesProps) {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4">
+        <div className="space-y-3">
           {dossiersAssocies.map((dossier) => (
-            <button
+            <div
               key={dossier.id}
-              className="w-full p-4 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-shadow cursor-pointer text-left"
+              className="bg-gradient-to-br from-purple-50 to-blue-50 border border-purple-200 rounded-lg p-4 hover:shadow-sm transition-shadow cursor-pointer"
               onClick={() => navigate(`/sinistre/synthesis/${dossier.id}`)}
             >
               <div className="flex items-center justify-between mb-2">
-                <h4 className="font-semibold text-base">{dossier.nom}</h4>
+                <h4 className="font-semibold text-sm text-gray-900">{dossier.nom}</h4>
                 <ExternalLink className="h-4 w-4 text-gray-400" />
               </div>
               
-              <div className="text-sm text-gray-600 mb-3">
-                <span className="font-medium">Réf:</span> {dossier.id} • <span className="font-medium">Assuré:</span> {dossier.assure}
+              <div className="text-xs text-gray-600 mb-3">
+                <span className="font-medium">Réf:</span> {dossier.id}
               </div>
               
-              <div className="flex items-start gap-3">
-                <Star className="h-4 w-4 text-violet-500 mt-0.5 flex-shrink-0" fill="currentColor" />
-                <p className="text-sm text-violet-600 leading-relaxed flex-1 italic opacity-80">{dossier.syntheseIA}</p>
+              <div className="flex items-start gap-2">
+                <Star className="h-3 w-3 text-violet-500 mt-0.5 flex-shrink-0" fill="currentColor" />
+                <p className="text-xs text-violet-600 leading-relaxed flex-1 italic opacity-80">{dossier.syntheseIA}</p>
               </div>
-            </button>
+            </div>
           ))}
         </div>
       </CardContent>
