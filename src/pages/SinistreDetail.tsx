@@ -406,31 +406,8 @@ export default function SinistreDetail() {
                 </CardContent>
               </Card>
 
-              {/* Informations principales */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <Card className="border-blue-200">
-                  <CardHeader className="pb-3 bg-blue-50">
-                    <CardTitle className="flex items-center gap-2 text-lg text-blue-800">
-                      <Calendar className="w-5 h-5" />
-                      Dates clés
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-gray-600 font-medium">Déclaration:</span>
-                      <span className="font-bold">{sinistre.dateDeclaration}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600 font-medium">Réception:</span>
-                      <span className="font-bold">{sinistre.dateReception}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600 font-medium">Échéance:</span>
-                      <span className="font-bold text-red-600">{sinistre.echeance}</span>
-                    </div>
-                  </CardContent>
-                </Card>
-
+              {/* Informations principales - Assuré et Contrat seulement */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <Card className="border-blue-200">
                   <CardHeader className="pb-3 bg-blue-50">
                     <CardTitle className="flex items-center gap-2 text-lg text-blue-800">
