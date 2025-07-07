@@ -91,7 +91,7 @@ const SinistreSynthesis = () => {
     }
   ];
 
-  // Dossiers associés - Simplified version
+  // Dossiers associés - Enhanced version with longer syntheses
   const dossiersAssocies: DossierAssocie[] = [
     {
       id: "CON-2023-456123",
@@ -99,7 +99,7 @@ const SinistreSynthesis = () => {
       assure: "Société BATIMEX SARL",
       relation: "Même assuré",
       statut: "Clos",
-      syntheseIA: "Dossier similaire clos avec succès. Même type de dégâts des eaux, montant 12K€. Procédure standard respectée, délai 38 jours. Aucun contentieux."
+      syntheseIA: "Dossier similaire traité avec succès en 2023. Même typologie de dégâts des eaux dans les locaux techniques, montant final réglé à 12 000€. La procédure standard a été respectée avec un délai total de 38 jours. Aucun contentieux n'est survenu, expertise contradictoire menée sans opposition. L'assuré avait fourni tous les justificatifs dans les délais, permettant un règlement rapide et satisfaisant pour toutes les parties."
     },
     {
       id: "CON-2024-123789",
@@ -107,7 +107,7 @@ const SinistreSynthesis = () => {
       assure: "Entreprise Générale du Bâtiment",
       relation: "Même adresse",
       statut: "En cours",
-      syntheseIA: "Sinistre en parallèle sur le même site. Problématique de malfaçons structurelles. Expertise contradictoire en cours. Montant potentiel élevé."
+      syntheseIA: "Sinistre complexe en parallèle sur le même site de construction. Problématique de malfaçons structurelles touchant les fondations et la charpente. Une expertise contradictoire est actuellement en cours avec trois experts mandatés. Le montant potentiel est estimé entre 50 000€ et 80 000€. Des recours croisés sont envisagés entre les différents intervenants du chantier, nécessitant une coordination juridique approfondie."
     }
   ];
 

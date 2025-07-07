@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileText, ExternalLink } from "lucide-react";
+import { FileText, ExternalLink, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { DossierAssocie } from "@/types/sinistre";
 
@@ -32,11 +32,14 @@ export function AssociatedFiles({ dossiersAssocies }: AssociatedFilesProps) {
                 <ExternalLink className="h-4 w-4 text-gray-400" />
               </div>
               
-              <div className="text-sm text-gray-600 mb-2">
+              <div className="text-sm text-gray-600 mb-3">
                 <span className="font-medium">Réf:</span> {dossier.id} • <span className="font-medium">Assuré:</span> {dossier.assure}
               </div>
               
-              <p className="text-sm text-gray-700 leading-relaxed">{dossier.syntheseIA}</p>
+              <div className="flex items-start gap-3">
+                <Star className="h-4 w-4 text-violet-500 mt-0.5 flex-shrink-0" fill="currentColor" />
+                <p className="text-sm text-gray-700 leading-relaxed flex-1">{dossier.syntheseIA}</p>
+              </div>
             </button>
           ))}
         </div>
