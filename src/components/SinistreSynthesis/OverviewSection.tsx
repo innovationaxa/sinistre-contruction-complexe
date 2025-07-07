@@ -1,41 +1,49 @@
 import { Badge } from "@/components/ui/badge";
 import { AlertTriangle, CheckCircle, Sparkles, Scale, Clock, TrendingUp, Bot } from "lucide-react";
 import { ActeContentieux, AlerteIA, NextAction } from "@/types/sinistre";
-
 interface OverviewSectionProps {
   syntheseIA: string;
   actesContentieux: ActeContentieux[];
   alertesIA: AlerteIA[];
   nextActions: NextAction[];
 }
-
-export function OverviewSection({ syntheseIA, actesContentieux, alertesIA, nextActions }: OverviewSectionProps) {
+export function OverviewSection({
+  syntheseIA,
+  actesContentieux,
+  alertesIA,
+  nextActions
+}: OverviewSectionProps) {
   const getAlertIcon = (type: string) => {
     switch (type) {
-      case "urgent": return <AlertTriangle className="h-4 w-4 text-red-600" />;
-      case "warning": return <Clock className="h-4 w-4 text-orange-600" />;
-      default: return <TrendingUp className="h-4 w-4 text-blue-600" />;
+      case "urgent":
+        return <AlertTriangle className="h-4 w-4 text-red-600" />;
+      case "warning":
+        return <Clock className="h-4 w-4 text-orange-600" />;
+      default:
+        return <TrendingUp className="h-4 w-4 text-blue-600" />;
     }
   };
-
   const getAlertColor = (type: string) => {
     switch (type) {
-      case "urgent": return "bg-red-50";
-      case "warning": return "bg-orange-50";
-      default: return "bg-blue-50";
+      case "urgent":
+        return "bg-red-50";
+      case "warning":
+        return "bg-orange-50";
+      default:
+        return "bg-blue-50";
     }
   };
-
   const getPriorityColor = (priorite: string) => {
     switch (priorite) {
-      case "haute": return "bg-red-100 text-red-800";
-      case "moyenne": return "bg-orange-100 text-orange-800";
-      default: return "bg-green-100 text-green-800";
+      case "haute":
+        return "bg-red-100 text-red-800";
+      case "moyenne":
+        return "bg-orange-100 text-orange-800";
+      default:
+        return "bg-green-100 text-green-800";
     }
   };
-
-  return (
-    <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+  return <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
       <div className="flex items-center gap-2 mb-6">
         <div className="w-2 h-2 rounded-full bg-blue-500"></div>
         <h2 className="text-lg font-semibold text-gray-900">Vue d'ensemble du dossier</h2>
@@ -72,28 +80,7 @@ export function OverviewSection({ syntheseIA, actesContentieux, alertesIA, nextA
             </div>
           </div>
 
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-            <div className="flex items-center gap-2 mb-3">
-              <Scale className="h-4 w-4 text-gray-600" />
-              <h3 className="font-semibold text-gray-900">Actes contentieux</h3>
-            </div>
-            <div className="space-y-3">
-              {actesContentieux.map((acte, index) => (
-                <div key={index} className="flex items-center justify-between p-3 bg-white rounded border border-gray-100">
-                  <div>
-                    <p className="font-medium text-sm">{acte.type}</p>
-                    <p className="text-xs text-gray-600">{acte.partie}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm font-medium">{acte.date}</p>
-                    <Badge variant="outline" className="text-xs">
-                      {acte.status}
-                    </Badge>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          
         </div>
 
         {/* Colonne 2 - Alertes IA */}
@@ -103,8 +90,7 @@ export function OverviewSection({ syntheseIA, actesContentieux, alertesIA, nextA
             <h3 className="font-semibold text-gray-900">Alertes IA</h3>
           </div>
           <div className="space-y-4">
-            {alertesIA.map((alerte) => (
-              <div key={alerte.id} className={`p-3 rounded border border-gray-200 ${getAlertColor(alerte.type)} bg-white`}>
+            {alertesIA.map(alerte => <div key={alerte.id} className={`p-3 rounded border border-gray-200 ${getAlertColor(alerte.type)} bg-white`}>
                 <div className="flex items-start gap-3">
                   {getAlertIcon(alerte.type)}
                   <div className="flex-1">
@@ -117,8 +103,7 @@ export function OverviewSection({ syntheseIA, actesContentieux, alertesIA, nextA
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              </div>)}
           </div>
         </div>
 
@@ -129,8 +114,7 @@ export function OverviewSection({ syntheseIA, actesContentieux, alertesIA, nextA
             <h3 className="font-semibold text-gray-900">Next Best Actions</h3>
           </div>
           <div className="space-y-4">
-            {nextActions.map((action) => (
-              <div key={action.id} className="p-3 border border-gray-200 rounded bg-white hover:shadow-sm transition-shadow cursor-pointer">
+            {nextActions.map(action => <div key={action.id} className="p-3 border border-gray-200 rounded bg-white hover:shadow-sm transition-shadow cursor-pointer">
                 <div className="flex items-start justify-between mb-2">
                   <h4 className="font-semibold text-sm">{action.action}</h4>
                   <Badge className={getPriorityColor(action.priorite)}>
@@ -142,11 +126,9 @@ export function OverviewSection({ syntheseIA, actesContentieux, alertesIA, nextA
                   <span>👤 {action.assignee}</span>
                   <span>⏱️ {action.delai}</span>
                 </div>
-              </div>
-            ))}
+              </div>)}
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 }
