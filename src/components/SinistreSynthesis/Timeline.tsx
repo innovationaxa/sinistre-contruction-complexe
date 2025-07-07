@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Clock, CheckCircle, Circle, AlertCircle } from "lucide-react";
+import { Clock, CheckCircle, Circle, AlertCircle, Star } from "lucide-react";
 import { TimelineEvent } from "@/types/sinistre";
 
 interface TimelineProps {
@@ -38,6 +38,7 @@ export function Timeline({ timeline }: TimelineProps) {
     <Card className="w-full">
       <CardHeader className="pb-4">
         <CardTitle className="flex items-center gap-2 text-lg">
+          <Star className="h-4 w-4 text-purple-600 fill-purple-600" />
           <Clock className="h-5 w-5 text-gray-600" />
           Timeline du sinistre
         </CardTitle>
