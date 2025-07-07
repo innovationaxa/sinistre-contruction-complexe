@@ -1085,35 +1085,6 @@ export default function SinistreDetail() {
                   </div>
                 </CardContent>
               </Card>
-
-              {/* Sinistres passés */}
-              <Card className="border-blue-200">
-                <CardHeader className="bg-blue-50">
-                  <CardTitle className="text-blue-800">Sinistres passés et en cours</CardTitle>
-                </CardHeader>
-                <CardContent className="pt-4">
-                  <div className="space-y-3">
-                    <div className="p-3 bg-red-50 rounded-lg border-l-4 border-red-500">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <p className="font-bold text-gray-900">Sinistre actuel - RC-DECA-2024-001</p>
-                          <p className="text-sm text-gray-600">En cours de traitement depuis le 28/09/2024</p>
-                        </div>
-                        <Badge className="bg-orange-100 text-orange-800">En cours</Badge>
-                      </div>
-                    </div>
-                    <div className="p-3 bg-gray-50 rounded-lg">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <p className="font-bold text-gray-900">Aucun sinistre antérieur</p>
-                          <p className="text-sm text-gray-600">Historique vierge sur ce contrat</p>
-                        </div>
-                        <Badge className="bg-green-100 text-green-800">Bon risque</Badge>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
             </TabsContent>
 
             <TabsContent value="analyse" className="space-y-6">
