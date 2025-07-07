@@ -36,13 +36,10 @@ export interface NextAction {
 export interface DossierAssocie {
   id: string;
   nom: string;
-  score: number;
+  assure: string;
   relation: string;
   statut: string;
   syntheseIA: string;
-  montantEstime?: string;
-  prochaineMilestone?: string;
-  risqueIdentifie?: string;
 }
 
 export interface TimelineEvent {

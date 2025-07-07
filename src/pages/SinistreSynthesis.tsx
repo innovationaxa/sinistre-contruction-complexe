@@ -91,29 +91,23 @@ const SinistreSynthesis = () => {
     }
   ];
 
-  // Dossiers associés - Updated to show only 2 with AI summaries
+  // Dossiers associés - Simplified version
   const dossiersAssocies: DossierAssocie[] = [
     {
       id: "CON-2023-456123",
       nom: "BATIMEX - Sinistre antérieur",
-      score: 85,
+      assure: "Société BATIMEX SARL",
       relation: "Même assuré",
       statut: "Clos",
-      syntheseIA: "Dossier similaire clos avec succès. Même type de dégâts des eaux, montant 12K€. Procédure standard respectée, délai 38 jours. Aucun contentieux.",
-      montantEstime: "12 000€",
-      prochaineMilestone: "Archivage définitif",
-      risqueIdentifie: "Aucun risque identifié"
+      syntheseIA: "Dossier similaire clos avec succès. Même type de dégâts des eaux, montant 12K€. Procédure standard respectée, délai 38 jours. Aucun contentieux."
     },
     {
       id: "CON-2024-123789",
       nom: "Chantier Avenue des Chantiers",
-      score: 72,
+      assure: "Entreprise Générale du Bâtiment",
       relation: "Même adresse",
       statut: "En cours",
-      syntheseIA: "Sinistre en parallèle sur le même site. Problématique de malfaçons structurelles. Expertise contradictoire en cours. Montant potentiel élevé.",
-      montantEstime: "45 000€",
-      prochaineMilestone: "Expertise contradictoire - 25/03/2024",
-      risqueIdentifie: "Risque de contentieux"
+      syntheseIA: "Sinistre en parallèle sur le même site. Problématique de malfaçons structurelles. Expertise contradictoire en cours. Montant potentiel élevé."
     }
   ];
 
