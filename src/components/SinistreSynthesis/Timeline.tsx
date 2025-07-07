@@ -62,8 +62,8 @@ export function Timeline({ timeline }: TimelineProps) {
             
             return (
               <div key={index} className="relative flex items-center">
-                {/* Cercle de statut aligné avec la barre */}
-                <div className={`absolute -left-20 flex items-center justify-center w-8 h-8 rounded-full ${getStatusColor(event.statut)} shadow-lg hover:scale-110 transition-transform duration-200`}>
+                {/* Cercle de statut aligné avec la barre et centré horizontalement */}
+                <div className={`absolute -left-20 flex items-center justify-center w-8 h-8 rounded-full ${getStatusColor(event.statut)} shadow-lg hover:scale-110 transition-transform duration-200`} style={{ left: 'calc(-5rem + 1px)' }}>
                   {getStatusIcon(event.statut)}
                 </div>
                 
