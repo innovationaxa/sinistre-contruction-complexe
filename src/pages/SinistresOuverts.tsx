@@ -1,3 +1,4 @@
+
 import { Header } from "@/components/Header";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -34,6 +35,24 @@ const SinistresOuverts = () => {
       montantEstime: "2 800 €",
       expert: "Pierre Dubois",
       priorite: "basse"
+    },
+    {
+      id: "SIN-2024-004",
+      dateDeclaration: "05/02/2024",
+      typeContrat: "RC/RCD",
+      statut: "Nouveau",
+      montantEstime: "8 200 €",
+      expert: "Sophie Laurent",
+      priorite: "neutre"
+    },
+    {
+      id: "SIN-2024-005",
+      dateDeclaration: "12/02/2024",
+      typeContrat: "RC/RCD",
+      statut: "Documents requis",
+      montantEstime: "25 000 €",
+      expert: "Thomas Bernard",
+      priorite: "haute"
     }
   ];
 
@@ -65,7 +84,7 @@ const SinistresOuverts = () => {
     };
 
     return (
-      <Badge variant="outline" className={`flex items-center gap-1.5 ${getVariantClasses()}`}>
+      <Badge variant="outline" className={`inline-flex items-center gap-1.5 w-fit ${getVariantClasses()}`}>
         {getIcon()}
         <span>{statut}</span>
       </Badge>
