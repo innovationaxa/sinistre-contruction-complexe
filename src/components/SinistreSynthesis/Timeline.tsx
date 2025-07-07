@@ -46,16 +46,6 @@ export function Timeline({ timeline }: TimelineProps) {
     }
   };
 
-  const getLineColor = (currentStatus: string, nextStatus?: string) => {
-    if (currentStatus === 'completed') {
-      return 'bg-gradient-to-b from-green-400 to-green-500';
-    }
-    if (currentStatus === 'upcoming' && nextStatus) {
-      return 'bg-gradient-to-b from-blue-400 to-gray-300';
-    }
-    return 'bg-gray-300';
-  };
-
   return (
     <Card className="w-full overflow-hidden">
       <CardHeader className="pb-4 bg-gradient-to-r from-blue-50 to-indigo-50">
@@ -65,23 +55,23 @@ export function Timeline({ timeline }: TimelineProps) {
         </CardTitle>
       </CardHeader>
       <CardContent className="px-6 pb-6 pt-6 relative">
-        {/* Barre continue sur toute la hauteur */}
-        <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-green-400 via-blue-400 to-gray-300"></div>
+        {/* Barre continue centrée sur toute la hauteur */}
+        <div className="absolute left-1/2 top-6 bottom-6 w-0.5 bg-gradient-to-b from-green-400 via-blue-400 to-gray-300 transform -translate-x-1/2"></div>
         
-        <div className="relative">
+        <div className="relative flex flex-col items-center">
           {timeline.map((event, index) => {
             const styles = getStatusStyles(event.statut);
             const isLast = index === timeline.length - 1;
             
             return (
-              <div key={index} className={`relative flex items-start ${!isLast ? 'mb-10' : ''}`}>
-                {/* Cercle avec icône et effet hover */}
-                <div className={`relative z-10 flex items-center justify-center w-7 h-7 rounded-full ${styles.circle} transition-all duration-300 hover:scale-110 hover:shadow-xl cursor-pointer`}>
+              <div key={index} className={`relative flex flex-col items-center w-full ${!isLast ? 'mb-10' : ''}`}>
+                {/* Cercle avec icône centré sur la barre */}
+                <div className={`relative z-10 flex items-center justify-center w-7 h-7 rounded-full ${styles.circle} transition-all duration-300 hover:scale-110 hover:shadow-xl cursor-pointer mb-4`}>
                   {getStatusIcon(event.statut)}
                 </div>
                 
-                {/* Contenu de l'événement avec animation */}
-                <div className="flex-1 ml-5 pt-0">
+                {/* Contenu de l'événement centré */}
+                <div className="w-full max-w-md">
                   <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm hover:shadow-md transition-all duration-300 hover:bg-gray-50">
                     <div className="flex items-center justify-between mb-2">
                       <h4 className={`font-semibold text-base ${styles.text} transition-colors duration-200`}>
@@ -95,12 +85,12 @@ export function Timeline({ timeline }: TimelineProps) {
                         {event.date}
                       </span>
                     </div>
-                    <p className={`text-sm ${styles.text} leading-relaxed`}>
+                    <p className={`text-sm ${styles.text} leading-relaxed mb-3`}>
                       {event.description}
                     </p>
                     
-                    {/* Indicateur de statut */}
-                    <div className="flex items-center gap-2 mt-3">
+                    {/* Indicateur de statut centré */}
+                    <div className="flex items-center justify-center gap-2">
                       <div className={`w-2 h-2 rounded-full ${
                         event.statut === 'completed' ? 'bg-green-500' :
                         event.statut === 'upcoming' ? 'bg-blue-500' :
