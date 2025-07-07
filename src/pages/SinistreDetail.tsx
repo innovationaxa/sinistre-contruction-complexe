@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, FileText, User, Building, Calendar, AlertTriangle, Sparkles, Shield, Clock, TrendingUp, CheckCircle, Bot, Tag, FileCheck, Star, AlertCircle, Users } from "lucide-react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { ArrowLeft, FileText, User, Building, Calendar, AlertTriangle, Sparkles, Shield, Clock, TrendingUp, CheckCircle, Bot, Tag, FileCheck, Star, AlertCircle, Users, MapPin, Euro, Hammer } from "lucide-react";
 
 interface SinistreData {
   id: string;
@@ -32,6 +33,7 @@ interface SinistreData {
     dateEcheance: string;
     prime: string;
     courtier: string;
+    activitesCouvertes: string[];
   };
   
   // Informations Sinistre  
@@ -49,6 +51,16 @@ interface SinistreData {
       prejudiceImateriel: string;
     };
   };
+
+  // Travaux réalisés
+  travauxRealises: {
+    description: string;
+    adresse: string;
+    cout: string;
+    dateRealisation: string;
+    estCouvert: boolean;
+    activiteContrat: string;
+  }[];
   
   // Documents
   documents: {
@@ -92,7 +104,15 @@ const mockSinistreData: SinistreData = {
     dateEffet: "01/01/2021",
     dateEcheance: "31/12/2024",
     prime: "8 500 € HT/an",
-    courtier: "Agent AXA Lyon Centre - M. Dubois"
+    courtier: "Agent AXA Lyon Centre - M. Dubois",
+    activitesCouvertes: [
+      "Gros œuvre - Maçonnerie",
+      "Second œuvre - Plâtrerie",
+      "Second œuvre - Électricité",
+      "Second œuvre - Plomberie",
+      "Finitions - Carrelage",
+      "Rénovation lourde"
+    ]
   },
   
   sinistre: {
@@ -109,6 +129,49 @@ const mockSinistreData: SinistreData = {
       prejudiceImateriel: "Fermeture boutique 2 mois estimée = 45 000€ de CA perdu"
     }
   },
+
+  travauxRealises: [
+    {
+      description: "Reprise des murs porteurs en maçonnerie",
+      adresse: "42 Rue du Commerce, 69002 Lyon",
+      cout: "32 000 € HT",
+      dateRealisation: "Mars-Avril 2021",
+      estCouvert: true,
+      activiteContrat: "Gros œuvre - Maçonnerie"
+    },
+    {
+      description: "Installation électrique complète",
+      adresse: "42 Rue du Commerce, 69002 Lyon", 
+      cout: "18 500 € HT",
+      dateRealisation: "Mai 2021",
+      estCouvert: true,
+      activiteContrat: "Second œuvre - Électricité"
+    },
+    {
+      description: "Plomberie et évacuations",
+      adresse: "42 Rue du Commerce, 69002 Lyon",
+      cout: "12 800 € HT",
+      dateRealisation: "Mai 2021",
+      estCouvert: true,
+      activiteContrat: "Second œuvre - Plomberie"
+    },
+    {
+      description: "Pose carrelage sol et faïence",
+      adresse: "42 Rue du Commerce, 69002 Lyon",
+      cout: "15 200 € HT",
+      dateRealisation: "Juin 2021",
+      estCouvert: true,
+      activiteContrat: "Finitions - Carrelage"
+    },
+    {
+      description: "Aménagement vitrine (hors garantie décennale)",
+      adresse: "42 Rue du Commerce, 69002 Lyon",
+      cout: "8 500 € HT",
+      dateRealisation: "Juin 2021",
+      estCouvert: false,
+      activiteContrat: "Non couvert - Aménagements"
+    }
+  ],
   
   documents: [
     { 
@@ -273,6 +336,88 @@ export default function SinistreDetail() {
                     declarationValue={sinistre.assure.secteurActivite}
                     isMatch={true}
                   />
+                </CardContent>
+              </Card>
+
+              {/* Liste des travaux réalisés */}
+              <Card className="border-blue-200">
+                <CardHeader className="pb-3 bg-blue-50">
+                  <CardTitle className="flex items-center gap-2 text-lg text-blue-800">
+                    <Hammer className="w-5 h-5" />
+                    Travaux réalisés et couverture contractuelle
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-4">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="w-[300px]">Description des travaux</TableHead>
+                        <TableHead className="w-[200px]">Adresse</TableHead>
+                        <TableHead className="w-[120px]">Coût</TableHead>
+                        <TableHead className="w-[120px]">Date</TableHead>
+                        <TableHead className="w-[200px]">Activité contrat</TableHead>
+                        <TableHead className="w-[100px]">Couverture</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {sinistre.travauxRealises.map((travail, index) => (
+                        <TableRow key={index}>
+                          <TableCell className="font-medium">
+                            {travail.description}
+                          </TableCell>
+                          <TableCell className="text-sm text-gray-600">
+                            <div className="flex items-center gap-1">
+                              <MapPin className="w-3 h-3" />
+                              {travail.adresse}
+                            </div>
+                          </TableCell>
+                          <TableCell className="font-semibold">
+                            <div className="flex items-center gap-1">
+                              <Euro className="w-3 h-3" />
+                              {travail.cout}
+                            </div>
+                          </TableCell>
+                          <TableCell className="text-sm text-gray-600">
+                            {travail.dateRealisation}
+                          </TableCell>
+                          <TableCell className="text-sm">
+                            {travail.activiteContrat}
+                          </TableCell>
+                          <TableCell>
+                            {travail.estCouvert ? (
+                              <Badge className="bg-green-100 text-green-800 text-xs">
+                                <CheckCircle className="w-3 h-3 mr-1" />
+                                Couvert
+                              </Badge>
+                            ) : (
+                              <Badge className="bg-red-100 text-red-800 text-xs">
+                                <AlertCircle className="w-3 h-3 mr-1" />
+                                Non couvert
+                              </Badge>
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                  
+                  {/* Résumé des coûts */}
+                  <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="text-center">
+                        <p className="text-sm font-medium text-gray-600">Total des travaux</p>
+                        <p className="text-xl font-bold text-gray-900">87 000 € HT</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-sm font-medium text-green-600">Travaux couverts</p>
+                        <p className="text-xl font-bold text-green-700">78 500 € HT</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-sm font-medium text-red-600">Travaux non couverts</p>
+                        <p className="text-xl font-bold text-red-700">8 500 € HT</p>
+                      </div>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
 
