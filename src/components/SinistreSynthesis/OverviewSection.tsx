@@ -1,4 +1,5 @@
 
+
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { AlertTriangle, CheckCircle, Sparkles, Scale, Clock, TrendingUp, Bot, Info } from "lucide-react";
@@ -97,29 +98,27 @@ export function OverviewSection({
         </div>
 
         {/* Colonne 2 - Alertes IA */}
-        <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+        <div className="border border-gray-200 rounded-lg p-4">
           <div className="flex items-center gap-2 mb-3">
             <AlertTriangle className="h-4 w-4 text-red-600" />
             <h3 className="font-semibold text-gray-900">Alertes IA</h3>
           </div>
           <div className="space-y-4">
-            {alertesIA.map(alerte => <div key={alerte.id} className={`p-3 rounded border border-gray-200 ${getAlertColor(alerte.type)} bg-white`}>
-                <div className="flex items-start gap-3">
+            {alertesIA.map(alerte => <div key={alerte.id} className={`p-3 rounded border border-gray-200 ${getAlertColor(alerte.type)} bg-white relative`}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button className="absolute top-2 right-2 flex items-center justify-center w-5 h-5 rounded-full border border-gray-300 bg-white hover:bg-gray-50 transition-colors">
+                      <Info className="h-3.5 w-3.5 text-gray-600" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent className="max-w-md p-4">
+                    <p className="text-sm leading-relaxed">{getAlertExplanation(alerte.id)}</p>
+                  </TooltipContent>
+                </Tooltip>
+                <div className="flex items-start gap-3 pr-8">
                   {getAlertIcon(alerte.type)}
                   <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h4 className="font-semibold text-sm">{alerte.titre}</h4>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <button className="flex items-center justify-center w-4 h-4 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors">
-                            <Info className="h-3 w-3 text-gray-600" />
-                          </button>
-                        </TooltipTrigger>
-                        <TooltipContent className="max-w-xs">
-                          <p className="text-sm">{getAlertExplanation(alerte.id)}</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </div>
+                    <h4 className="font-semibold text-sm mb-1">{alerte.titre}</h4>
                     <p className="text-xs text-gray-700 mb-2">{alerte.description}</p>
                     <p className="text-xs text-gray-600">{alerte.impact}</p>
                   </div>
@@ -129,7 +128,7 @@ export function OverviewSection({
         </div>
 
         {/* Colonne 3 - Next Best Actions */}
-        <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+        <div className="border border-gray-200 rounded-lg p-4">
           <div className="flex items-center gap-2 mb-3">
             <CheckCircle className="h-4 w-4 text-green-600" />
             <h3 className="font-semibold text-gray-900">Next Best Actions</h3>
@@ -154,3 +153,4 @@ export function OverviewSection({
     </div>
   </TooltipProvider>;
 }
+
