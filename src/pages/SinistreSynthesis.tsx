@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -298,35 +297,35 @@ const SinistreSynthesis = () => {
 
       <main className="flex-1 p-6">
         <div className="max-w-7xl mx-auto space-y-6">
-          {/* Partie supérieure - 3 colonnes */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Colonne 1 - Synthèse IA + Actes contentieux */}
-            <div className="space-y-6">
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="flex items-center gap-2 text-lg">
-                    <Sparkles className="h-5 w-5 text-purple-600" />
-                    Synthèse IA
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
+          {/* Zone principale - Partie supérieure avec fond unifié */}
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+            <div className="flex items-center gap-2 mb-6">
+              <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+              <h2 className="text-lg font-semibold text-gray-900">Vue d'ensemble du dossier</h2>
+              <div className="flex-1 h-px bg-gray-200 ml-4"></div>
+            </div>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Colonne 1 - Synthèse IA + Actes contentieux */}
+              <div className="space-y-6">
+                <div className="bg-gradient-to-br from-purple-50 to-blue-50 border border-purple-100 rounded-lg p-4">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Sparkles className="h-4 w-4 text-purple-600" />
+                    <h3 className="font-semibold text-gray-900">Synthèse IA</h3>
+                  </div>
                   <p className="text-gray-700 leading-relaxed text-sm">
                     {syntheseIA}
                   </p>
-                </CardContent>
-              </Card>
+                </div>
 
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="flex items-center gap-2 text-lg">
-                    <Scale className="h-5 w-5 text-gray-600" />
-                    Actes contentieux
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Scale className="h-4 w-4 text-gray-600" />
+                    <h3 className="font-semibold text-gray-900">Actes contentieux</h3>
+                  </div>
                   <div className="space-y-3">
                     {actesContentieux.map((acte, index) => (
-                      <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div key={index} className="flex items-center justify-between p-3 bg-white rounded border border-gray-100">
                         <div>
                           <p className="font-medium text-sm">{acte.type}</p>
                           <p className="text-xs text-gray-600">{acte.partie}</p>
@@ -340,71 +339,59 @@ const SinistreSynthesis = () => {
                       </div>
                     ))}
                   </div>
-                </CardContent>
-              </Card>
-            </div>
+                </div>
+              </div>
 
-            {/* Colonne 2 - Alertes IA */}
-            <div>
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="flex items-center gap-2 text-lg">
-                    <AlertTriangle className="h-5 w-5 text-red-600" />
-                    Alertes IA
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {alertesIA.map((alerte) => (
-                      <div key={alerte.id} className={`p-4 rounded-lg border ${getAlertColor(alerte.type)}`}>
-                        <div className="flex items-start gap-3">
-                          {getAlertIcon(alerte.type)}
-                          <div className="flex-1">
-                            <h4 className="font-semibold text-sm mb-1">{alerte.titre}</h4>
-                            <p className="text-xs text-gray-700 mb-2">{alerte.description}</p>
-                            <p className="text-xs text-gray-600">{alerte.impact}</p>
-                            <div className="flex items-center gap-1 mt-2">
-                              <Bot className="h-3 w-3 text-purple-600" />
-                              <span className="text-xs text-purple-700">{alerte.confidence}% confiance</span>
-                            </div>
+              {/* Colonne 2 - Alertes IA */}
+              <div className="bg-red-50 border border-red-100 rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <AlertTriangle className="h-4 w-4 text-red-600" />
+                  <h3 className="font-semibold text-gray-900">Alertes IA</h3>
+                </div>
+                <div className="space-y-4">
+                  {alertesIA.map((alerte) => (
+                    <div key={alerte.id} className={`p-3 rounded border ${getAlertColor(alerte.type)} bg-white`}>
+                      <div className="flex items-start gap-3">
+                        {getAlertIcon(alerte.type)}
+                        <div className="flex-1">
+                          <h4 className="font-semibold text-sm mb-1">{alerte.titre}</h4>
+                          <p className="text-xs text-gray-700 mb-2">{alerte.description}</p>
+                          <p className="text-xs text-gray-600">{alerte.impact}</p>
+                          <div className="flex items-center gap-1 mt-2">
+                            <Bot className="h-3 w-3 text-purple-600" />
+                            <span className="text-xs text-purple-700">{alerte.confidence}% confiance</span>
                           </div>
                         </div>
                       </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
 
-            {/* Colonne 3 - Next Best Actions */}
-            <div>
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="flex items-center gap-2 text-lg">
-                    <CheckCircle className="h-5 w-5 text-green-600" />
-                    Next Best Actions
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {nextActions.map((action) => (
-                      <div key={action.id} className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                        <div className="flex items-start justify-between mb-2">
-                          <h4 className="font-semibold text-sm">{action.action}</h4>
-                          <Badge className={getPriorityColor(action.priorite)}>
-                            {action.priorite}
-                          </Badge>
-                        </div>
-                        <p className="text-xs text-gray-700 mb-2">{action.description}</p>
-                        <div className="flex items-center justify-between text-xs text-gray-600">
-                          <span>👤 {action.assignee}</span>
-                          <span>⏱️ {action.delai}</span>
-                        </div>
+              {/* Colonne 3 - Next Best Actions */}
+              <div className="bg-green-50 border border-green-100 rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <CheckCircle className="h-4 w-4 text-green-600" />
+                  <h3 className="font-semibold text-gray-900">Next Best Actions</h3>
+                </div>
+                <div className="space-y-4">
+                  {nextActions.map((action) => (
+                    <div key={action.id} className="p-3 border border-gray-200 rounded bg-white hover:shadow-sm transition-shadow cursor-pointer">
+                      <div className="flex items-start justify-between mb-2">
+                        <h4 className="font-semibold text-sm">{action.action}</h4>
+                        <Badge className={getPriorityColor(action.priorite)}>
+                          {action.priorite}
+                        </Badge>
                       </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+                      <p className="text-xs text-gray-700 mb-2">{action.description}</p>
+                      <div className="flex items-center justify-between text-xs text-gray-600">
+                        <span>👤 {action.assignee}</span>
+                        <span>⏱️ {action.delai}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
 
