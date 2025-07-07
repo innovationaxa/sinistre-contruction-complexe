@@ -8,8 +8,11 @@ export function Header() {
   const navigate = useNavigate();
   const location = useLocation();
   
+  // Mise à jour de la logique pour inclure les pages de synthèse de sinistres
   const currentTab = location.pathname === "/" ? "corbeille" : 
-                    location.pathname === "/sinistres" ? "sinistres" : "corbeille";
+                    location.pathname === "/sinistres" || 
+                    location.pathname.startsWith("/sinistre/synthesis/") || 
+                    location.pathname.startsWith("/sinistre/") ? "sinistres" : "corbeille";
 
   const handleTabChange = (value: string) => {
     if (value === "corbeille") {
