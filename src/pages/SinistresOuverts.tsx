@@ -1,8 +1,8 @@
-
 import { Header } from "@/components/Header";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
+import { AlertTriangle, Clock, FileText, Search } from "lucide-react";
 
 const SinistresOuverts = () => {
   const navigate = useNavigate();
@@ -37,19 +37,39 @@ const SinistresOuverts = () => {
     }
   ];
 
-  const getStatusBadge = (statut: string) => {
-    switch (statut) {
-      case "Nouveau":
-        return <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">Nouveau</Badge>;
-      case "En cours d'expertise":
-        return <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">En cours d'expertise</Badge>;
-      case "Documents requis":
-        return <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200">Documents requis</Badge>;
-      case "Enquête en cours":
-        return <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200">Enquête en cours</Badge>;
-      default:
-        return <Badge variant="outline">{statut}</Badge>;
-    }
+  const getStatusBadge = (statut: string, priorite: string) => {
+    const getIcon = () => {
+      switch (statut) {
+        case "Nouveau":
+          return <AlertTriangle className="w-3 h-3" />;
+        case "Documents requis":
+          return <FileText className="w-3 h-3" />;
+        case "Enquête en cours":
+          return <Search className="w-3 h-3" />;
+        default:
+          return <Clock className="w-3 h-3" />;
+      }
+    };
+
+    const getVariantClasses = () => {
+      switch (priorite) {
+        case "haute":
+          return "bg-red-50 text-red-700 border-red-200";
+        case "moyenne":
+          return "bg-orange-50 text-orange-700 border-orange-200";
+        case "basse":
+          return "bg-yellow-50 text-yellow-700 border-yellow-200";
+        default:
+          return "bg-gray-50 text-gray-700 border-gray-200";
+      }
+    };
+
+    return (
+      <Badge variant="outline" className={`flex items-center gap-1.5 ${getVariantClasses()}`}>
+        {getIcon()}
+        <span>{statut}</span>
+      </Badge>
+    );
   };
 
   const getPriorityIndicator = (priorite: string) => {
@@ -104,7 +124,6 @@ const SinistresOuverts = () => {
                 <TableHead>Date de déclaration</TableHead>
                 <TableHead>Type de contrat</TableHead>
                 <TableHead>Statut</TableHead>
-                <TableHead>Priorité</TableHead>
                 <TableHead>Montant estimé</TableHead>
                 <TableHead>Expert assigné</TableHead>
               </TableRow>
@@ -119,8 +138,7 @@ const SinistresOuverts = () => {
                   <TableCell className="font-medium text-blue-600">{sinistre.id}</TableCell>
                   <TableCell>{sinistre.dateDeclaration}</TableCell>
                   <TableCell>{sinistre.typeContrat}</TableCell>
-                  <TableCell>{getStatusBadge(sinistre.statut)}</TableCell>
-                  <TableCell>{getPriorityIndicator(sinistre.priorite)}</TableCell>
+                  <TableCell>{getStatusBadge(sinistre.statut, sinistre.priorite)}</TableCell>
                   <TableCell className="font-semibold">{sinistre.montantEstime}</TableCell>
                   <TableCell>{sinistre.expert}</TableCell>
                 </TableRow>
