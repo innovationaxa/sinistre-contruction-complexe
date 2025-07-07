@@ -111,54 +111,36 @@ const SinistreSynthesis = () => {
     }
   ];
 
-  // Timeline enrichie avec plus d'étapes
+  // Timeline simplifiée à 5 macro étapes
   const timeline: TimelineEvent[] = [
     {
-      date: "15/03/2024 14:30",
-      titre: "Déclaration sinistre",
-      description: "Déclaration reçue de BATIMEX SARL - Dégâts des eaux atelier principal",
+      date: "15/03/2024",
+      titre: "Déclaration",
+      description: "Sinistre déclaré et dossier ouvert",
       statut: "completed"
     },
     {
-      date: "15/03/2024 16:15",
-      titre: "Ouverture dossier",
-      description: "Dossier créé et assigné à Marie Dubois - Première analyse effectuée",
+      date: "18/03/2024",
+      titre: "Expertise",
+      description: "Mission d'expertise confiée",
       statut: "completed"
     },
     {
-      date: "16/03/2024 09:00",
-      titre: "Vérification garanties",
-      description: "Contrôle de couverture RC Décennale - Aucune exclusion identifiée",
-      statut: "completed"
-    },
-    {
-      date: "18/03/2024 11:30",
-      titre: "Mission d'expertise",
-      description: "Mandat confié à l'expert M. Dubois - Visite programmée",
-      statut: "completed"
-    },
-    {
-      date: "20/03/2024 14:00",
-      titre: "Expertise sur site",
-      description: "Visite de l'expert en cours - Évaluation des dégâts en atelier",
+      date: "20/03/2024",
+      titre: "Évaluation",
+      description: "Visite et évaluation des dégâts",
       statut: "upcoming"
     },
     {
-      date: "25/03/2024",
-      titre: "Rapport d'expertise",
-      description: "Réception du rapport technique et chiffrage définitif",
-      statut: "pending"
-    },
-    {
       date: "30/03/2024",
-      titre: "Décision de règlement",
-      description: "Validation du dossier et montant d'indemnisation",
+      titre: "Décision",
+      description: "Validation du règlement",
       statut: "pending"
     },
     {
       date: "05/04/2024",
-      titre: "Clôture dossier",
-      description: "Paiement effectué et dossier archivé",
+      titre: "Clôture",
+      description: "Paiement et archivage",
       statut: "pending"
     }
   ];
