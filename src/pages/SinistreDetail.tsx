@@ -61,16 +61,6 @@ interface SinistreData {
     estCouvert: boolean;
     activiteContrat: string;
   }[];
-
-  // Désordres
-  desordres: {
-    nature: string;
-    cause: string;
-    responsabilite: string;
-    enjeux: string;
-    gravite: "faible" | "moyenne" | "élevée";
-    montantEstime: string;
-  }[];
   
   // Documents
   documents: {
@@ -182,41 +172,6 @@ const mockSinistreData: SinistreData = {
       activiteContrat: "Non couvert - Aménagements"
     }
   ],
-
-  desordres: [
-    {
-      nature: "Fissures structurelles dans les murs porteurs",
-      cause: "Défaut de conception ou d'exécution des fondations, tassement différentiel",
-      responsabilite: "SARL Bâti Construct - Gros œuvre maçonnerie",
-      enjeux: "Stabilité de l'ouvrage, sécurité des occupants",
-      gravite: "élevée",
-      montantEstime: "45 000 € HT"
-    },
-    {
-      nature: "Affaissement partiel du plancher",
-      cause: "Sous-dimensionnement des poutrelles ou défaut de mise en œuvre",
-      responsabilite: "SARL Bâti Construct - Structure porteuse",
-      enjeux: "Sécurité structurelle, usage du local",
-      gravite: "élevée",
-      montantEstime: "25 000 € HT"
-    },
-    {
-      nature: "Infiltrations d'eau par les murs",
-      cause: "Défaut d'étanchéité lors de la reprise des murs",
-      responsabilite: "SARL Bâti Construct - Étanchéité",
-      enjeux: "Dégradation progressive, insalubrité",
-      gravite: "moyenne",
-      montantEstime: "15 000 € HT"
-    },
-    {
-      nature: "Dégradation du carrelage suite aux mouvements",
-      cause: "Conséquence des désordres structurels",
-      responsabilite: "SARL Bâti Construct - Finitions (indirect)",
-      enjeux: "Aspect esthétique, sécurité (chutes)",
-      gravite: "faible",
-      montantEstime: "8 000 € HT"
-    }
-  ],
   
   documents: [
     { 
@@ -283,15 +238,6 @@ export default function SinistreDetail() {
     if (confidence >= 90) return "text-blue-600 bg-blue-50 border-blue-200";
     if (confidence >= 85) return "text-yellow-600 bg-yellow-50 border-yellow-200";
     return "text-red-600 bg-red-50 border-red-200";
-  };
-
-  const getGraviteColor = (gravite: string) => {
-    switch (gravite) {
-      case "faible": return "bg-green-100 text-green-800 border-green-200";
-      case "moyenne": return "bg-yellow-100 text-yellow-800 border-yellow-200";
-      case "élevée": return "bg-red-100 text-red-800 border-red-200";
-      default: return "bg-gray-100 text-gray-800 border-gray-200";
-    }
   };
 
   const ComparisonRow = ({ label, contractValue, declarationValue, isMatch }: {
@@ -547,76 +493,6 @@ export default function SinistreDetail() {
                       <div className="text-center">
                         <p className="text-sm font-medium text-red-600">Travaux non couverts</p>
                         <p className="text-xl font-bold text-red-700">8 500 € HT</p>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Liste des désordres */}
-              <Card className="border-blue-200">
-                <CardHeader className="pb-3 bg-blue-50">
-                  <CardTitle className="flex items-center gap-2 text-lg text-blue-800">
-                    <AlertTriangle className="w-5 h-5" />
-                    Liste des désordres constatés
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="pt-4">
-                  <div className="space-y-4">
-                    {sinistre.desordres.map((desordre, index) => (
-                      <div key={index} className="border-2 border-gray-200 rounded-lg p-4 bg-white shadow-sm">
-                        <div className="flex items-start justify-between mb-3">
-                          <div className="flex-1">
-                            <h4 className="text-lg font-semibold text-gray-900 mb-2">{desordre.nature}</h4>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <Badge className={`text-xs border ${getGraviteColor(desordre.gravite)}`}>
-                              {desordre.gravite}
-                            </Badge>
-                            <Badge variant="outline" className="text-sm font-bold">
-                              {desordre.montantEstime}
-                            </Badge>
-                          </div>
-                        </div>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                          <div className="bg-orange-50 border border-orange-200 rounded-lg p-3">
-                            <h5 className="font-semibold text-orange-900 mb-2 text-sm">Cause identifiée</h5>
-                            <p className="text-sm text-orange-800">{desordre.cause}</p>
-                          </div>
-                          
-                          <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-                            <h5 className="font-semibold text-red-900 mb-2 text-sm">Responsabilité</h5>
-                            <p className="text-sm text-red-800">{desordre.responsabilite}</p>
-                          </div>
-                          
-                          <div className="bg-purple-50 border border-purple-200 rounded-lg p-3">
-                            <h5 className="font-semibold text-purple-900 mb-2 text-sm">Enjeux</h5>
-                            <p className="text-sm text-purple-800">{desordre.enjeux}</p>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Résumé des montants */}
-                  <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                      <div className="text-center">
-                        <p className="text-sm font-medium text-gray-600">Total estimé</p>
-                        <p className="text-xl font-bold text-gray-900">93 000 € HT</p>
-                      </div>
-                      <div className="text-center">
-                        <p className="text-sm font-medium text-red-600">Gravité élevée</p>
-                        <p className="text-xl font-bold text-red-700">70 000 € HT</p>
-                      </div>
-                      <div className="text-center">
-                        <p className="text-sm font-medium text-yellow-600">Gravité moyenne</p>
-                        <p className="text-xl font-bold text-yellow-700">15 000 € HT</p>
-                      </div>
-                      <div className="text-center">
-                        <p className="text-sm font-medium text-green-600">Gravité faible</p>
-                        <p className="text-xl font-bold text-green-700">8 000 € HT</p>
                       </div>
                     </div>
                   </div>
