@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Progress } from "@/components/ui/progress";
-import { ArrowLeft, FileText, User, Building, Calendar, AlertTriangle, Sparkles, Shield, Clock, TrendingUp, CheckCircle, Bot, Tag, FileCheck, Star, AlertCircle, Users, MapPin, Euro, Hammer } from "lucide-react";
+import { ArrowLeft, FileText, User, Building, Calendar, AlertTriangle, Sparkles, Shield, Clock, TrendingUp, CheckCircle, Bot, Tag, FileCheck, Star, AlertCircle, Users, MapPin, Euro, Hammer, Brain, Target, Zap } from "lucide-react";
 
 interface SinistreData {
   id: string;
@@ -368,6 +368,58 @@ const sinistresChantier = [
   }
 ];
 
+// Données pour l'analyse IA
+const activitesAnalysis = {
+  declared: [
+    { activity: "Gros œuvre - Maçonnerie", status: "declared", coverage: "covered" },
+    { activity: "Second œuvre - Plâtrerie", status: "declared", coverage: "covered" },
+    { activity: "Second œuvre - Électricité", status: "declared", coverage: "covered" },
+    { activity: "Second œuvre - Plomberie", status: "declared", coverage: "covered" },
+    { activity: "Finitions - Carrelage", status: "declared", coverage: "covered" },
+    { activity: "Rénovation lourde", status: "declared", coverage: "covered" }
+  ],
+  guaranteed: [
+    { activity: "Gros œuvre - Maçonnerie", status: "guaranteed", coverage: "active" },
+    { activity: "Second œuvre - Plâtrerie", status: "guaranteed", coverage: "active" },
+    { activity: "Second œuvre - Électricité", status: "guaranteed", coverage: "active" },
+    { activity: "Second œuvre - Plomberie", status: "guaranteed", coverage: "active" },
+    { activity: "Finitions - Carrelage", status: "guaranteed", coverage: "active" },
+    { activity: "Rénovation lourde", status: "guaranteed", coverage: "active" },
+    { activity: "Étanchéité", status: "guaranteed", coverage: "available" },
+    { activity: "Chauffage", status: "guaranteed", coverage: "available" }
+  ]
+};
+
+const dossiersAssocies = [
+  {
+    id: "DOSS-001",
+    reference: "RC-DECA-2024-001",
+    type: "Principal",
+    probabilite: 95,
+    statut: "En cours",
+    impact: "Majeur",
+    description: "Dossier principal - Dommages structurels"
+  },
+  {
+    id: "DOSS-002", 
+    reference: "RC-ELEC-2024-002",
+    type: "Connexe",
+    probabilite: 75,
+    statut: "Surveillé",
+    impact: "Modéré",
+    description: "Risque de réclamation électricité"
+  },
+  {
+    id: "DOSS-003",
+    reference: "RC-PLOM-2024-003", 
+    type: "Potentiel",
+    probabilite: 35,
+    statut: "Veille",
+    impact: "Faible",
+    description: "Surveillance plomberie préventive"
+  }
+];
+
 export default function SinistreDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -470,6 +522,26 @@ export default function SinistreDetail() {
       default:
         return "Inconnue";
     }
+  };
+
+  const getProbabilityColor = (probability: number) => {
+    if (probability >= 80) return "bg-red-100 text-red-800 border-red-200";
+    if (probability >= 60) return "bg-orange-100 text-orange-800 border-orange-200";
+    if (probability >= 40) return "bg-yellow-100 text-yellow-800 border-yellow-200";
+    return "bg-green-100 text-green-800 border-green-200";
+  };
+
+  const getActivityStatusIcon = (status: string, coverage: string) => {
+    if (status === "declared" && coverage === "covered") {
+      return <CheckCircle className="w-4 h-4 text-green-600" />;
+    }
+    if (status === "guaranteed" && coverage === "active") {
+      return <Shield className="w-4 h-4 text-blue-600" />;
+    }
+    if (status === "guaranteed" && coverage === "available") {
+      return <Clock className="w-4 h-4 text-gray-500" />;
+    }
+    return <AlertCircle className="w-4 h-4 text-orange-600" />;
   };
 
   return (
@@ -1088,7 +1160,269 @@ export default function SinistreDetail() {
             </TabsContent>
 
             <TabsContent value="analyse" className="space-y-6">
-              {/* Analyse de conformité */}
+              {/* Synthèse de la déclaration */}
+              <Card className="border-purple-200">
+                <CardHeader className="bg-gradient-to-r from-purple-50 to-blue-50">
+                  <CardTitle className="flex items-center gap-2 text-purple-800">
+                    <Brain className="w-5 h-5" />
+                    Synthèse de la déclaration
+                    <Sparkles className="w-5 h-5 text-purple-600" />
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-6 space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Informations clés */}
+                    <div className="space-y-4">
+                      <h4 className="font-semibold text-gray-900 flex items-center gap-2">
+                        <FileText className="w-4 h-4" />
+                        Informations clés du sinistre
+                      </h4>
+                      <div className="bg-gray-50 rounded-lg p-4 space-y-3">
+                        <div className="flex justify-between">
+                          <span className="text-sm font-medium text-gray-600">Type de chantier:</span>
+                          <span className="text-sm text-gray-900">{sinistre.sinistre.typeChantier}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-sm font-medium text-gray-600">Date réception:</span>
+                          <span className="text-sm text-gray-900">{sinistre.sinistre.dateReceptionTravaux}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-sm font-medium text-gray-600">Délai déclaration:</span>
+                          <span className="text-sm text-green-700 font-medium">3 ans (conforme)</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-sm font-medium text-gray-600">Nature dommages:</span>
+                          <span className="text-sm text-red-700 font-medium">Structurels</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Évaluation IA */}
+                    <div className="space-y-4">
+                      <h4 className="font-semibold text-gray-900 flex items-center gap-2">
+                        <Bot className="w-4 h-4" />
+                        Évaluation IA automatique
+                      </h4>
+                      <div className="space-y-3">
+                        <div className="p-3 bg-green-50 rounded-lg border-l-4 border-green-500">
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm font-medium text-green-800">Conformité déclaration</span>
+                            <Badge className="bg-green-100 text-green-800">95%</Badge>
+                          </div>
+                        </div>
+                        <div className="p-3 bg-blue-50 rounded-lg border-l-4 border-blue-500">
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm font-medium text-blue-800">Couverture contractuelle</span>
+                            <Badge className="bg-blue-100 text-blue-800">100%</Badge>
+                          </div>
+                        </div>
+                        <div className="p-3 bg-orange-50 rounded-lg border-l-4 border-orange-500">
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm font-medium text-orange-800">Complexité dossier</span>
+                            <Badge className="bg-orange-100 text-orange-800">Élevée</Badge>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Résumé automatique */}
+                  <div className="mt-6 p-4 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg border border-purple-200">
+                    <h4 className="font-semibold text-purple-900 mb-3 flex items-center gap-2">
+                      <Sparkles className="w-4 h-4" />
+                      Résumé automatique IA
+                    </h4>
+                    <p className="text-sm text-gray-700 leading-relaxed">
+                      <strong>Sinistre décennal conforme :</strong> Dommages structurels graves survenus 3 ans après réception des travaux de rénovation d'un local commercial. 
+                      Les désordres (fissures, affaissement, infiltrations) relèvent clairement de la garantie décennale. 
+                      <strong>Enjeu total estimé : 133 500€</strong> répartis entre dommages matériels (85 500€) et préjudice immatériel (48 000€). 
+                      La couverture contractuelle est adéquate avec des plafonds de 500 000€ (DO) et 150 000€ (PI). 
+                      <strong>Recommandation :</strong> Expertise technique urgente et constitution de provision à 80 000€.
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Comparaison activités déclarées vs garanties */}
+              <Card className="border-blue-200">
+                <CardHeader className="bg-blue-50">
+                  <CardTitle className="flex items-center gap-2 text-blue-800">
+                    <Target className="w-5 h-5" />
+                    Comparaison Activités Déclarées vs Garanties Contractuelles
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {/* Activités déclarées */}
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                        <FileCheck className="w-4 h-4" />
+                        Activités déclarées dans le sinistre
+                      </h4>
+                      <div className="space-y-2">
+                        {activitesAnalysis.declared.map((activity, index) => (
+                          <div key={index} className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
+                            <div className="flex items-center gap-2">
+                              {getActivityStatusIcon(activity.status, activity.coverage)}
+                              <span className="text-sm font-medium text-gray-900">{activity.activity}</span>
+                            </div>
+                            <Badge className="bg-green-100 text-green-800 text-xs">Couvert</Badge>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Activités garanties */}
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                        <Shield className="w-4 h-4" />
+                        Activités garanties au contrat
+                      </h4>
+                      <div className="space-y-2">
+                        {activitesAnalysis.guaranteed.map((activity, index) => (
+                          <div key={index} className={`flex items-center justify-between p-3 rounded-lg border ${
+                            activity.coverage === "active" ? "bg-blue-50 border-blue-200" : "bg-gray-50 border-gray-200"
+                          }`}>
+                            <div className="flex items-center gap-2">
+                              {getActivityStatusIcon(activity.status, activity.coverage)}
+                              <span className="text-sm font-medium text-gray-900">{activity.activity}</span>
+                            </div>
+                            <Badge className={`text-xs ${
+                              activity.coverage === "active" ? "bg-blue-100 text-blue-800" : "bg-gray-100 text-gray-600"
+                            }`}>
+                              {activity.coverage === "active" ? "Mobilisée" : "Disponible"}
+                            </Badge>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Analyse des écarts */}
+                  <div className="mt-6 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                    <h4 className="font-semibold text-yellow-800 mb-3 flex items-center gap-2">
+                      <Zap className="w-4 h-4" />
+                      Analyse des écarts et opportunités
+                    </h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <h5 className="font-medium text-gray-900 mb-2">✓ Parfaite concordance</h5>
+                        <p className="text-sm text-gray-700">
+                          Toutes les activités déclarées sont garanties au contrat. 
+                          Aucun écart de couverture identifié.
+                        </p>
+                      </div>
+                      <div>
+                        <h5 className="font-medium text-gray-900 mb-2">🎯 Garanties mobilisables</h5>
+                        <ul className="text-sm text-gray-700 space-y-1">
+                          <li>• <strong>Étanchéité :</strong> Disponible pour infiltrations</li>
+                          <li>• <strong>Chauffage :</strong> Non sollicitée dans ce dossier</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Probabilités des dossiers associés */}
+              <Card className="border-orange-200">
+                <CardHeader className="bg-orange-50">
+                  <CardTitle className="flex items-center gap-2 text-orange-800">
+                    <TrendingUp className="w-5 h-5" />
+                    Probabilités des Dossiers Associés en Cours
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-6">
+                  <div className="space-y-4">
+                    {dossiersAssocies.map((dossier, index) => (
+                      <div key={dossier.id} className="border border-gray-200 rounded-lg p-4 bg-white shadow-sm">
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center gap-3">
+                            <div>
+                              <h4 className="font-semibold text-gray-900">{dossier.reference}</h4>
+                              <p className="text-sm text-gray-600">{dossier.description}</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <Badge className={getProbabilityColor(dossier.probabilite)}>
+                              {dossier.probabilite}% probabilité
+                            </Badge>
+                            <Badge variant="outline">{dossier.statut}</Badge>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                          <div className="flex items-center gap-2">
+                            <Tag className="w-4 h-4 text-gray-500" />
+                            <span className="text-sm text-gray-600">Type: <strong>{dossier.type}</strong></span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <AlertTriangle className="w-4 h-4 text-gray-500" />
+                            <span className="text-sm text-gray-600">Impact: <strong>{dossier.impact}</strong></span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Progress value={dossier.probabilite} className="flex-1" />
+                            <span className="text-sm font-medium text-gray-900">{dossier.probabilite}%</span>
+                          </div>
+                        </div>
+
+                        {/* Détail par probabilité */}
+                        {dossier.probabilite >= 80 && (
+                          <div className="mt-3 p-3 bg-red-50 rounded border-l-4 border-red-500">
+                            <p className="text-sm text-red-800">
+                              <strong>Risque élevé :</strong> Surveillance active recommandée. Constitution de provision conseillée.
+                            </p>
+                          </div>
+                        )}
+                        {dossier.probabilite >= 60 && dossier.probabilite < 80 && (
+                          <div className="mt-3 p-3 bg-orange-50 rounded border-l-4 border-orange-500">
+                            <p className="text-sm text-orange-800">
+                              <strong>Risque modéré :</strong> Suivi régulier nécessaire. Évaluation périodique du risque.
+                            </p>
+                          </div>
+                        )}
+                        {dossier.probabilite < 60 && (
+                          <div className="mt-3 p-3 bg-green-50 rounded border-l-4 border-green-500">
+                            <p className="text-sm text-green-800">
+                              <strong>Risque faible :</strong> Surveillance de routine suffisante.
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Synthèse globale */}
+                  <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border border-blue-200">
+                    <h4 className="font-semibold text-blue-900 mb-3 flex items-center gap-2">
+                      <Brain className="w-4 h-4" />
+                      Synthèse Prédictive IA
+                    </h4>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="text-center">
+                        <p className="text-2xl font-bold text-red-600">1</p>
+                        <p className="text-sm text-gray-600">Dossier à risque élevé</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-2xl font-bold text-orange-600">1</p>
+                        <p className="text-sm text-gray-600">Dossier à risque modéré</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-2xl font-bold text-green-600">1</p>
+                        <p className="text-sm text-gray-600">Dossier à risque faible</p>
+                      </div>
+                    </div>
+                    <div className="mt-4 pt-4 border-t border-blue-200">
+                      <p className="text-sm text-gray-700 text-center">
+                        <strong>Recommandation globale :</strong> Focus sur RC-ELEC-2024-002 (75% de probabilité). 
+                        Provision suggérée : 15 000€ pour l'ensemble des risques connexes.
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Analyse de conformité existante */}
               <Card className="border-blue-200">
                 <CardHeader className="bg-blue-50">
                   <CardTitle className="flex items-center gap-2 text-blue-800">
