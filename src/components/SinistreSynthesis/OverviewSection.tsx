@@ -1,5 +1,7 @@
+
 import { Badge } from "@/components/ui/badge";
-import { AlertTriangle, CheckCircle, Sparkles, Scale, Clock, TrendingUp, Bot } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { AlertTriangle, CheckCircle, Sparkles, Scale, Clock, TrendingUp, Bot, Info } from "lucide-react";
 import { ActeContentieux, AlerteIA, NextAction } from "@/types/sinistre";
 interface OverviewSectionProps {
   syntheseIA: string;
@@ -33,6 +35,20 @@ export function OverviewSection({
         return "bg-blue-50";
     }
   };
+
+  const getAlertExplanation = (id: number) => {
+    switch (id) {
+      case 1:
+        return "Détection automatique basée sur l'analyse des documents fournis. Le système n'a pas trouvé de justificatifs de réparation dans les pièces jointes du dossier, ce qui est requis pour le règlement.";
+      case 2:
+        return "Calcul automatique des délais basé sur la date de mission d'expertise (18/03/2024) et la date prévue de livraison du rapport. Le système suit les délais contractuels standards.";
+      case 3:
+        return "Analyse juridique automatique des délais de prescription. Calcul basé sur la date de survenance du sinistre et la réglementation en vigueur pour les actions en responsabilité décennale.";
+      default:
+        return "Analyse automatique basée sur les données du dossier et les règles métier configurées.";
+    }
+  };
+
   const getPriorityColor = (priorite: string) => {
     switch (priorite) {
       case "haute":
@@ -43,7 +59,8 @@ export function OverviewSection({
         return "bg-green-100 text-green-800";
     }
   };
-  return <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+  return <TooltipProvider>
+    <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
       <div className="flex items-center gap-2 mb-6">
         <div className="w-2 h-2 rounded-full bg-blue-500"></div>
         <h2 className="text-lg font-semibold text-gray-900">Vue d'ensemble du dossier</h2>
@@ -90,13 +107,21 @@ export function OverviewSection({
                 <div className="flex items-start gap-3">
                   {getAlertIcon(alerte.type)}
                   <div className="flex-1">
-                    <h4 className="font-semibold text-sm mb-1">{alerte.titre}</h4>
+                    <div className="flex items-center gap-2 mb-1">
+                      <h4 className="font-semibold text-sm">{alerte.titre}</h4>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <button className="flex items-center justify-center w-4 h-4 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors">
+                            <Info className="h-3 w-3 text-gray-600" />
+                          </button>
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-xs">
+                          <p className="text-sm">{getAlertExplanation(alerte.id)}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
                     <p className="text-xs text-gray-700 mb-2">{alerte.description}</p>
                     <p className="text-xs text-gray-600">{alerte.impact}</p>
-                    <div className="flex items-center gap-1 mt-2">
-                      <Bot className="h-3 w-3 text-purple-600" />
-                      <span className="text-xs text-purple-700">{alerte.confidence}% confiance</span>
-                    </div>
                   </div>
                 </div>
               </div>)}
@@ -126,5 +151,6 @@ export function OverviewSection({
           </div>
         </div>
       </div>
-    </div>;
+    </div>
+  </TooltipProvider>;
 }
