@@ -276,58 +276,6 @@ export default function SinistreDetail() {
                 </CardContent>
               </Card>
 
-              {/* Comparaison des dates */}
-              <Card className="border-blue-200">
-                <CardHeader className="pb-3 bg-blue-50">
-                  <CardTitle className="flex items-center gap-2 text-lg text-blue-800">
-                    <Calendar className="w-5 h-5" />
-                    Comparaison des dates critiques
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="pt-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-3">
-                      <h4 className="font-semibold text-gray-900">Dates du sinistre</h4>
-                      <div className="space-y-2 text-sm">
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Date de survenance:</span>
-                          <span className="font-medium">Non précisée</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Réception travaux:</span>
-                          <span className="font-medium">{sinistre.sinistre.dateReceptionTravaux}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Date de réclamation:</span>
-                          <span className="font-medium">25/09/2024</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Date déclaration:</span>
-                          <span className="font-medium">{sinistre.dateDeclaration}</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="space-y-3">
-                      <h4 className="font-semibold text-gray-900">Vérifications délais</h4>
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2 p-2 bg-green-50 rounded text-sm">
-                          <CheckCircle className="w-4 h-4 text-green-600" />
-                          <span>Délai décennal respecté (3 ans après DOC)</span>
-                        </div>
-                        <div className="flex items-center gap-2 p-2 bg-green-50 rounded text-sm">
-                          <CheckCircle className="w-4 h-4 text-green-600" />
-                          <span>Déclaration dans les 5 jours ouvrés</span>
-                        </div>
-                        <div className="flex items-center gap-2 p-2 bg-blue-50 rounded text-sm">
-                          <Clock className="w-4 h-4 text-blue-600" />
-                          <span>Échéance traitement: {sinistre.echeance}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
               {/* Timeline de la vie du contrat */}
               <Card className="border-blue-200">
                 <CardHeader className="pb-3 bg-blue-50">
@@ -406,37 +354,6 @@ export default function SinistreDetail() {
                 </CardContent>
               </Card>
 
-              {/* Informations principales - Assuré et Contrat seulement */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Card className="border-blue-200">
-                  <CardHeader className="pb-3 bg-blue-50">
-                    <CardTitle className="flex items-center gap-2 text-lg text-blue-800">
-                      <Building className="w-5 h-5" />
-                      Assuré
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-2 text-sm">
-                    <div className="font-bold text-gray-900">{sinistre.assure.raisonSociale}</div>
-                    <div className="text-gray-600">SIRET: {sinistre.assure.siret}</div>
-                    <div className="text-gray-600">{sinistre.assure.secteurActivite}</div>
-                  </CardContent>
-                </Card>
-
-                <Card className="border-blue-200">
-                  <CardHeader className="pb-3 bg-blue-50">
-                    <CardTitle className="flex items-center gap-2 text-lg text-blue-800">
-                      <FileText className="w-5 h-5" />
-                      Contrat
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-2 text-sm">
-                    <div className="font-bold text-gray-900">{sinistre.contrat.numero}</div>
-                    <div className="text-gray-600">{sinistre.contrat.produit}</div>
-                    <div className="text-gray-600 font-semibold">Prime: {sinistre.contrat.prime}</div>
-                  </CardContent>
-                </Card>
-              </div>
-
               {/* Description du sinistre */}
               <Card className="border-blue-200">
                 <CardHeader className="bg-blue-50">
@@ -451,57 +368,31 @@ export default function SinistreDetail() {
                 </CardContent>
               </Card>
 
-              {/* Détails du sinistre */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Card className="border-blue-200">
-                  <CardHeader className="bg-blue-50">
-                    <CardTitle className="text-blue-800">Informations chantier</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3 pt-4">
-                    <div>
-                      <span className="text-sm font-bold text-gray-600">Type de chantier:</span>
-                      <p className="text-gray-800 font-medium">{sinistre.sinistre.typeChantier}</p>
-                    </div>
-                    <div>
-                      <span className="text-sm font-bold text-gray-600">Adresse des travaux:</span>
-                      <p className="text-gray-800 font-medium">{sinistre.sinistre.adresseTravaux}</p>
-                    </div>
-                    <div>
-                      <span className="text-sm font-bold text-gray-600">Date de réception:</span>
-                      <p className="text-gray-800 font-medium">{sinistre.sinistre.dateReceptionTravaux}</p>
-                    </div>
-                    <div>
-                      <span className="text-sm font-bold text-gray-600">Nature des dommages:</span>
-                      <p className="text-gray-800 font-medium">{sinistre.sinistre.natureDommages}</p>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="border-blue-200">
-                  <CardHeader className="bg-blue-50">
-                    <CardTitle className="text-blue-800">Maître d'ouvrage & Préjudices</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3 pt-4">
-                    <div>
-                      <span className="text-sm font-bold text-gray-600">Nom:</span>
-                      <p className="text-gray-800 font-medium">{sinistre.sinistre.maitreOuvrage.nom}</p>
-                    </div>
-                    <div>
-                      <span className="text-sm font-bold text-gray-600">Qualité:</span>
-                      <p className="text-gray-800 font-medium">{sinistre.sinistre.maitreOuvrage.qualite}</p>
-                    </div>
-                    <div>
-                      <span className="text-sm font-bold text-gray-600">Activité:</span>
-                      <p className="text-gray-800 font-medium">{sinistre.sinistre.maitreOuvrage.activite}</p>
-                    </div>
-                    <div>
-                      <span className="text-sm font-bold text-gray-600">Préjudice immatériel:</span>
-                      <p className="text-red-600 font-bold">{sinistre.sinistre.maitreOuvrage.prejudiceImateriel}</p>
-                      {sinistre.aiGenerated.evaluation && <AIIndicator />}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
+              {/* Maître d'ouvrage & Préjudices seulement */}
+              <Card className="border-blue-200">
+                <CardHeader className="bg-blue-50">
+                  <CardTitle className="text-blue-800">Maître d'ouvrage & Préjudices</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3 pt-4">
+                  <div>
+                    <span className="text-sm font-bold text-gray-600">Nom:</span>
+                    <p className="text-gray-800 font-medium">{sinistre.sinistre.maitreOuvrage.nom}</p>
+                  </div>
+                  <div>
+                    <span className="text-sm font-bold text-gray-600">Qualité:</span>
+                    <p className="text-gray-800 font-medium">{sinistre.sinistre.maitreOuvrage.qualite}</p>
+                  </div>
+                  <div>
+                    <span className="text-sm font-bold text-gray-600">Activité:</span>
+                    <p className="text-gray-800 font-medium">{sinistre.sinistre.maitreOuvrage.activite}</p>
+                  </div>
+                  <div>
+                    <span className="text-sm font-bold text-gray-600">Préjudice immatériel:</span>
+                    <p className="text-red-600 font-bold">{sinistre.sinistre.maitreOuvrage.prejudiceImateriel}</p>
+                    {sinistre.aiGenerated.evaluation && <AIIndicator />}
+                  </div>
+                </CardContent>
+              </Card>
             </TabsContent>
 
             <TabsContent value="contrat" className="space-y-6">
