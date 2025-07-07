@@ -73,6 +73,22 @@ interface SinistreData {
     aiSummary: string;
     confidence: number;
   }[];
+
+  // Désordres constatés
+  desordres: {
+    id: string;
+    nature: string;
+    cause: string;
+    responsabilites: string[];
+    enjeux: {
+      materiel: string;
+      immateriel: string;
+      total: string;
+    };
+    gravite: "critique" | "majeur" | "modere";
+    localisation: string;
+    dateConstat: string;
+  }[];
   
   aiGenerated: {
     description: boolean;
@@ -215,6 +231,52 @@ const mockSinistreData: SinistreData = {
       confidence: 98
     }
   ],
+
+  // Ajout des données des désordres
+  desordres: [
+    {
+      id: "D001",
+      nature: "Fissures structurelles dans les murs porteurs",
+      cause: "Affaissement des fondations suite à un défaut d'étude de sol et de dimensionnement",
+      responsabilites: ["SARL Bâti Construct - Maçonnerie", "Bureau d'études structure (sous-traitant)"],
+      enjeux: {
+        materiel: "52 000 €",
+        immateriel: "25 000 €",
+        total: "77 000 €"
+      },
+      gravite: "critique",
+      localisation: "Murs porteurs - Rez-de-chaussée",
+      dateConstat: "20/09/2024"
+    },
+    {
+      id: "D002", 
+      nature: "Affaissement du plancher principal",
+      cause: "Sous-dimensionnement des poutrelles et défaut de mise en œuvre",
+      responsabilites: ["SARL Bâti Construct - Gros œuvre"],
+      enjeux: {
+        materiel: "28 000 €",
+        immateriel: "15 000 €",
+        total: "43 000 €"
+      },
+      gravite: "majeur",
+      localisation: "Plancher principal - Zone commerciale",
+      dateConstat: "22/09/2024"
+    },
+    {
+      id: "D003",
+      nature: "Infiltrations d'eau par les joints de façade",
+      cause: "Défaut d'étanchéité et vices de mise en œuvre des joints",
+      responsabilites: ["SARL Bâti Construct - Étanchéité", "Entreprise de façadage (co-traitant)"],
+      enjeux: {
+        materiel: "8 500 €",
+        immateriel: "5 000 €",
+        total: "13 500 €"
+      },
+      gravite: "modere",
+      localisation: "Façade principale - Joints de dilatation",
+      dateConstat: "25/09/2024"
+    }
+  ],
   
   aiGenerated: {
     description: true,
@@ -238,6 +300,32 @@ export default function SinistreDetail() {
     if (confidence >= 90) return "text-blue-600 bg-blue-50 border-blue-200";
     if (confidence >= 85) return "text-yellow-600 bg-yellow-50 border-yellow-200";
     return "text-red-600 bg-red-50 border-red-200";
+  };
+
+  const getGraviteColor = (gravite: "critique" | "majeur" | "modere") => {
+    switch (gravite) {
+      case "critique":
+        return "border-red-500 bg-red-50";
+      case "majeur":
+        return "border-orange-500 bg-orange-50";
+      case "modere":
+        return "border-yellow-500 bg-yellow-50";
+      default:
+        return "border-gray-500 bg-gray-50";
+    }
+  };
+
+  const getGraviteBadgeColor = (gravite: "critique" | "majeur" | "modere") => {
+    switch (gravite) {
+      case "critique":
+        return "bg-red-100 text-red-800";
+      case "majeur":
+        return "bg-orange-100 text-orange-800";
+      case "modere":
+        return "bg-yellow-100 text-yellow-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
   };
 
   const ComparisonRow = ({ label, contractValue, declarationValue, isMatch }: {
@@ -267,6 +355,13 @@ export default function SinistreDetail() {
       </div>
     </div>
   );
+
+  // Calcul des montants par gravité
+  const montantsParGravite = sinistre.desordres.reduce((acc, desordre) => {
+    const montant = parseFloat(desordre.enjeux.total.replace(/[€\s]/g, '').replace(',', '.'));
+    acc[desordre.gravite] = (acc[desordre.gravite] || 0) + montant;
+    return acc;
+  }, {} as Record<string, number>);
 
   return (
     <div className="min-h-screen flex flex-col w-full bg-gray-50">
@@ -547,76 +642,119 @@ export default function SinistreDetail() {
             </TabsContent>
 
             <TabsContent value="contrat" className="space-y-6">
-              {/* Données du contrat */}
-              <Card className="border-blue-200">
-                <CardHeader className="bg-blue-50">
-                  <CardTitle className="text-blue-800">Données du contrat</CardTitle>
-                </CardHeader>
-                <CardContent className="pt-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-3">
-                      <div>
-                        <span className="text-sm font-bold text-gray-600">Numéro de contrat:</span>
-                        <p className="text-gray-800 font-mono">{sinistre.contrat.numero}</p>
-                      </div>
-                      <div>
-                        <span className="text-sm font-bold text-gray-600">Produit:</span>
-                        <p className="text-gray-800 font-medium">{sinistre.contrat.produit}</p>
-                      </div>
-                      <div>
-                        <span className="text-sm font-bold text-gray-600">Prime annuelle:</span>
-                        <p className="text-gray-800 font-bold">{sinistre.contrat.prime}</p>
-                      </div>
-                    </div>
-                    <div className="space-y-3">
-                      <div>
-                        <span className="text-sm font-bold text-gray-600">Date d'effet:</span>
-                        <p className="text-gray-800 font-medium">{sinistre.contrat.dateEffet}</p>
-                      </div>
-                      <div>
-                        <span className="text-sm font-bold text-gray-600">Date d'échéance:</span>
-                        <p className="text-gray-800 font-medium">{sinistre.contrat.dateEcheance}</p>
-                      </div>
-                      <div>
-                        <span className="text-sm font-bold text-gray-600">Courtier:</span>
-                        <p className="text-gray-800 font-medium">{sinistre.contrat.courtier}</p>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Timeline du contrat */}
-              <Card className="border-blue-200">
-                <CardHeader className="bg-blue-50">
-                  <CardTitle className="flex items-center gap-2 text-blue-800">
-                    <Clock className="w-5 h-5" />
-                    Timeline du contrat
+              {/* Liste des désordres constatés */}
+              <Card className="border-red-200">
+                <CardHeader className="pb-3 bg-red-50">
+                  <CardTitle className="flex items-center gap-2 text-lg text-red-800">
+                    <AlertTriangle className="w-5 h-5" />
+                    Liste des désordres constatés
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="pt-4">
+                  {/* Résumé des montants par gravité */}
+                  <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+                    <h4 className="font-semibold text-gray-900 mb-3">Synthèse des enjeux par niveau de gravité</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="text-center p-3 bg-red-100 rounded-lg">
+                        <p className="text-sm font-medium text-red-600">Critique</p>
+                        <p className="text-lg font-bold text-red-800">{montantsParGravite.critique?.toLocaleString() || 0} €</p>
+                        <p className="text-xs text-red-600">{sinistre.desordres.filter(d => d.gravite === 'critique').length} désordre(s)</p>
+                      </div>
+                      <div className="text-center p-3 bg-orange-100 rounded-lg">
+                        <p className="text-sm font-medium text-orange-600">Majeur</p>
+                        <p className="text-lg font-bold text-orange-800">{montantsParGravite.majeur?.toLocaleString() || 0} €</p>
+                        <p className="text-xs text-orange-600">{sinistre.desordres.filter(d => d.gravite === 'majeur').length} désordre(s)</p>
+                      </div>
+                      <div className="text-center p-3 bg-yellow-100 rounded-lg">
+                        <p className="text-sm font-medium text-yellow-600">Modéré</p>
+                        <p className="text-lg font-bold text-yellow-800">{montantsParGravite.modere?.toLocaleString() || 0} €</p>
+                        <p className="text-xs text-yellow-600">{sinistre.desordres.filter(d => d.gravite === 'modere').length} désordre(s)</p>
+                      </div>
+                    </div>
+                    <div className="mt-4 pt-4 border-t border-gray-200 text-center">
+                      <p className="text-sm font-medium text-gray-600">Total des enjeux</p>
+                      <p className="text-2xl font-bold text-gray-900">
+                        {Object.values(montantsParGravite).reduce((a, b) => a + b, 0).toLocaleString()} €
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Liste détaillée des désordres */}
                   <div className="space-y-4">
-                    <div className="flex items-center gap-4 p-3 bg-green-50 rounded-lg">
-                      <div className="w-3 h-3 bg-green-600 rounded-full"></div>
-                      <div className="flex-1">
-                        <p className="font-bold text-gray-900">Souscription du contrat</p>
-                        <p className="text-sm text-gray-600">01/01/2021 - Mise en place de la couverture RC Décennale</p>
+                    {sinistre.desordres.map((desordre, index) => (
+                      <div key={desordre.id} className={`border-l-4 rounded-lg p-4 ${getGraviteColor(desordre.gravite)}`}>
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-2">
+                              <h3 className="text-lg font-semibold text-gray-900">{desordre.nature}</h3>
+                              <Badge className={`text-xs ${getGraviteBadgeColor(desordre.gravite)}`}>
+                                {desordre.gravite.charAt(0).toUpperCase() + desordre.gravite.slice(1)}
+                              </Badge>
+                            </div>
+                            <p className="text-sm text-gray-600 mb-2">
+                              <span className="font-medium">Référence:</span> {desordre.id} • 
+                              <span className="font-medium"> Constaté le:</span> {desordre.dateConstat}
+                            </p>
+                            <p className="text-sm text-gray-600">
+                              <span className="font-medium">Localisation:</span> {desordre.localisation}
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-lg font-bold text-gray-900">{desordre.enjeux.total}</p>
+                            <p className="text-xs text-gray-500">Enjeu total</p>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                          {/* Cause */}
+                          <div className="bg-white bg-opacity-60 rounded-lg p-3">
+                            <h4 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
+                              <AlertCircle className="w-4 h-4" />
+                              Cause identifiée
+                            </h4>
+                            <p className="text-sm text-gray-700">{desordre.cause}</p>
+                          </div>
+
+                          {/* Responsabilités */}
+                          <div className="bg-white bg-opacity-60 rounded-lg p-3">
+                            <h4 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
+                              <Users className="w-4 h-4" />
+                              Responsabilités engagées
+                            </h4>
+                            <ul className="space-y-1">
+                              {desordre.responsabilites.map((resp, idx) => (
+                                <li key={idx} className="text-sm text-gray-700 flex items-center gap-2">
+                                  <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
+                                  {resp}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+
+                        {/* Enjeux détaillés */}
+                        <div className="mt-4 pt-4 border-t border-gray-200">
+                          <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                            <Euro className="w-4 h-4" />
+                            Détail des enjeux financiers
+                          </h4>
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div className="bg-white bg-opacity-60 rounded p-3 text-center">
+                              <p className="text-sm font-medium text-gray-600">Préjudice matériel</p>
+                              <p className="text-lg font-bold text-gray-900">{desordre.enjeux.materiel}</p>
+                            </div>
+                            <div className="bg-white bg-opacity-60 rounded p-3 text-center">
+                              <p className="text-sm font-medium text-gray-600">Préjudice immatériel</p>
+                              <p className="text-lg font-bold text-gray-900">{desordre.enjeux.immateriel}</p>
+                            </div>
+                            <div className="bg-white bg-opacity-60 rounded p-3 text-center">
+                              <p className="text-sm font-medium text-gray-600">Total</p>
+                              <p className="text-lg font-bold text-gray-900">{desordre.enjeux.total}</p>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                    <div className="flex items-center gap-4 p-3 bg-blue-50 rounded-lg">
-                      <div className="w-3 h-3 bg-blue-600 rounded-full"></div>
-                      <div className="flex-1">
-                        <p className="font-bold text-gray-900">Réception des travaux couverts</p>
-                        <p className="text-sm text-gray-600">15/06/2021 - Début de la période de garantie décennale</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-4 p-3 bg-orange-50 rounded-lg">
-                      <div className="w-3 h-3 bg-orange-600 rounded-full"></div>
-                      <div className="flex-1">
-                        <p className="font-bold text-gray-900">Déclaration du sinistre</p>
-                        <p className="text-sm text-gray-600">28/09/2024 - Mise en cause dans les délais</p>
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </CardContent>
               </Card>
