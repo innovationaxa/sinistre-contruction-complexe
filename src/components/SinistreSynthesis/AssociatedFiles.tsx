@@ -38,7 +38,7 @@ export function AssociatedFiles({ dossiersAssocies }: AssociatedFilesProps) {
               
               <div className="flex items-start gap-3">
                 <Star className="h-4 w-4 text-violet-500 mt-0.5 flex-shrink-0" fill="currentColor" />
-                <p className="text-sm text-gray-700 leading-relaxed flex-1">{dossier.syntheseIA}</p>
+                <p className="text-sm text-violet-600 leading-relaxed flex-1 italic opacity-80">{dossier.syntheseIA}</p>
               </div>
             </button>
           ))}
