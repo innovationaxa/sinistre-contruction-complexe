@@ -498,6 +498,52 @@ export default function SinistreDetail() {
                   </div>
                 </CardContent>
               </Card>
+
+              {/* Garanties du contrat */}
+              <Card className="border-blue-200">
+                <CardHeader className="bg-blue-50">
+                  <CardTitle className="flex items-center gap-2 text-blue-800">
+                    <Shield className="w-5 h-5" />
+                    Garanties du contrat
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-2 p-3 bg-green-50 rounded-lg">
+                        <CheckCircle className="w-5 h-5 text-green-600" />
+                        <div>
+                          <p className="font-bold text-gray-900">Dommages à l'ouvrage</p>
+                          <p className="text-sm text-gray-600">Plafond: 500 000 €</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 p-3 bg-green-50 rounded-lg">
+                        <CheckCircle className="w-5 h-5 text-green-600" />
+                        <div>
+                          <p className="font-bold text-gray-900">Préjudice immatériel</p>
+                          <p className="text-sm text-gray-600">Plafond: 150 000 €</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-2 p-3 bg-green-50 rounded-lg">
+                        <CheckCircle className="w-5 h-5 text-green-600" />
+                        <div>
+                          <p className="font-bold text-gray-900">Frais de démolition</p>
+                          <p className="text-sm text-gray-600">Inclus dans le plafond principal</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 p-3 bg-green-50 rounded-lg">
+                        <CheckCircle className="w-5 h-5 text-green-600" />
+                        <div>
+                          <p className="font-bold text-gray-900">Frais d'expertise</p>
+                          <p className="text-sm text-gray-600">Pris en charge par AXA</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </TabsContent>
 
             <TabsContent value="contrat" className="space-y-6">
@@ -569,52 +615,6 @@ export default function SinistreDetail() {
                       <div className="flex-1">
                         <p className="font-bold text-gray-900">Déclaration du sinistre</p>
                         <p className="text-sm text-gray-600">28/09/2024 - Mise en cause dans les délais</p>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Garanties du contrat */}
-              <Card className="border-blue-200">
-                <CardHeader className="bg-blue-50">
-                  <CardTitle className="flex items-center gap-2 text-blue-800">
-                    <Shield className="w-5 h-5" />
-                    Garanties du contrat
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="pt-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-2 p-3 bg-green-50 rounded-lg">
-                        <CheckCircle className="w-5 h-5 text-green-600" />
-                        <div>
-                          <p className="font-bold text-gray-900">Dommages à l'ouvrage</p>
-                          <p className="text-sm text-gray-600">Plafond: 500 000 €</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2 p-3 bg-green-50 rounded-lg">
-                        <CheckCircle className="w-5 h-5 text-green-600" />
-                        <div>
-                          <p className="font-bold text-gray-900">Préjudice immatériel</p>
-                          <p className="text-sm text-gray-600">Plafond: 150 000 €</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-2 p-3 bg-green-50 rounded-lg">
-                        <CheckCircle className="w-5 h-5 text-green-600" />
-                        <div>
-                          <p className="font-bold text-gray-900">Frais de démolition</p>
-                          <p className="text-sm text-gray-600">Inclus dans le plafond principal</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2 p-3 bg-green-50 rounded-lg">
-                        <CheckCircle className="w-5 h-5 text-green-600" />
-                        <div>
-                          <p className="font-bold text-gray-900">Frais d'expertise</p>
-                          <p className="text-sm text-gray-600">Pris en charge par AXA</p>
-                        </div>
                       </div>
                     </div>
                   </div>
