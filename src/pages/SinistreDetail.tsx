@@ -1,3 +1,4 @@
+
 import { useParams, useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
@@ -5,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, FileText, User, Building, Calendar, AlertTriangle, Sparkles, Shield, Clock, TrendingUp, CheckCircle, Bot, Tag, FileCheck, Star, AlertCircle, Users, MapPin, Euro, Hammer } from "lucide-react";
 
 interface SinistreData {
@@ -285,6 +287,88 @@ const mockSinistreData: SinistreData = {
   }
 };
 
+// Données supplémentaires pour les nouveaux onglets
+const autresIntervenants = [
+  {
+    nom: "Entreprise Électro Plus SARL",
+    role: "Électricien principal",
+    assureurRC: "AXA France",
+    numeroContratRC: "RC-2021-8901",
+    assureurDO: "MAIF",
+    numeroContratDO: "DO-2021-4562",
+    plafondDO: "300 000 €",
+    dateEffetDO: "01/01/2021",
+    statusAssuranceRC: "active",
+    statusAssuranceDO: "active"
+  },
+  {
+    nom: "Plomberie Moderne SAS",
+    role: "Plombier-chauffagiste",
+    assureurRC: "AXA France",
+    numeroContratRC: "RC-2021-8902",
+    assureurDO: "SMABTP",
+    numeroContratDO: "DO-2021-7834",
+    plafondDO: "500 000 €",
+    dateEffetDO: "15/02/2021",
+    statusAssuranceRC: "active",
+    statusAssuranceDO: "active"
+  },
+  {
+    nom: "Carrelage Expert EURL",
+    role: "Carreleur",
+    assureurRC: "AXA France",
+    numeroContratRC: "RC-2021-8903",
+    assureurDO: "MAAF",
+    numeroContratDO: "DO-2021-9123",
+    plafondDO: "200 000 €",
+    dateEffetDO: "01/03/2021",
+    statusAssuranceRC: "active",
+    statusAssuranceDO: "expire_bientot"
+  }
+];
+
+const sinistresChantier = [
+  {
+    id: "SIN-001",
+    reference: "RC-DECA-2024-001",
+    statut: "En cours",
+    dateDeclaration: "28/09/2024",
+    intervenant: "SARL Bâti Construct",
+    garanties: [
+      {
+        nom: "Dommages à l'ouvrage",
+        plafond: 500000,
+        engage: 77000,
+        reserve: 80000,
+        resteAPayer: 423000
+      },
+      {
+        nom: "Préjudice immatériel",
+        plafond: 150000,
+        engage: 45000,
+        reserve: 50000,
+        resteAPayer: 100000
+      }
+    ]
+  },
+  {
+    id: "SIN-002",
+    reference: "RC-ELEC-2024-002",
+    statut: "Fermé",
+    dateDeclaration: "15/08/2024",
+    intervenant: "Entreprise Électro Plus SARL",
+    garanties: [
+      {
+        nom: "Dommages à l'ouvrage",
+        plafond: 300000,
+        engage: 12000,
+        reserve: 0,
+        resteAPayer: 288000
+      }
+    ]
+  }
+];
+
 export default function SinistreDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -362,6 +446,32 @@ export default function SinistreDetail() {
     acc[desordre.gravite] = (acc[desordre.gravite] || 0) + montant;
     return acc;
   }, {} as Record<string, number>);
+
+  const getStatusBadgeColor = (status: string) => {
+    switch (status) {
+      case "active":
+        return "bg-green-100 text-green-800";
+      case "expire_bientot":
+        return "bg-orange-100 text-orange-800";
+      case "expire":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
+  };
+
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case "active":
+        return "Active";
+      case "expire_bientot":
+        return "Expire bientôt";
+      case "expire":
+        return "Expirée";
+      default:
+        return "Inconnue";
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col w-full bg-gray-50">
@@ -761,6 +871,222 @@ export default function SinistreDetail() {
             </TabsContent>
 
             <TabsContent value="historique" className="space-y-6">
+              {/* Autres intervenants assurés chez AXA */}
+              <Card className="border-blue-200">
+                <CardHeader className="bg-blue-50">
+                  <CardTitle className="flex items-center gap-2 text-blue-800">
+                    <Users className="w-5 h-5" />
+                    Autres intervenants assurés AXA
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-4">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="w-[250px]">Intervenant</TableHead>
+                        <TableHead className="w-[150px]">Rôle</TableHead>
+                        <TableHead className="w-[120px]">RC (AXA)</TableHead>
+                        <TableHead className="w-[200px]">Assureur DO</TableHead>
+                        <TableHead className="w-[150px]">Plafond DO</TableHead>
+                        <TableHead className="w-[120px]">Statut DO</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {autresIntervenants.map((intervenant, index) => (
+                        <TableRow key={index}>
+                          <TableCell className="font-medium">
+                            <div>
+                              <p className="font-semibold text-gray-900">{intervenant.nom}</p>
+                              <p className="text-xs text-gray-500">Contrat: {intervenant.numeroContratRC}</p>
+                            </div>
+                          </TableCell>
+                          <TableCell className="text-sm text-gray-600">
+                            {intervenant.role}
+                          </TableCell>
+                          <TableCell>
+                            <Badge className="bg-blue-100 text-blue-800 text-xs">
+                              <CheckCircle className="w-3 h-3 mr-1" />
+                              AXA
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="text-sm">
+                            <div>
+                              <p className="font-medium text-gray-900">{intervenant.assureurDO}</p>
+                              <p className="text-xs text-gray-500">{intervenant.numeroContratDO}</p>
+                              <p className="text-xs text-gray-500">Effet: {intervenant.dateEffetDO}</p>
+                            </div>
+                          </TableCell>
+                          <TableCell className="font-semibold text-gray-900">
+                            {intervenant.plafondDO}
+                          </TableCell>
+                          <TableCell>
+                            <Badge className={`text-xs ${getStatusBadgeColor(intervenant.statusAssuranceDO)}`}>
+                              {getStatusText(intervenant.statusAssuranceDO)}
+                            </Badge>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+
+              {/* Section Chantier - Sinistres associés */}
+              <Card className="border-orange-200">
+                <CardHeader className="bg-orange-50">
+                  <CardTitle className="flex items-center gap-2 text-orange-800">
+                    <Building className="w-5 h-5" />
+                    Chantier - Sinistres associés
+                    <Badge className="bg-orange-100 text-orange-800 ml-2">
+                      42 Rue du Commerce, Lyon
+                    </Badge>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-4">
+                  <div className="space-y-6">
+                    {sinistresChantier.map((sinistre, index) => (
+                      <div key={sinistre.id} className="border border-gray-200 rounded-lg p-4 bg-white shadow-sm">
+                        {/* En-tête du sinistre */}
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center gap-3">
+                            <div>
+                              <h3 className="text-lg font-semibold text-gray-900">{sinistre.reference}</h3>
+                              <p className="text-sm text-gray-600">
+                                Déclaré le {sinistre.dateDeclaration} • {sinistre.intervenant}
+                              </p>
+                            </div>
+                          </div>
+                          <Badge className={`${
+                            sinistre.statut === "En cours" ? "bg-orange-100 text-orange-800" : 
+                            sinistre.statut === "Fermé" ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"
+                          }`}>
+                            {sinistre.statut}
+                          </Badge>
+                        </div>
+
+                        {/* Garanties avec jauges */}
+                        <div className="space-y-4">
+                          <h4 className="font-semibold text-gray-900 flex items-center gap-2">
+                            <Shield className="w-4 h-4" />
+                            Garanties et reste à payer
+                          </h4>
+                          {sinistre.garanties.map((garantie, gIndex) => {
+                            const pourcentageUtilise = (garantie.engage + garantie.reserve) / garantie.plafond * 100;
+                            const pourcentageEngage = garantie.engage / garantie.plafond * 100;
+                            const pourcentageReserve = garantie.reserve / garantie.plafond * 100;
+                            
+                            return (
+                              <div key={gIndex} className="bg-gray-50 rounded-lg p-4">
+                                <div className="flex items-center justify-between mb-3">
+                                  <h5 className="font-medium text-gray-900">{garantie.nom}</h5>
+                                  <div className="text-right">
+                                    <p className="text-sm font-semibold text-gray-900">
+                                      Reste: {garantie.resteAPayer.toLocaleString()} €
+                                    </p>
+                                    <p className="text-xs text-gray-500">
+                                      sur {garantie.plafond.toLocaleString()} €
+                                    </p>
+                                  </div>
+                                </div>
+                                
+                                {/* Barre de progression avec segments */}
+                                <div className="space-y-2">
+                                  <div className="relative h-4 bg-gray-200 rounded-full overflow-hidden">
+                                    {/* Montant engagé */}
+                                    <div 
+                                      className="absolute left-0 h-full bg-red-500"
+                                      style={{ width: `${pourcentageEngage}%` }}
+                                    ></div>
+                                    {/* Réserve */}
+                                    <div 
+                                      className="absolute h-full bg-orange-500"
+                                      style={{ 
+                                        left: `${pourcentageEngage}%`,
+                                        width: `${pourcentageReserve}%` 
+                                      }}
+                                    ></div>
+                                    {/* Reste disponible */}
+                                    <div 
+                                      className="absolute right-0 h-full bg-green-500"
+                                      style={{ width: `${100 - pourcentageUtilise}%` }}
+                                    ></div>
+                                  </div>
+                                  
+                                  {/* Légende */}
+                                  <div className="flex items-center justify-between text-xs">
+                                    <div className="flex items-center gap-4">
+                                      <div className="flex items-center gap-1">
+                                        <div className="w-3 h-3 bg-red-500 rounded"></div>
+                                        <span className="text-gray-600">
+                                          Engagé: {garantie.engage.toLocaleString()} €
+                                        </span>
+                                      </div>
+                                      <div className="flex items-center gap-1">
+                                        <div className="w-3 h-3 bg-orange-500 rounded"></div>
+                                        <span className="text-gray-600">
+                                          Réserve: {garantie.reserve.toLocaleString()} €
+                                        </span>
+                                      </div>
+                                      <div className="flex items-center gap-1">
+                                        <div className="w-3 h-3 bg-green-500 rounded"></div>
+                                        <span className="text-gray-600">
+                                          Disponible: {garantie.resteAPayer.toLocaleString()} €
+                                        </span>
+                                      </div>
+                                    </div>
+                                    <span className="font-medium text-gray-700">
+                                      {pourcentageUtilise.toFixed(1)}% utilisé
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {/* Résumé global du chantier */}
+                  <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+                    <h4 className="font-semibold text-blue-900 mb-3 flex items-center gap-2">
+                      <TrendingUp className="w-4 h-4" />
+                      Résumé global du chantier
+                    </h4>
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                      <div className="text-center">
+                        <p className="text-sm font-medium text-gray-600">Sinistres</p>
+                        <p className="text-xl font-bold text-gray-900">{sinistresChantier.length}</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-sm font-medium text-red-600">Total engagé</p>
+                        <p className="text-xl font-bold text-red-700">
+                          {sinistresChantier.reduce((acc, s) => 
+                            acc + s.garanties.reduce((gAcc, g) => gAcc + g.engage, 0), 0
+                          ).toLocaleString()} €
+                        </p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-sm font-medium text-orange-600">Total réserves</p>
+                        <p className="text-xl font-bold text-orange-700">
+                          {sinistresChantier.reduce((acc, s) => 
+                            acc + s.garanties.reduce((gAcc, g) => gAcc + g.reserve, 0), 0
+                          ).toLocaleString()} €
+                        </p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-sm font-medium text-green-600">Reste disponible</p>
+                        <p className="text-xl font-bold text-green-700">
+                          {sinistresChantier.reduce((acc, s) => 
+                            acc + s.garanties.reduce((gAcc, g) => gAcc + g.resteAPayer, 0), 0
+                          ).toLocaleString()} €
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
               {/* Documents avec analyse IA */}
               <Card className="border-blue-200">
                 <CardHeader className="bg-blue-50">
@@ -992,3 +1318,4 @@ export default function SinistreDetail() {
     </div>
   );
 }
+
