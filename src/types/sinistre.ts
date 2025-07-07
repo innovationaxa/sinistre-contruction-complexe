@@ -39,6 +39,10 @@ export interface DossierAssocie {
   score: number;
   relation: string;
   statut: string;
+  syntheseIA: string;
+  montantEstime?: string;
+  prochaineMilestone?: string;
+  risqueIdentifie?: string;
 }
 
 export interface TimelineEvent {
