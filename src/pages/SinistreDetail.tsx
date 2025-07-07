@@ -353,46 +353,6 @@ export default function SinistreDetail() {
                   </div>
                 </CardContent>
               </Card>
-
-              {/* Description du sinistre */}
-              <Card className="border-blue-200">
-                <CardHeader className="bg-blue-50">
-                  <CardTitle className="flex items-center gap-2 text-blue-800">
-                    <AlertTriangle className="w-5 h-5" />
-                    Description du sinistre
-                    {sinistre.aiGenerated.description && <AIIndicator />}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="pt-4">
-                  <p className="text-gray-800 leading-relaxed font-medium">{sinistre.sinistre.description}</p>
-                </CardContent>
-              </Card>
-
-              {/* Maître d'ouvrage & Préjudices seulement */}
-              <Card className="border-blue-200">
-                <CardHeader className="bg-blue-50">
-                  <CardTitle className="text-blue-800">Maître d'ouvrage & Préjudices</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3 pt-4">
-                  <div>
-                    <span className="text-sm font-bold text-gray-600">Nom:</span>
-                    <p className="text-gray-800 font-medium">{sinistre.sinistre.maitreOuvrage.nom}</p>
-                  </div>
-                  <div>
-                    <span className="text-sm font-bold text-gray-600">Qualité:</span>
-                    <p className="text-gray-800 font-medium">{sinistre.sinistre.maitreOuvrage.qualite}</p>
-                  </div>
-                  <div>
-                    <span className="text-sm font-bold text-gray-600">Activité:</span>
-                    <p className="text-gray-800 font-medium">{sinistre.sinistre.maitreOuvrage.activite}</p>
-                  </div>
-                  <div>
-                    <span className="text-sm font-bold text-gray-600">Préjudice immatériel:</span>
-                    <p className="text-red-600 font-bold">{sinistre.sinistre.maitreOuvrage.prejudiceImateriel}</p>
-                    {sinistre.aiGenerated.evaluation && <AIIndicator />}
-                  </div>
-                </CardContent>
-              </Card>
             </TabsContent>
 
             <TabsContent value="contrat" className="space-y-6">
