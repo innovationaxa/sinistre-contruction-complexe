@@ -1,4 +1,3 @@
-
 import { Badge } from "@/components/ui/badge";
 import { AlertTriangle, CheckCircle, Sparkles, Scale, Clock, TrendingUp, Bot } from "lucide-react";
 import { ActeContentieux, AlerteIA, NextAction } from "@/types/sinistre";
@@ -54,18 +53,21 @@ export function OverviewSection({ syntheseIA, actesContentieux, alertesIA, nextA
             
             <div className="text-sm text-gray-700 leading-relaxed space-y-3">
               <p>
-                <strong>🏢 Contexte :</strong> RC Décennale BATIMEX SARL - Dégâts des eaux atelier principal. 
-                Déclaration à J+3 ans (délais respectés), couverture confirmée, aucune exclusion identifiée.
+                <strong>🏢 Contexte :</strong> Sinistre RC Décennale pour BATIMEX SARL suite à des dégâts des eaux survenus dans l'atelier principal du site parisien. 
+                La déclaration a été effectuée dans les délais réglementaires (J+3 après constat), la couverture d'assurance est confirmée sans exclusions particulières identifiées. 
+                Le dossier présente un profil de risque standard pour ce type de sinistre.
               </p>
               
               <p>
-                <strong>💰 Enjeux :</strong> Montant estimé <Badge className="bg-orange-100 text-orange-800 font-medium mx-1">15 000€</Badge>
-                Budget expertise 2 500€. Préjudice immatériel à évaluer.
+                <strong>💰 Enjeux financiers :</strong> Estimation initiale des dommages à <Badge className="bg-orange-100 text-orange-800 font-medium mx-1">15 000€</Badge>
+                avec un budget d'expertise alloué de 2 500€. Le préjudice immatériel (arrêt d'activité, perte d'exploitation) reste à quantifier précisément lors de l'expertise. 
+                Les premiers éléments suggèrent un impact limité sur la production.
               </p>
               
               <p>
-                <strong>🎯 Action :</strong> Expertise programmée le 20/03/2024. 
-                Délai standard 45 jours. ⚠️ Risque d'expertise contradictoire à anticiper.
+                <strong>🎯 Plan d'action :</strong> Mission d'expertise planifiée le 20/03/2024 avec l'expert mandaté. 
+                Délai de traitement estimé selon nos standards internes : 45 jours ouvrés. 
+                ⚠️ Attention particulière requise car risque d'expertise contradictoire de la part du maître d'ouvrage à anticiper selon le profil du dossier.
               </p>
             </div>
           </div>
