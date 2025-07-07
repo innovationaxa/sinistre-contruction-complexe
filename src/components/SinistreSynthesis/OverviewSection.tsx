@@ -72,11 +72,7 @@ export function OverviewSection({
                 Les premiers éléments suggèrent un impact limité sur la production.
               </p>
               
-              <p>
-                <strong>🎯 Plan d'action :</strong> Mission d'expertise planifiée le 20/03/2024 avec l'expert mandaté. 
-                Délai de traitement estimé selon nos standards internes : 45 jours ouvrés. 
-                ⚠️ Attention particulière requise car risque d'expertise contradictoire de la part du maître d'ouvrage à anticiper selon le profil du dossier.
-              </p>
+              
             </div>
           </div>
 
