@@ -48,28 +48,27 @@ export function Timeline({ timeline }: TimelineProps) {
         </CardTitle>
       </CardHeader>
       <CardContent className="p-6 relative">
-        {/* Ligne de progression centrale */}
-        <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gray-200 transform -translate-x-1/2">
+        {/* Barre de progression à gauche */}
+        <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gray-200">
           <div 
             className="w-full bg-gradient-to-b from-green-500 to-blue-500 transition-all duration-500"
             style={{ height: `${getProgressPercentage(timeline.length - 1, timeline.length)}%` }}
           />
         </div>
         
-        <div className="space-y-8">
+        <div className="space-y-8 pl-16">
           {timeline.map((event, index) => {
-            const isLeft = index % 2 === 0;
             const isLast = index === timeline.length - 1;
             
             return (
               <div key={index} className="relative flex items-center">
-                {/* Cercle de statut centré */}
-                <div className={`absolute left-1/2 transform -translate-x-1/2 z-10 flex items-center justify-center w-8 h-8 rounded-full ${getStatusColor(event.statut)} shadow-lg hover:scale-110 transition-transform duration-200`}>
+                {/* Cercle de statut aligné avec la barre */}
+                <div className={`absolute -left-20 flex items-center justify-center w-8 h-8 rounded-full ${getStatusColor(event.statut)} shadow-lg hover:scale-110 transition-transform duration-200`}>
                   {getStatusIcon(event.statut)}
                 </div>
                 
-                {/* Contenu de l'événement - alternance gauche/droite */}
-                <div className={`w-5/12 ${isLeft ? 'mr-auto pr-8' : 'ml-auto pl-8'}`}>
+                {/* Contenu de l'événement - toujours à droite */}
+                <div className="w-full">
                   <div className={`bg-white rounded-lg border-2 shadow-sm hover:shadow-md transition-all duration-300 p-4 ${
                     event.statut === 'completed' ? 'border-green-200 bg-green-50/30' :
                     event.statut === 'upcoming' ? 'border-blue-200 bg-blue-50/30' :
