@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DocumentViewer } from "./DocumentViewer";
 import { DocumentChat } from "./DocumentChat";
+import { DocumentSynthesis } from "./DocumentSynthesis";
 import { FileText, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -62,7 +63,7 @@ export const DocumentsSection = ({ documents }: DocumentsSectionProps) => {
       </div>
 
       {/* Visionneuse au centre */}
-      <div className={`${isChatOpen ? 'col-span-6' : 'col-span-9'} transition-all duration-300`}>
+      <div className="col-span-6">
         <Card className="h-full">
           <CardHeader className="pb-3 border-b">
             <div className="flex items-center justify-between">
@@ -102,13 +103,20 @@ export const DocumentsSection = ({ documents }: DocumentsSectionProps) => {
         </Card>
       </div>
 
-      {/* Chat IA à droite */}
+      {/* Synthèse IA à droite */}
+      <div className="col-span-3">
+        <DocumentSynthesis document={selectedDocument} />
+      </div>
+
+      {/* Chat IA modal/overlay */}
       {isChatOpen && (
-        <div className="col-span-3">
-          <DocumentChat 
-            document={selectedDocument} 
-            onClose={() => setIsChatOpen(false)} 
-          />
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl h-[600px]">
+            <DocumentChat 
+              document={selectedDocument} 
+              onClose={() => setIsChatOpen(false)} 
+            />
+          </div>
         </div>
       )}
     </div>
