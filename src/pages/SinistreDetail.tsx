@@ -65,7 +65,7 @@ const SinistreDetail = () => {
     {
       id: 1,
       titre: "Abandon de chantier - Garantie RC Décennale",
-      description: "Le chantier n'est pas terminé car notre assuré a abandonné le chantier\n==> Dans ces circonstances, la garantie Responsabilité Décénale du contrat de l’assuré ne peut trouver application\n==> Les garanties en cours de chantier ne peuvent également trouver application. En effet, ces garanties ne peuvent trouver application que pour des dommages matériels accidentels et non pour des malfaçons et des non finitions.",
+      description: "Le chantier n'est pas terminé car notre assuré a abandonné le chantier\n==> Dans ces circonstances, la garantie Responsabilité Décénale du contrat de l'assuré ne peut trouver application\n==> Les garanties en cours de chantier ne peuvent également trouver application. En effet, ces garanties ne peuvent trouver application que pour des dommages matériels accidentels et non pour des malfaçons et des non finitions.",
       type: "critique",
       confidence: 95,
       impact: "Exclusion de garantie majeure"
