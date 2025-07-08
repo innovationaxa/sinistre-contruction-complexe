@@ -7,7 +7,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, FileText, User, Building, Calendar, AlertTriangle, Sparkles, Shield, Clock, TrendingUp, CheckCircle, Bot, Tag, FileCheck, Star, AlertCircle, Users, MapPin, Euro, Hammer, Brain, Target, Zap, Trash, ArrowRight, FolderOpen, Search, ExternalLink } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { ArrowLeft, FileText, User, Building, Calendar, AlertTriangle, Sparkles, Shield, Clock, TrendingUp, CheckCircle, Bot, Tag, FileCheck, Star, AlertCircle, Users, MapPin, Euro, Hammer, Brain, Target, Zap, Trash, ArrowRight, FolderOpen, Search, Eye } from "lucide-react";
 import { useState } from "react";
 
 interface SinistreData {
@@ -98,6 +99,7 @@ interface SinistreData {
     evaluation: boolean;
   };
 }
+
 const mockSinistreData: SinistreData = {
   id: "1",
   reference: "RC-DECA-2024-001",
@@ -247,7 +249,6 @@ const mockSinistreData: SinistreData = {
   }
 };
 
-// Données supplémentaires pour les nouveaux onglets
 const autresIntervenants = [{
   nom: "Entreprise Électro Plus SARL",
   role: "Électricien principal",
@@ -316,7 +317,6 @@ const sinistresChantier = [{
   }]
 }];
 
-// Données pour l'analyse IA
 const activitesAnalysis = {
   declared: [{
     activity: "Gros œuvre - Maçonnerie",
@@ -403,7 +403,6 @@ const dossiersAssocies = [{
   description: "Surveillance plomberie préventive"
 }];
 
-// Documents data based on the screenshot
 const documentsData = [
   {
     id: "DOC-001",
@@ -822,97 +821,142 @@ export default function SinistreDetail() {
 
             <TabsContent value="documents" className="space-y-6">
               <Card className="border-blue-200">
-                <CardHeader className="pb-4 bg-blue-50">
-                  <CardTitle className="flex items-center gap-2 text-lg text-blue-800">
-                    <FileText className="w-5 h-5" />
-                    Documents contractuels et assurantiels
+                <CardHeader className="pb-4 bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-200">
+                  <CardTitle className="flex items-center gap-3 text-xl text-blue-900">
+                    <div className="p-2 bg-blue-600 rounded-lg">
+                      <FileText className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-bold">Documents contractuels et assurantiels</h2>
+                      <p className="text-sm text-blue-700 font-normal mt-1">
+                        Gestion intelligente et classification automatique des pièces jointes
+                      </p>
+                    </div>
                   </CardTitle>
-                  <div className="flex items-center gap-2 mt-3">
-                    <Search className="w-4 h-4 text-gray-500" />
-                    <Input 
-                      placeholder="Rechercher un document..." 
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="max-w-md"
-                    />
-                    <Badge variant="outline" className="ml-2">
+                </CardHeader>
+                <div className="px-6 py-4 bg-gray-50 border-b">
+                  <div className="flex items-center gap-3">
+                    <div className="relative flex-1 max-w-md">
+                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <Input 
+                        placeholder="Rechercher un document par nom, type ou classification..." 
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="pl-10 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                      />
+                    </div>
+                    <Badge variant="outline" className="bg-white border-blue-200 text-blue-700">
                       {filteredDocuments.length} document{filteredDocuments.length > 1 ? 's' : ''}
                     </Badge>
                   </div>
-                </CardHeader>
-                <CardContent className="pt-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                </div>
+                <CardContent className="pt-6">
+                  <div className="space-y-4">
                     {filteredDocuments.map((doc) => (
-                      <div key={doc.id} className="border border-gray-200 rounded-lg p-4 bg-white hover:shadow-md transition-shadow">
-                        <div className="flex items-start justify-between mb-3">
-                          <div className="flex items-center gap-2">
-                            <FileText className="w-4 h-4 text-blue-600" />
-                            <h4 className="font-semibold text-gray-900 text-sm">{doc.nom}</h4>
+                      <div key={doc.id} className="border border-gray-200 rounded-lg p-5 bg-white hover:shadow-lg transition-all duration-200 hover:border-blue-300">
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="flex items-center gap-3">
+                            <div className="p-2 bg-blue-100 rounded-lg">
+                              <FileText className="w-5 h-5 text-blue-600" />
+                            </div>
+                            <div>
+                              <h4 className="font-semibold text-gray-900 text-lg">{doc.nom}</h4>
+                              <div className="flex items-center gap-2 mt-1">
+                                <Badge variant="outline" className="text-xs bg-gray-50">{doc.type}</Badge>
+                                <span className="text-sm text-gray-500">•</span>
+                                <span className="text-sm text-gray-600">{doc.date}</span>
+                              </div>
+                            </div>
                           </div>
-                          <Badge variant="outline" className="text-xs">{doc.type}</Badge>
-                        </div>
-                        
-                        <div className="space-y-2 text-xs text-gray-600 mb-3">
-                          <div className="flex justify-between">
-                            <span>Date:</span>
-                            <span className="font-medium">{doc.date}</span>
-                          </div>
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button variant="outline" size="sm" className="flex items-center gap-2 hover:bg-blue-50 hover:border-blue-300">
+                                <Eye className="w-4 h-4" />
+                                Voir
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+                              <DialogHeader>
+                                <DialogTitle className="flex items-center gap-2">
+                                  <FileText className="w-5 h-5" />
+                                  {doc.nom}
+                                </DialogTitle>
+                              </DialogHeader>
+                              <div className="mt-4 space-y-4">
+                                <div className="bg-gray-100 rounded-lg p-8 text-center">
+                                  <FileText className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                                  <p className="text-gray-600">Aperçu du document : {doc.aiRenamed}</p>
+                                  <p className="text-sm text-gray-500 mt-2">
+                                    Contenu simulé - Dans une vraie application, le document PDF/image s'afficherait ici
+                                  </p>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4 text-sm">
+                                  <div>
+                                    <span className="font-medium text-gray-600">Type:</span>
+                                    <span className="ml-2">{doc.type}</span>
+                                  </div>
+                                  <div>
+                                    <span className="font-medium text-gray-600">Date:</span>
+                                    <span className="ml-2">{doc.date}</span>
+                                  </div>
+                                  <div className="col-span-2">
+                                    <span className="font-medium text-gray-600">Classification IA:</span>
+                                    <span className="ml-2">{doc.aiClassification}</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </DialogContent>
+                          </Dialog>
                         </div>
 
                         <div className="space-y-3">
-                          {/* Classification IA */}
-                          <div className="bg-purple-50 rounded-md p-2 border border-purple-200">
-                            <div className="flex items-center gap-1 mb-1">
-                              <Tag className="w-3 h-3 text-purple-600" />
-                              <span className="text-xs font-medium text-purple-800">Classification IA</span>
+                          {/* Classification, Renommage et Synthèse en ligne */}
+                          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                            {/* Classification IA */}
+                            <div className="bg-purple-50 rounded-lg p-3 border border-purple-200">
+                              <div className="flex items-center gap-2 mb-2">
+                                <Tag className="w-4 h-4 text-purple-600" />
+                                <span className="text-sm font-semibold text-purple-800">Classification IA</span>
+                              </div>
+                              <p className="text-sm text-purple-700 font-medium">{doc.aiClassification}</p>
                             </div>
-                            <p className="text-xs text-purple-700">{doc.aiClassification}</p>
-                          </div>
 
-                          {/* Renommage IA */}
-                          <div className="bg-blue-50 rounded-md p-2 border border-blue-200">
-                            <div className="flex items-center gap-1 mb-1">
-                              <Bot className="w-3 h-3 text-blue-600" />
-                              <span className="text-xs font-medium text-blue-800">Renommage IA</span>
-                            </div>
-                            <div className="space-y-1">
-                              <p className="text-xs text-gray-600">
+                            {/* Renommage IA */}
+                            <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
+                              <div className="flex items-center gap-2 mb-2">
+                                <Bot className="w-4 h-4 text-blue-600" />
+                                <span className="text-sm font-semibold text-blue-800">Renommage IA</span>
+                              </div>
+                              <p className="text-xs text-gray-600 mb-1">
                                 <span className="font-medium">Original:</span> {doc.originalName}
                               </p>
-                              <p className="text-xs text-blue-700 font-medium">
+                              <p className="text-sm text-blue-700 font-medium break-all">
                                 {doc.aiRenamed}
                               </p>
                             </div>
-                          </div>
 
-                          {/* Synthèse IA */}
-                          <div className="bg-green-50 rounded-md p-2 border border-green-200">
-                            <div className="flex items-center gap-1 mb-1">
-                              <Brain className="w-3 h-3 text-green-600" />
-                              <span className="text-xs font-medium text-green-800">Synthèse IA détaillée</span>
+                            {/* Synthèse IA */}
+                            <div className="bg-green-50 rounded-lg p-3 border border-green-200">
+                              <div className="flex items-center gap-2 mb-2">
+                                <Brain className="w-4 h-4 text-green-600" />
+                                <span className="text-sm font-semibold text-green-800">Synthèse IA</span>
+                              </div>
+                              <p className="text-sm text-green-700 leading-relaxed line-clamp-3">
+                                {doc.aiSummary}
+                              </p>
                             </div>
-                            <p className="text-xs text-green-700 leading-relaxed">{doc.aiSummary}</p>
                           </div>
-                        </div>
-
-                        <div className="mt-4 pt-3 border-t border-gray-100">
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            className="w-full h-8 text-xs"
-                            onClick={() => console.log(`Ouvrir document ${doc.id}`)}
-                          >
-                            <ExternalLink className="w-3 h-3 mr-1" />
-                            Ouvrir le document
-                          </Button>
                         </div>
                       </div>
                     ))}
                   </div>
                   
                   {filteredDocuments.length === 0 && (
-                    <div className="text-center py-8 text-gray-500">
-                      <FileText className="w-12 h-12 mx-auto mb-2 text-gray-300" />
+                    <div className="text-center py-12 text-gray-500">
+                      <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Search className="w-8 h-8 text-gray-400" />
+                      </div>
+                      <h3 className="text-lg font-medium text-gray-900 mb-2">Aucun document trouvé</h3>
                       <p>Aucun document ne correspond à votre recherche</p>
                     </div>
                   )}
