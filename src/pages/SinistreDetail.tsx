@@ -542,7 +542,7 @@ export default function SinistreDetail() {
             <TabsList className="grid w-full grid-cols-4 bg-blue-50 border-blue-200">
               <TabsTrigger value="synthese" className="font-semibold data-[state=active]:bg-blue-600 data-[state=active]:text-white">Contrat et garanties</TabsTrigger>
               <TabsTrigger value="contrat" className="font-semibold data-[state=active]:bg-blue-600 data-[state=active]:text-white">Chantier et désordres</TabsTrigger>
-              <TabsTrigger value="historique" className="font-semibold data-[state=active]:bg-blue-600 data-[state=active]:text-white">Autres intervenants et Chantier</TabsTrigger>
+              <TabsTrigger value="historique" className="font-semibold data-[state=active]:bg-blue-600 data-[state=active]:text-white">Documents</TabsTrigger>
               <TabsTrigger value="analyse" className="font-semibold data-[state=active]:bg-blue-600 data-[state=active]:text-white">Analyse IA</TabsTrigger>
             </TabsList>
 
