@@ -6,7 +6,10 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Progress } from "@/components/ui/progress";
-import { ArrowLeft, FileText, User, Building, Calendar, AlertTriangle, Sparkles, Shield, Clock, TrendingUp, CheckCircle, Bot, Tag, FileCheck, Star, AlertCircle, Users, MapPin, Euro, Hammer, Brain, Target, Zap, Trash, ArrowRight, FolderOpen } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { ArrowLeft, FileText, User, Building, Calendar, AlertTriangle, Sparkles, Shield, Clock, TrendingUp, CheckCircle, Bot, Tag, FileCheck, Star, AlertCircle, Users, MapPin, Euro, Hammer, Brain, Target, Zap, Trash, ArrowRight, FolderOpen, Search, ExternalLink } from "lucide-react";
+import { useState } from "react";
+
 interface SinistreData {
   id: string;
   reference: string;
@@ -196,15 +199,6 @@ const mockSinistreData: SinistreData = {
     aiClassification: "Document commercial - Estimation travaux",
     aiSummary: "Devis détaillé établi par entreprise spécialisée en réparation structurelle. Montant total : 85 000€ HT incluant reprises en sous-œuvre, renforcement structure, étanchéité. Délais d'exécution : 6 semaines. Entreprise certifiée RGE, garanties décennales à jour.",
     confidence: 88
-  }, {
-    nom: "Attestation RC Décennale",
-    type: "Attestation",
-    date: "28/09/2024",
-    originalName: "attestation_assurance.pdf",
-    aiRenamed: "Attestation_RCDecennale_BatiConstruct_AXA_Validite2024.pdf",
-    aiClassification: "Document contractuel - Attestation assurance",
-    aiSummary: "Attestation d'assurance RC Décennale valide couvrant la période des travaux litigieux (2021-2031). Plafonds de garantie conformes : 500 000€ dommages ouvrage, 150 000€ préjudice immatériel. Aucune exclusion particulière identifiée. Document authentifié par signature électronique AXA.",
-    confidence: 98
   }],
   desordres: [{
     id: "D001",
@@ -408,12 +402,57 @@ const dossiersAssocies = [{
   impact: "Faible",
   description: "Surveillance plomberie préventive"
 }];
+
+// Documents data based on the screenshot
+const documentsData = [
+  {
+    id: "DOC-001",
+    nom: "Courrier de mise en cause",
+    type: "Courrier",
+    date: "25/09/2024",
+    originalName: "courrier_mise_en_cause.pdf",
+    aiRenamed: "Courrier_MiseEnCause_CommercePlus_BatiConstruct_25092024.pdf",
+    aiClassification: "Document juridique - Mise en demeure",
+    aiSummary: "Courrier officiel de mise en cause de la société SARL Bâti Construct par SAS Commerce Plus. Document détaillant les dommages constatés 3 ans après réception des travaux de rénovation du local commercial. Mentions légales conformes, délais respectés. Demande d'indemnisation chiffrée incluant les préjudices matériels et immatériels.",
+    confidence: 95
+  },
+  {
+    id: "DOC-002", 
+    nom: "Photos des dommages",
+    type: "Photos",
+    date: "27/09/2024",
+    originalName: "photos_degats.zip",
+    aiRenamed: "Photos_Dommages_LocalCommercial_RueCommerce_27092024.zip",
+    aiClassification: "Documentation visuelle - Preuves dommages",
+    aiSummary: "Archive photographique complète des dommages structurels. 15 photos haute résolution montrant les fissures dans les murs porteurs, l'affaissement du plancher et les infiltrations d'eau. Documentation technique exploitable pour expertise. Géolocalisation et métadonnées temporelles présentes.",
+    confidence: 92
+  },
+  {
+    id: "DOC-003",
+    nom: "Devis de réparation",
+    type: "Devis", 
+    date: "28/09/2024",
+    originalName: "devis_reparation.pdf",
+    aiRenamed: "Devis_Réparation_Structurelle_EntrepriseBTP_Lyon_28092024.pdf",
+    aiClassification: "Document commercial - Estimation travaux",
+    aiSummary: "Devis détaillé établi par entreprise spécialisée en réparation structurelle. Montant total : 85 000€ HT incluant reprises en sous-œuvre, renforcement structure, étanchéité. Délais d'exécution : 6 semaines. Entreprise certifiée RGE, garanties décennales à jour.",
+    confidence: 88
+  }
+];
+
 export default function SinistreDetail() {
-  const {
-    id
-  } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
   const sinistre = mockSinistreData;
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Filter documents based on search term
+  const filteredDocuments = documentsData.filter(doc => 
+    doc.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    doc.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    doc.aiClassification.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   const AIIndicator = () => <Sparkles className="w-4 h-4 text-purple-600 inline ml-1" />;
   const getConfidenceColor = (confidence: number) => {
     if (confidence >= 95) return "text-green-600 bg-green-50 border-green-200";
@@ -518,7 +557,8 @@ export default function SinistreDetail() {
     }
     return <AlertCircle className="w-4 h-4 text-orange-600" />;
   };
-  return <div className="min-h-screen flex flex-col w-full bg-gray-50">
+  return (
+    <div className="min-h-screen flex flex-col w-full bg-gray-50">
       <Header />
       <div className="flex items-center gap-4 px-6 py-3 bg-white border-b border-gray-200">
         <Button variant="outline" size="sm" onClick={() => navigate("/")} className="flex items-center gap-2">
@@ -542,7 +582,7 @@ export default function SinistreDetail() {
             <TabsList className="grid w-full grid-cols-4 bg-blue-50 border-blue-200">
               <TabsTrigger value="synthese" className="font-semibold data-[state=active]:bg-blue-600 data-[state=active]:text-white">Contrat et garanties</TabsTrigger>
               <TabsTrigger value="contrat" className="font-semibold data-[state=active]:bg-blue-600 data-[state=active]:text-white">Chantier et désordres</TabsTrigger>
-              <TabsTrigger value="historique" className="font-semibold data-[state=active]:bg-blue-600 data-[state=active]:text-white">Documents</TabsTrigger>
+              <TabsTrigger value="documents" className="font-semibold data-[state=active]:bg-blue-600 data-[state=active]:text-white">Documents</TabsTrigger>
               <TabsTrigger value="analyse" className="font-semibold data-[state=active]:bg-blue-600 data-[state=active]:text-white">Analyse IA</TabsTrigger>
             </TabsList>
 
@@ -686,7 +726,105 @@ export default function SinistreDetail() {
               
             </TabsContent>
 
-            
+            <TabsContent value="documents" className="space-y-6">
+              <Card className="border-blue-200">
+                <CardHeader className="pb-4 bg-blue-50">
+                  <CardTitle className="flex items-center gap-2 text-lg text-blue-800">
+                    <FileText className="w-5 h-5" />
+                    Documents contractuels et assurantiels
+                  </CardTitle>
+                  <div className="flex items-center gap-2 mt-3">
+                    <Search className="w-4 h-4 text-gray-500" />
+                    <Input 
+                      placeholder="Rechercher un document..." 
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="max-w-md"
+                    />
+                    <Badge variant="outline" className="ml-2">
+                      {filteredDocuments.length} document{filteredDocuments.length > 1 ? 's' : ''}
+                    </Badge>
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {filteredDocuments.map((doc) => (
+                      <div key={doc.id} className="border border-gray-200 rounded-lg p-4 bg-white hover:shadow-md transition-shadow">
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex items-center gap-2">
+                            <FileText className="w-4 h-4 text-blue-600" />
+                            <h4 className="font-semibold text-gray-900 text-sm">{doc.nom}</h4>
+                          </div>
+                          <Badge variant="outline" className="text-xs">{doc.type}</Badge>
+                        </div>
+                        
+                        <div className="space-y-2 text-xs text-gray-600 mb-3">
+                          <div className="flex justify-between">
+                            <span>Date:</span>
+                            <span className="font-medium">{doc.date}</span>
+                          </div>
+                        </div>
+
+                        <div className="space-y-3">
+                          {/* Classification IA */}
+                          <div className="bg-purple-50 rounded-md p-2 border border-purple-200">
+                            <div className="flex items-center gap-1 mb-1">
+                              <Tag className="w-3 h-3 text-purple-600" />
+                              <span className="text-xs font-medium text-purple-800">Classification IA</span>
+                            </div>
+                            <p className="text-xs text-purple-700">{doc.aiClassification}</p>
+                          </div>
+
+                          {/* Renommage IA */}
+                          <div className="bg-blue-50 rounded-md p-2 border border-blue-200">
+                            <div className="flex items-center gap-1 mb-1">
+                              <Bot className="w-3 h-3 text-blue-600" />
+                              <span className="text-xs font-medium text-blue-800">Renommage IA</span>
+                            </div>
+                            <div className="space-y-1">
+                              <p className="text-xs text-gray-600">
+                                <span className="font-medium">Original:</span> {doc.originalName}
+                              </p>
+                              <p className="text-xs text-blue-700 font-medium">
+                                {doc.aiRenamed}
+                              </p>
+                            </div>
+                          </div>
+
+                          {/* Synthèse IA */}
+                          <div className="bg-green-50 rounded-md p-2 border border-green-200">
+                            <div className="flex items-center gap-1 mb-1">
+                              <Brain className="w-3 h-3 text-green-600" />
+                              <span className="text-xs font-medium text-green-800">Synthèse IA détaillée</span>
+                            </div>
+                            <p className="text-xs text-green-700 leading-relaxed">{doc.aiSummary}</p>
+                          </div>
+                        </div>
+
+                        <div className="mt-4 pt-3 border-t border-gray-100">
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="w-full h-8 text-xs"
+                            onClick={() => console.log(`Ouvrir document ${doc.id}`)}
+                          >
+                            <ExternalLink className="w-3 h-3 mr-1" />
+                            Ouvrir le document
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {filteredDocuments.length === 0 && (
+                    <div className="text-center py-8 text-gray-500">
+                      <FileText className="w-12 h-12 mx-auto mb-2 text-gray-300" />
+                      <p>Aucun document ne correspond à votre recherche</p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
 
             <TabsContent value="analyse" className="space-y-6">
               <Card className="border-purple-200">
@@ -972,5 +1110,6 @@ export default function SinistreDetail() {
           </Tabs>
         </div>
       </main>
-    </div>;
+    </div>
+  );
 }
