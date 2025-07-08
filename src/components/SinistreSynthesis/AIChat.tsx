@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -40,7 +39,6 @@ export function AIChat({ dossierReference }: AIChatProps) {
       <SheetTrigger asChild>
         <Button variant="outline" className="flex items-center gap-2">
           <MessageCircle className="h-4 w-4" />
-          <Bot className="h-4 w-4 text-purple-600" />
           Chat IA
         </Button>
       </SheetTrigger>
