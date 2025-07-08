@@ -241,15 +241,12 @@ const SinistreSynthesis = () => {
       <main className="flex-1 p-6">
         <div className="max-w-7xl mx-auto space-y-6">
           <Tabs defaultValue="synthese" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-3 bg-blue-50 border-blue-200">
+            <TabsList className="grid w-full grid-cols-2 bg-blue-50 border-blue-200">
               <TabsTrigger value="synthese" className="font-semibold data-[state=active]:bg-blue-600 data-[state=active]:text-white">
                 Synthèse
               </TabsTrigger>
               <TabsTrigger value="documents" className="font-semibold data-[state=active]:bg-blue-600 data-[state=active]:text-white">
                 Documents
-              </TabsTrigger>
-              <TabsTrigger value="timeline" className="font-semibold data-[state=active]:bg-blue-600 data-[state=active]:text-white">
-                Timeline
               </TabsTrigger>
             </TabsList>
 
@@ -263,15 +260,12 @@ const SinistreSynthesis = () => {
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <AssociatedFiles dossiersAssocies={dossiersAssocies} />
+                <Timeline timeline={timeline} />
               </div>
             </TabsContent>
 
             <TabsContent value="documents" className="space-y-6">
               <DocumentsSection documents={documentsData} />
-            </TabsContent>
-
-            <TabsContent value="timeline" className="space-y-6">
-              <Timeline timeline={timeline} />
             </TabsContent>
           </Tabs>
         </div>
