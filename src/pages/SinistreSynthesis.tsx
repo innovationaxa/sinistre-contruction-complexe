@@ -3,6 +3,8 @@ import { SynthesisHeader } from "@/components/SinistreSynthesis/SynthesisHeader"
 import { OverviewSection } from "@/components/SinistreSynthesis/OverviewSection";
 import { AssociatedFiles } from "@/components/SinistreSynthesis/AssociatedFiles";
 import { Timeline } from "@/components/SinistreSynthesis/Timeline";
+import { DocumentsSection } from "@/components/SinistreSynthesis/DocumentsSection";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DossierInfo, ActeContentieux, AlerteIA, NextAction, DossierAssocie, TimelineEvent } from "@/types/sinistre";
 
 const SinistreSynthesis = () => {
@@ -180,6 +182,57 @@ const SinistreSynthesis = () => {
     }
   ];
 
+  const documentsData = [
+    {
+      id: "DOC-001",
+      nom: "Rapport Amiable de notre expert 2.pdf",
+      type: "pdf",
+      description: "Rapport amiable expert 2",
+      dateModification: "27/06/2024",
+      taille: "2.1 MB"
+    },
+    {
+      id: "DOC-002", 
+      nom: "Rapport Amiable de notre expert 1.pdf",
+      type: "pdf",
+      description: "Rapport amiable expert 1",
+      dateModification: "26/06/2024",
+      taille: "1.8 MB"
+    },
+    {
+      id: "DOC-003",
+      nom: "CR Expert 5 JUN REJ.pdf",
+      type: "pdf",
+      description: "Rapport sur la rejection",
+      dateModification: "05/06/2024",
+      taille: "1.2 MB"
+    },
+    {
+      id: "DOC-004",
+      nom: "CR Expert 5.pdf",
+      type: "pdf",
+      description: "Rapport complémentaire",
+      dateModification: "22/06/2024",
+      taille: "950 KB"
+    },
+    {
+      id: "DOC-005",
+      nom: "Jugement PDF",
+      type: "pdf",
+      description: "Jugement du tribunal",
+      dateModification: "15/06/2024",
+      taille: "3.2 MB"
+    },
+    {
+      id: "DOC-006",
+      nom: "CR Expert 2.pdf",
+      type: "pdf",
+      description: "Rapport expert",
+      dateModification: "18/06/2024",
+      taille: "1.5 MB"
+    }
+  ];
+
   return (
     <div className="min-h-screen flex flex-col w-full bg-gray-50">
       <Header />
@@ -187,17 +240,40 @@ const SinistreSynthesis = () => {
 
       <main className="flex-1 p-6">
         <div className="max-w-7xl mx-auto space-y-6">
-          <OverviewSection 
-            syntheseIA={syntheseIA}
-            actesContentieux={actesContentieux}
-            alertesIA={alertesIA}
-            nextActions={nextActions}
-          />
+          <Tabs defaultValue="synthese" className="space-y-6">
+            <TabsList className="grid w-full grid-cols-3 bg-blue-50 border-blue-200">
+              <TabsTrigger value="synthese" className="font-semibold data-[state=active]:bg-blue-600 data-[state=active]:text-white">
+                Synthèse
+              </TabsTrigger>
+              <TabsTrigger value="documents" className="font-semibold data-[state=active]:bg-blue-600 data-[state=active]:text-white">
+                Documents
+              </TabsTrigger>
+              <TabsTrigger value="timeline" className="font-semibold data-[state=active]:bg-blue-600 data-[state=active]:text-white">
+                Timeline
+              </TabsTrigger>
+            </TabsList>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <AssociatedFiles dossiersAssocies={dossiersAssocies} />
-            <Timeline timeline={timeline} />
-          </div>
+            <TabsContent value="synthese" className="space-y-6">
+              <OverviewSection 
+                syntheseIA={syntheseIA}
+                actesContentieux={actesContentieux}
+                alertesIA={alertesIA}
+                nextActions={nextActions}
+              />
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <AssociatedFiles dossiersAssocies={dossiersAssocies} />
+              </div>
+            </TabsContent>
+
+            <TabsContent value="documents" className="space-y-6">
+              <DocumentsSection documents={documentsData} />
+            </TabsContent>
+
+            <TabsContent value="timeline" className="space-y-6">
+              <Timeline timeline={timeline} />
+            </TabsContent>
+          </Tabs>
         </div>
       </main>
     </div>
