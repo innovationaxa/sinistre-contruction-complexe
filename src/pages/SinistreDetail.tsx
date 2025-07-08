@@ -605,7 +605,7 @@ export default function SinistreDetail() {
                 <CardHeader className="pb-3 bg-blue-50">
                   <CardTitle className="flex items-center gap-2 text-lg text-blue-800">
                     <Clock className="w-5 h-5" />
-                    Timeline de la vie du contrat
+                    Dates clés
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="pt-4">
