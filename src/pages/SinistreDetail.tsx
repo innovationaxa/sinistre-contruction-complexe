@@ -674,8 +674,6 @@ export default function SinistreDetail() {
                 </CardContent>
               </Card>
 
-              
-
               <Card className="border-blue-200">
                 <CardHeader className="bg-blue-50">
                   <CardTitle className="flex items-center gap-2 text-blue-800">
@@ -723,7 +721,103 @@ export default function SinistreDetail() {
             </TabsContent>
 
             <TabsContent value="contrat" className="space-y-6">
-              
+              {/* Section Informations sur le chantier */}
+              <Card className="border-blue-200">
+                <CardHeader className="pb-3 bg-blue-50">
+                  <CardTitle className="flex items-center gap-2 text-lg text-blue-800">
+                    <Building className="w-5 h-5" />
+                    Informations sur le chantier
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-4">
+                      <div className="flex justify-between py-2 border-b border-gray-100">
+                        <span className="text-sm font-medium text-gray-600">Nature de l'ouvrage:</span>
+                        <span className="text-sm text-gray-900">{sinistre.sinistre.typeChantier}</span>
+                      </div>
+                      <div className="flex justify-between py-2 border-b border-gray-100">
+                        <span className="text-sm font-medium text-gray-600">Coût de la construction:</span>
+                        <span className="text-sm text-gray-900">87 000 € HT</span>
+                      </div>
+                      <div className="flex justify-between py-2 border-b border-gray-100">
+                        <span className="text-sm font-medium text-gray-600">Montant du marché des travaux:</span>
+                        <span className="text-sm text-gray-900">87 000 € HT</span>
+                      </div>
+                    </div>
+                    <div className="space-y-4">
+                      <div className="flex justify-between py-2 border-b border-gray-100">
+                        <span className="text-sm font-medium text-gray-600">Code postal du chantier:</span>
+                        <span className="text-sm text-gray-900">69002</span>
+                      </div>
+                      <div className="flex justify-between py-2 border-b border-gray-100">
+                        <span className="text-sm font-medium text-gray-600">Adresse du chantier:</span>
+                        <span className="text-sm text-gray-900">{sinistre.sinistre.adresseTravaux}</span>
+                      </div>
+                      <div className="flex justify-between py-2 border-b border-gray-100">
+                        <span className="text-sm font-medium text-gray-600">Nature de l'intervention:</span>
+                        <span className="text-sm text-gray-900">Rénovation complète tous corps d'état</span>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Section Informations sur les désordres */}
+              <Card className="border-orange-200">
+                <CardHeader className="pb-3 bg-orange-50">
+                  <CardTitle className="flex items-center gap-2 text-lg text-orange-800">
+                    <AlertTriangle className="w-5 h-5" />
+                    Informations sur les désordres
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-4">
+                  <div className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-4">
+                        <div className="flex justify-between py-2 border-b border-gray-100">
+                          <span className="text-sm font-medium text-gray-600">Sinistre:</span>
+                          <span className="text-sm text-gray-900">Après réception des travaux</span>
+                        </div>
+                        <div className="flex justify-between py-2 border-b border-gray-100">
+                          <span className="text-sm font-medium text-gray-600">Nature des désordres:</span>
+                          <span className="text-sm text-gray-900">{sinistre.sinistre.natureDommages}</span>
+                        </div>
+                      </div>
+                      <div className="space-y-4">
+                        <div className="flex justify-between py-2 border-b border-gray-100">
+                          <span className="text-sm font-medium text-gray-600">Enjeux totaux:</span>
+                          <span className="text-sm font-bold text-red-600">133 500 €</span>
+                        </div>
+                        <div className="flex justify-between py-2 border-b border-gray-100">
+                          <span className="text-sm font-medium text-gray-600">Nom du tiers:</span>
+                          <span className="text-sm text-gray-900">{sinistre.sinistre.maitreOuvrage.nom}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Détail des désordres par localisation */}
+                    <div className="mt-6">
+                      <h4 className="font-semibold text-gray-900 mb-4">Localisation des désordres</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {sinistre.desordres.map((desordre) => (
+                          <div key={desordre.id} className={`border rounded-lg p-4 ${getGraviteColor(desordre.gravite)}`}>
+                            <div className="flex items-center justify-between mb-2">
+                              <Badge className={getGraviteBadgeColor(desordre.gravite)}>
+                                {desordre.gravite}
+                              </Badge>
+                              <span className="text-sm font-bold text-gray-900">{desordre.enjeux.total}</span>
+                            </div>
+                            <h5 className="font-medium text-gray-900 mb-1">{desordre.localisation}</h5>
+                            <p className="text-sm text-gray-700 mb-2">{desordre.nature}</p>
+                            <p className="text-xs text-gray-600">{desordre.cause}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </TabsContent>
 
             <TabsContent value="documents" className="space-y-6">
