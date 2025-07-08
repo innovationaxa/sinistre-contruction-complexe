@@ -7,7 +7,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, FileText, User, Building, Calendar, AlertTriangle, Sparkles, Shield, Clock, TrendingUp, CheckCircle, Bot, Tag, FileCheck, Star, AlertCircle, Users, MapPin, Euro, Hammer, Brain, Target, Zap, Trash, ArrowRight, FolderOpen } from "lucide-react";
-
 interface SinistreData {
   id: string;
   reference: string;
@@ -15,7 +14,7 @@ interface SinistreData {
   dateDeclaration: string;
   dateReception: string;
   echeance: string;
-  
+
   // Informations Assuré
   assure: {
     raisonSociale: string;
@@ -25,7 +24,7 @@ interface SinistreData {
     telephone: string;
     email: string;
   };
-  
+
   // Informations Contrat
   contrat: {
     numero: string;
@@ -36,7 +35,7 @@ interface SinistreData {
     courtier: string;
     activitesCouvertes: string[];
   };
-  
+
   // Informations Sinistre  
   sinistre: {
     description: string;
@@ -62,7 +61,7 @@ interface SinistreData {
     estCouvert: boolean;
     activiteContrat: string;
   }[];
-  
+
   // Documents
   documents: {
     nom: string;
@@ -90,14 +89,12 @@ interface SinistreData {
     localisation: string;
     dateConstat: string;
   }[];
-  
   aiGenerated: {
     description: boolean;
     surtype: boolean;
     evaluation: boolean;
   };
 }
-
 const mockSinistreData: SinistreData = {
   id: "1",
   reference: "RC-DECA-2024-001",
@@ -105,7 +102,6 @@ const mockSinistreData: SinistreData = {
   dateDeclaration: "28/09/2024",
   dateReception: "28/09/2024 14:30",
   echeance: "15/10/2024",
-  
   assure: {
     raisonSociale: "SARL Bâti Construct",
     siret: "123 456 789 00012",
@@ -114,7 +110,6 @@ const mockSinistreData: SinistreData = {
     telephone: "04 78 12 34 56",
     email: "contact@bati-construct.fr"
   },
-  
   contrat: {
     numero: "DECA-2021-4567",
     produit: "RC Décennale Tous Corps d'État",
@@ -122,16 +117,8 @@ const mockSinistreData: SinistreData = {
     dateEcheance: "31/12/2024",
     prime: "8 500 € HT/an",
     courtier: "Agent AXA Lyon Centre - M. Dubois",
-    activitesCouvertes: [
-      "Gros œuvre - Maçonnerie",
-      "Second œuvre - Plâtrerie",
-      "Second œuvre - Électricité",
-      "Second œuvre - Plomberie",
-      "Finitions - Carrelage",
-      "Rénovation lourde"
-    ]
+    activitesCouvertes: ["Gros œuvre - Maçonnerie", "Second œuvre - Plâtrerie", "Second œuvre - Électricité", "Second œuvre - Plomberie", "Finitions - Carrelage", "Rénovation lourde"]
   },
-  
   sinistre: {
     description: "Sinistre amiable RC Décennale suite à l'apparition de dommages structurels 3 ans après la réception des travaux de rénovation d'un local commercial",
     typeChantier: "Rénovation lourde - Local commercial",
@@ -146,138 +133,119 @@ const mockSinistreData: SinistreData = {
       prejudiceImateriel: "Fermeture boutique 2 mois estimée = 45 000€ de CA perdu"
     }
   },
-
-  travauxRealises: [
-    {
-      description: "Reprise des murs porteurs en maçonnerie",
-      adresse: "42 Rue du Commerce, 69002 Lyon",
-      cout: "32 000 € HT",
-      dateRealisation: "Mars-Avril 2021",
-      estCouvert: true,
-      activiteContrat: "Gros œuvre - Maçonnerie"
+  travauxRealises: [{
+    description: "Reprise des murs porteurs en maçonnerie",
+    adresse: "42 Rue du Commerce, 69002 Lyon",
+    cout: "32 000 € HT",
+    dateRealisation: "Mars-Avril 2021",
+    estCouvert: true,
+    activiteContrat: "Gros œuvre - Maçonnerie"
+  }, {
+    description: "Installation électrique complète",
+    adresse: "42 Rue du Commerce, 69002 Lyon",
+    cout: "18 500 € HT",
+    dateRealisation: "Mai 2021",
+    estCouvert: true,
+    activiteContrat: "Second œuvre - Électricité"
+  }, {
+    description: "Plomberie et évacuations",
+    adresse: "42 Rue du Commerce, 69002 Lyon",
+    cout: "12 800 € HT",
+    dateRealisation: "Mai 2021",
+    estCouvert: true,
+    activiteContrat: "Second œuvre - Plomberie"
+  }, {
+    description: "Pose carrelage sol et faïence",
+    adresse: "42 Rue du Commerce, 69002 Lyon",
+    cout: "15 200 € HT",
+    dateRealisation: "Juin 2021",
+    estCouvert: true,
+    activiteContrat: "Finitions - Carrelage"
+  }, {
+    description: "Aménagement vitrine (hors garantie décennale)",
+    adresse: "42 Rue du Commerce, 69002 Lyon",
+    cout: "8 500 € HT",
+    dateRealisation: "Juin 2021",
+    estCouvert: false,
+    activiteContrat: "Non couvert - Aménagements"
+  }],
+  documents: [{
+    nom: "Courrier de mise en cause",
+    type: "Courrier",
+    date: "25/09/2024",
+    originalName: "courrier_mise_en_cause.pdf",
+    aiRenamed: "Courrier_MiseEnCause_CommercePlus_BatiConstruct_25092024.pdf",
+    aiClassification: "Document juridique - Mise en demeure",
+    aiSummary: "Courrier officiel de mise en cause de la société SARL Bâti Construct par SAS Commerce Plus. Document détaillant les dommages constatés 3 ans après réception des travaux de rénovation du local commercial. Mentions légales conformes, délais respectés. Demande d'indemnisation chiffrée incluant les préjudices matériels et immatériels.",
+    confidence: 95
+  }, {
+    nom: "Photos des dommages",
+    type: "Photos",
+    date: "27/09/2024",
+    originalName: "photos_degats.zip",
+    aiRenamed: "Photos_Dommages_LocalCommercial_RueCommerce_27092024.zip",
+    aiClassification: "Documentation visuelle - Preuves dommages",
+    aiSummary: "Archive photographique complète des dommages structurels. 15 photos haute résolution montrant les fissures dans les murs porteurs, l'affaissement du plancher et les infiltrations d'eau. Documentation technique exploitable pour expertise. Géolocalisation et métadonnées temporelles présentes.",
+    confidence: 92
+  }, {
+    nom: "Devis de réparation",
+    type: "Devis",
+    date: "28/09/2024",
+    originalName: "devis_reparation.pdf",
+    aiRenamed: "Devis_Réparation_Structurelle_EntrepriseBTP_Lyon_28092024.pdf",
+    aiClassification: "Document commercial - Estimation travaux",
+    aiSummary: "Devis détaillé établi par entreprise spécialisée en réparation structurelle. Montant total : 85 000€ HT incluant reprises en sous-œuvre, renforcement structure, étanchéité. Délais d'exécution : 6 semaines. Entreprise certifiée RGE, garanties décennales à jour.",
+    confidence: 88
+  }, {
+    nom: "Attestation RC Décennale",
+    type: "Attestation",
+    date: "28/09/2024",
+    originalName: "attestation_assurance.pdf",
+    aiRenamed: "Attestation_RCDecennale_BatiConstruct_AXA_Validite2024.pdf",
+    aiClassification: "Document contractuel - Attestation assurance",
+    aiSummary: "Attestation d'assurance RC Décennale valide couvrant la période des travaux litigieux (2021-2031). Plafonds de garantie conformes : 500 000€ dommages ouvrage, 150 000€ préjudice immatériel. Aucune exclusion particulière identifiée. Document authentifié par signature électronique AXA.",
+    confidence: 98
+  }],
+  desordres: [{
+    id: "D001",
+    nature: "Fissures structurelles dans les murs porteurs",
+    cause: "Affaissement des fondations suite à un défaut d'étude de sol et de dimensionnement",
+    responsabilites: ["SARL Bâti Construct - Maçonnerie", "Bureau d'études structure (sous-traitant)"],
+    enjeux: {
+      materiel: "52 000 €",
+      immateriel: "25 000 €",
+      total: "77 000 €"
     },
-    {
-      description: "Installation électrique complète",
-      adresse: "42 Rue du Commerce, 69002 Lyon", 
-      cout: "18 500 € HT",
-      dateRealisation: "Mai 2021",
-      estCouvert: true,
-      activiteContrat: "Second œuvre - Électricité"
+    gravite: "critique",
+    localisation: "Murs porteurs - Rez-de-chaussée",
+    dateConstat: "20/09/2024"
+  }, {
+    id: "D002",
+    nature: "Affaissement du plancher principal",
+    cause: "Sous-dimensionnement des poutrelles et défaut de mise en œuvre",
+    responsabilites: ["SARL Bâti Construct - Gros œuvre"],
+    enjeux: {
+      materiel: "28 000 €",
+      immateriel: "15 000 €",
+      total: "43 000 €"
     },
-    {
-      description: "Plomberie et évacuations",
-      adresse: "42 Rue du Commerce, 69002 Lyon",
-      cout: "12 800 € HT",
-      dateRealisation: "Mai 2021",
-      estCouvert: true,
-      activiteContrat: "Second œuvre - Plomberie"
+    gravite: "majeur",
+    localisation: "Plancher principal - Zone commerciale",
+    dateConstat: "22/09/2024"
+  }, {
+    id: "D003",
+    nature: "Infiltrations d'eau par les joints de façade",
+    cause: "Défaut d'étanchéité et vices de mise en œuvre des joints",
+    responsabilites: ["SARL Bâti Construct - Étanchéité", "Entreprise de façadage (co-traitant)"],
+    enjeux: {
+      materiel: "8 500 €",
+      immateriel: "5 000 €",
+      total: "13 500 €"
     },
-    {
-      description: "Pose carrelage sol et faïence",
-      adresse: "42 Rue du Commerce, 69002 Lyon",
-      cout: "15 200 € HT",
-      dateRealisation: "Juin 2021",
-      estCouvert: true,
-      activiteContrat: "Finitions - Carrelage"
-    },
-    {
-      description: "Aménagement vitrine (hors garantie décennale)",
-      adresse: "42 Rue du Commerce, 69002 Lyon",
-      cout: "8 500 € HT",
-      dateRealisation: "Juin 2021",
-      estCouvert: false,
-      activiteContrat: "Non couvert - Aménagements"
-    }
-  ],
-  
-  documents: [
-    { 
-      nom: "Courrier de mise en cause", 
-      type: "Courrier", 
-      date: "25/09/2024",
-      originalName: "courrier_mise_en_cause.pdf",
-      aiRenamed: "Courrier_MiseEnCause_CommercePlus_BatiConstruct_25092024.pdf",
-      aiClassification: "Document juridique - Mise en demeure",
-      aiSummary: "Courrier officiel de mise en cause de la société SARL Bâti Construct par SAS Commerce Plus. Document détaillant les dommages constatés 3 ans après réception des travaux de rénovation du local commercial. Mentions légales conformes, délais respectés. Demande d'indemnisation chiffrée incluant les préjudices matériels et immatériels.",
-      confidence: 95
-    },
-    { 
-      nom: "Photos des dommages", 
-      type: "Photos", 
-      date: "27/09/2024",
-      originalName: "photos_degats.zip",
-      aiRenamed: "Photos_Dommages_LocalCommercial_RueCommerce_27092024.zip",
-      aiClassification: "Documentation visuelle - Preuves dommages",
-      aiSummary: "Archive photographique complète des dommages structurels. 15 photos haute résolution montrant les fissures dans les murs porteurs, l'affaissement du plancher et les infiltrations d'eau. Documentation technique exploitable pour expertise. Géolocalisation et métadonnées temporelles présentes.",
-      confidence: 92
-    },
-    { 
-      nom: "Devis de réparation", 
-      type: "Devis", 
-      date: "28/09/2024",
-      originalName: "devis_reparation.pdf",
-      aiRenamed: "Devis_Réparation_Structurelle_EntrepriseBTP_Lyon_28092024.pdf",
-      aiClassification: "Document commercial - Estimation travaux",
-      aiSummary: "Devis détaillé établi par entreprise spécialisée en réparation structurelle. Montant total : 85 000€ HT incluant reprises en sous-œuvre, renforcement structure, étanchéité. Délais d'exécution : 6 semaines. Entreprise certifiée RGE, garanties décennales à jour.",
-      confidence: 88
-    },
-    { 
-      nom: "Attestation RC Décennale", 
-      type: "Attestation", 
-      date: "28/09/2024",
-      originalName: "attestation_assurance.pdf",
-      aiRenamed: "Attestation_RCDecennale_BatiConstruct_AXA_Validite2024.pdf",
-      aiClassification: "Document contractuel - Attestation assurance",
-      aiSummary: "Attestation d'assurance RC Décennale valide couvrant la période des travaux litigieux (2021-2031). Plafonds de garantie conformes : 500 000€ dommages ouvrage, 150 000€ préjudice immatériel. Aucune exclusion particulière identifiée. Document authentifié par signature électronique AXA.",
-      confidence: 98
-    }
-  ],
-
-  desordres: [
-    {
-      id: "D001",
-      nature: "Fissures structurelles dans les murs porteurs",
-      cause: "Affaissement des fondations suite à un défaut d'étude de sol et de dimensionnement",
-      responsabilites: ["SARL Bâti Construct - Maçonnerie", "Bureau d'études structure (sous-traitant)"],
-      enjeux: {
-        materiel: "52 000 €",
-        immateriel: "25 000 €",
-        total: "77 000 €"
-      },
-      gravite: "critique",
-      localisation: "Murs porteurs - Rez-de-chaussée",
-      dateConstat: "20/09/2024"
-    },
-    {
-      id: "D002", 
-      nature: "Affaissement du plancher principal",
-      cause: "Sous-dimensionnement des poutrelles et défaut de mise en œuvre",
-      responsabilites: ["SARL Bâti Construct - Gros œuvre"],
-      enjeux: {
-        materiel: "28 000 €",
-        immateriel: "15 000 €",
-        total: "43 000 €"
-      },
-      gravite: "majeur",
-      localisation: "Plancher principal - Zone commerciale",
-      dateConstat: "22/09/2024"
-    },
-    {
-      id: "D003",
-      nature: "Infiltrations d'eau par les joints de façade",
-      cause: "Défaut d'étanchéité et vices de mise en œuvre des joints",
-      responsabilites: ["SARL Bâti Construct - Étanchéité", "Entreprise de façadage (co-traitant)"],
-      enjeux: {
-        materiel: "8 500 €",
-        immateriel: "5 000 €",
-        total: "13 500 €"
-      },
-      gravite: "modere",
-      localisation: "Façade principale - Joints de dilatation",
-      dateConstat: "25/09/2024"
-    }
-  ],
-  
+    gravite: "modere",
+    localisation: "Façade principale - Joints de dilatation",
+    dateConstat: "25/09/2024"
+  }],
   aiGenerated: {
     description: true,
     surtype: true,
@@ -286,156 +254,173 @@ const mockSinistreData: SinistreData = {
 };
 
 // Données supplémentaires pour les nouveaux onglets
-const autresIntervenants = [
-  {
-    nom: "Entreprise Électro Plus SARL",
-    role: "Électricien principal",
-    assureurRC: "AXA France",
-    numeroContratRC: "RC-2021-8901",
-    assureurDO: "MAIF",
-    numeroContratDO: "DO-2021-4562",
-    plafondDO: "300 000 €",
-    dateEffetDO: "01/01/2021",
-    statusAssuranceRC: "active",
-    statusAssuranceDO: "active"
-  },
-  {
-    nom: "Plomberie Moderne SAS",
-    role: "Plombier-chauffagiste",
-    assureurRC: "AXA France",
-    numeroContratRC: "RC-2021-8902",
-    assureurDO: "SMABTP",
-    numeroContratDO: "DO-2021-7834",
-    plafondDO: "500 000 €",
-    dateEffetDO: "15/02/2021",
-    statusAssuranceRC: "active",
-    statusAssuranceDO: "active"
-  },
-  {
-    nom: "Carrelage Expert EURL",
-    role: "Carreleur",
-    assureurRC: "AXA France",
-    numeroContratRC: "RC-2021-8903",
-    assureurDO: "MAAF",
-    numeroContratDO: "DO-2021-9123",
-    plafondDO: "200 000 €",
-    dateEffetDO: "01/03/2021",
-    statusAssuranceRC: "active",
-    statusAssuranceDO: "expire_bientot"
-  }
-];
-
-const sinistresChantier = [
-  {
-    id: "SIN-001",
-    reference: "RC-DECA-2024-001",
-    statut: "En cours",
-    dateDeclaration: "28/09/2024",
-    intervenant: "SARL Bâti Construct",
-    garanties: [
-      {
-        nom: "Dommages à l'ouvrage",
-        plafond: 500000,
-        engage: 77000,
-        reserve: 80000,
-        resteAPayer: 423000
-      },
-      {
-        nom: "Préjudice immatériel",
-        plafond: 150000,
-        engage: 45000,
-        reserve: 50000,
-        resteAPayer: 100000
-      }
-    ]
-  },
-  {
-    id: "SIN-002",
-    reference: "RC-ELEC-2024-002",
-    statut: "Fermé",
-    dateDeclaration: "15/08/2024",
-    intervenant: "Entreprise Électro Plus SARL",
-    garanties: [
-      {
-        nom: "Dommages à l'ouvrage",
-        plafond: 300000,
-        engage: 12000,
-        reserve: 0,
-        resteAPayer: 288000
-      }
-    ]
-  }
-];
+const autresIntervenants = [{
+  nom: "Entreprise Électro Plus SARL",
+  role: "Électricien principal",
+  assureurRC: "AXA France",
+  numeroContratRC: "RC-2021-8901",
+  assureurDO: "MAIF",
+  numeroContratDO: "DO-2021-4562",
+  plafondDO: "300 000 €",
+  dateEffetDO: "01/01/2021",
+  statusAssuranceRC: "active",
+  statusAssuranceDO: "active"
+}, {
+  nom: "Plomberie Moderne SAS",
+  role: "Plombier-chauffagiste",
+  assureurRC: "AXA France",
+  numeroContratRC: "RC-2021-8902",
+  assureurDO: "SMABTP",
+  numeroContratDO: "DO-2021-7834",
+  plafondDO: "500 000 €",
+  dateEffetDO: "15/02/2021",
+  statusAssuranceRC: "active",
+  statusAssuranceDO: "active"
+}, {
+  nom: "Carrelage Expert EURL",
+  role: "Carreleur",
+  assureurRC: "AXA France",
+  numeroContratRC: "RC-2021-8903",
+  assureurDO: "MAAF",
+  numeroContratDO: "DO-2021-9123",
+  plafondDO: "200 000 €",
+  dateEffetDO: "01/03/2021",
+  statusAssuranceRC: "active",
+  statusAssuranceDO: "expire_bientot"
+}];
+const sinistresChantier = [{
+  id: "SIN-001",
+  reference: "RC-DECA-2024-001",
+  statut: "En cours",
+  dateDeclaration: "28/09/2024",
+  intervenant: "SARL Bâti Construct",
+  garanties: [{
+    nom: "Dommages à l'ouvrage",
+    plafond: 500000,
+    engage: 77000,
+    reserve: 80000,
+    resteAPayer: 423000
+  }, {
+    nom: "Préjudice immatériel",
+    plafond: 150000,
+    engage: 45000,
+    reserve: 50000,
+    resteAPayer: 100000
+  }]
+}, {
+  id: "SIN-002",
+  reference: "RC-ELEC-2024-002",
+  statut: "Fermé",
+  dateDeclaration: "15/08/2024",
+  intervenant: "Entreprise Électro Plus SARL",
+  garanties: [{
+    nom: "Dommages à l'ouvrage",
+    plafond: 300000,
+    engage: 12000,
+    reserve: 0,
+    resteAPayer: 288000
+  }]
+}];
 
 // Données pour l'analyse IA
 const activitesAnalysis = {
-  declared: [
-    { activity: "Gros œuvre - Maçonnerie", status: "declared", coverage: "covered" },
-    { activity: "Second œuvre - Plâtrerie", status: "declared", coverage: "covered" },
-    { activity: "Second œuvre - Électricité", status: "declared", coverage: "covered" },
-    { activity: "Second œuvre - Plomberie", status: "declared", coverage: "covered" },
-    { activity: "Finitions - Carrelage", status: "declared", coverage: "covered" },
-    { activity: "Rénovation lourde", status: "declared", coverage: "covered" }
-  ],
-  guaranteed: [
-    { activity: "Gros œuvre - Maçonnerie", status: "guaranteed", coverage: "active" },
-    { activity: "Second œuvre - Plâtrerie", status: "guaranteed", coverage: "active" },
-    { activity: "Second œuvre - Électricité", status: "guaranteed", coverage: "active" },
-    { activity: "Second œuvre - Plomberie", status: "guaranteed", coverage: "active" },
-    { activity: "Finitions - Carrelage", status: "guaranteed", coverage: "active" },
-    { activity: "Rénovation lourde", status: "guaranteed", coverage: "active" },
-    { activity: "Étanchéité", status: "guaranteed", coverage: "available" },
-    { activity: "Chauffage", status: "guaranteed", coverage: "available" }
-  ]
+  declared: [{
+    activity: "Gros œuvre - Maçonnerie",
+    status: "declared",
+    coverage: "covered"
+  }, {
+    activity: "Second œuvre - Plâtrerie",
+    status: "declared",
+    coverage: "covered"
+  }, {
+    activity: "Second œuvre - Électricité",
+    status: "declared",
+    coverage: "covered"
+  }, {
+    activity: "Second œuvre - Plomberie",
+    status: "declared",
+    coverage: "covered"
+  }, {
+    activity: "Finitions - Carrelage",
+    status: "declared",
+    coverage: "covered"
+  }, {
+    activity: "Rénovation lourde",
+    status: "declared",
+    coverage: "covered"
+  }],
+  guaranteed: [{
+    activity: "Gros œuvre - Maçonnerie",
+    status: "guaranteed",
+    coverage: "active"
+  }, {
+    activity: "Second œuvre - Plâtrerie",
+    status: "guaranteed",
+    coverage: "active"
+  }, {
+    activity: "Second œuvre - Électricité",
+    status: "guaranteed",
+    coverage: "active"
+  }, {
+    activity: "Second œuvre - Plomberie",
+    status: "guaranteed",
+    coverage: "active"
+  }, {
+    activity: "Finitions - Carrelage",
+    status: "guaranteed",
+    coverage: "active"
+  }, {
+    activity: "Rénovation lourde",
+    status: "guaranteed",
+    coverage: "active"
+  }, {
+    activity: "Étanchéité",
+    status: "guaranteed",
+    coverage: "available"
+  }, {
+    activity: "Chauffage",
+    status: "guaranteed",
+    coverage: "available"
+  }]
 };
-
-const dossiersAssocies = [
-  {
-    id: "DOSS-001",
-    reference: "RC-DECA-2024-001",
-    type: "Principal",
-    probabilite: 95,
-    statut: "En cours",
-    impact: "Majeur",
-    description: "Dossier principal - Dommages structurels"
-  },
-  {
-    id: "DOSS-002", 
-    reference: "RC-ELEC-2024-002",
-    type: "Connexe",
-    probabilite: 75,
-    statut: "Surveillé",
-    impact: "Modéré",
-    description: "Risque de réclamation électricité"
-  },
-  {
-    id: "DOSS-003",
-    reference: "RC-PLOM-2024-003", 
-    type: "Potentiel",
-    probabilite: 35,
-    statut: "Veille",
-    impact: "Faible",
-    description: "Surveillance plomberie préventive"
-  }
-];
-
+const dossiersAssocies = [{
+  id: "DOSS-001",
+  reference: "RC-DECA-2024-001",
+  type: "Principal",
+  probabilite: 95,
+  statut: "En cours",
+  impact: "Majeur",
+  description: "Dossier principal - Dommages structurels"
+}, {
+  id: "DOSS-002",
+  reference: "RC-ELEC-2024-002",
+  type: "Connexe",
+  probabilite: 75,
+  statut: "Surveillé",
+  impact: "Modéré",
+  description: "Risque de réclamation électricité"
+}, {
+  id: "DOSS-003",
+  reference: "RC-PLOM-2024-003",
+  type: "Potentiel",
+  probabilite: 35,
+  statut: "Veille",
+  impact: "Faible",
+  description: "Surveillance plomberie préventive"
+}];
 export default function SinistreDetail() {
-  const { id } = useParams();
+  const {
+    id
+  } = useParams();
   const navigate = useNavigate();
-  
   const sinistre = mockSinistreData;
-
-  const AIIndicator = () => (
-    <Sparkles className="w-4 h-4 text-purple-600 inline ml-1" />
-  );
-
+  const AIIndicator = () => <Sparkles className="w-4 h-4 text-purple-600 inline ml-1" />;
   const getConfidenceColor = (confidence: number) => {
     if (confidence >= 95) return "text-green-600 bg-green-50 border-green-200";
     if (confidence >= 90) return "text-blue-600 bg-blue-50 border-blue-200";
     if (confidence >= 85) return "text-yellow-600 bg-yellow-50 border-yellow-200";
     return "text-red-600 bg-red-50 border-red-200";
   };
-
   const getGraviteColor = (gravite: "critique" | "majeur" | "modere") => {
     switch (gravite) {
       case "critique":
@@ -448,7 +433,6 @@ export default function SinistreDetail() {
         return "border-gray-500 bg-gray-50";
     }
   };
-
   const getGraviteBadgeColor = (gravite: "critique" | "majeur" | "modere") => {
     switch (gravite) {
       case "critique":
@@ -461,14 +445,17 @@ export default function SinistreDetail() {
         return "bg-gray-100 text-gray-800";
     }
   };
-
-  const ComparisonRow = ({ label, contractValue, declarationValue, isMatch }: {
+  const ComparisonRow = ({
+    label,
+    contractValue,
+    declarationValue,
+    isMatch
+  }: {
     label: string;
     contractValue: string;
     declarationValue: string;
     isMatch: boolean;
-  }) => (
-    <div className="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0">
+  }) => <div className="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0">
       <span className="text-sm font-medium text-gray-600 w-32">{label}:</span>
       <div className="flex items-center gap-4 flex-1">
         <div className="flex-1">
@@ -476,26 +463,19 @@ export default function SinistreDetail() {
           <span className="text-xs text-gray-500 block">Contrat</span>
         </div>
         <div className="flex items-center">
-          {isMatch ? (
-            <CheckCircle className="w-4 h-4 text-green-600" />
-          ) : (
-            <AlertCircle className="w-4 h-4 text-red-600" />
-          )}
+          {isMatch ? <CheckCircle className="w-4 h-4 text-green-600" /> : <AlertCircle className="w-4 h-4 text-red-600" />}
         </div>
         <div className="flex-1">
           <span className="text-sm text-gray-800">{declarationValue}</span>
           <span className="text-xs text-gray-500 block">Déclaration</span>
         </div>
       </div>
-    </div>
-  );
-
+    </div>;
   const montantsParGravite = sinistre.desordres.reduce((acc, desordre) => {
     const montant = parseFloat(desordre.enjeux.total.replace(/[€\s]/g, '').replace(',', '.'));
     acc[desordre.gravite] = (acc[desordre.gravite] || 0) + montant;
     return acc;
   }, {} as Record<string, number>);
-
   const getStatusBadgeColor = (status: string) => {
     switch (status) {
       case "active":
@@ -508,7 +488,6 @@ export default function SinistreDetail() {
         return "bg-gray-100 text-gray-800";
     }
   };
-
   const getStatusText = (status: string) => {
     switch (status) {
       case "active":
@@ -521,14 +500,12 @@ export default function SinistreDetail() {
         return "Inconnue";
     }
   };
-
   const getProbabilityColor = (probability: number) => {
     if (probability >= 80) return "bg-red-100 text-red-800 border-red-200";
     if (probability >= 60) return "bg-orange-100 text-orange-800 border-orange-200";
     if (probability >= 40) return "bg-yellow-100 text-yellow-800 border-yellow-200";
     return "bg-green-100 text-green-800 border-green-200";
   };
-
   const getActivityStatusIcon = (status: string, coverage: string) => {
     if (status === "declared" && coverage === "covered") {
       return <CheckCircle className="w-4 h-4 text-green-600" />;
@@ -541,17 +518,10 @@ export default function SinistreDetail() {
     }
     return <AlertCircle className="w-4 h-4 text-orange-600" />;
   };
-
-  return (
-    <div className="min-h-screen flex flex-col w-full bg-gray-50">
+  return <div className="min-h-screen flex flex-col w-full bg-gray-50">
       <Header />
       <div className="flex items-center gap-4 px-6 py-3 bg-white border-b border-gray-200">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => navigate("/")}
-          className="flex items-center gap-2"
-        >
+        <Button variant="outline" size="sm" onClick={() => navigate("/")} className="flex items-center gap-2">
           <ArrowLeft className="w-4 h-4" />
           Retour à la corbeille
         </Button>
@@ -585,30 +555,10 @@ export default function SinistreDetail() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="pt-4">
-                  <ComparisonRow 
-                    label="Raison sociale"
-                    contractValue={sinistre.assure.raisonSociale}
-                    declarationValue={sinistre.assure.raisonSociale}
-                    isMatch={true}
-                  />
-                  <ComparisonRow 
-                    label="SIRET"
-                    contractValue={sinistre.assure.siret}
-                    declarationValue={sinistre.assure.siret}
-                    isMatch={true}
-                  />
-                  <ComparisonRow 
-                    label="Adresse"
-                    contractValue={sinistre.assure.adresse}
-                    declarationValue={sinistre.assure.adresse}
-                    isMatch={true}
-                  />
-                  <ComparisonRow 
-                    label="Secteur d'activité"
-                    contractValue={sinistre.assure.secteurActivite}
-                    declarationValue={sinistre.assure.secteurActivite}
-                    isMatch={true}
-                  />
+                  <ComparisonRow label="Raison sociale" contractValue={sinistre.assure.raisonSociale} declarationValue={sinistre.assure.raisonSociale} isMatch={true} />
+                  <ComparisonRow label="SIRET" contractValue={sinistre.assure.siret} declarationValue={sinistre.assure.siret} isMatch={true} />
+                  <ComparisonRow label="Adresse" contractValue={sinistre.assure.adresse} declarationValue={sinistre.assure.adresse} isMatch={true} />
+                  <ComparisonRow label="Secteur d'activité" contractValue={sinistre.assure.secteurActivite} declarationValue={sinistre.assure.secteurActivite} isMatch={true} />
                 </CardContent>
               </Card>
 
@@ -684,85 +634,7 @@ export default function SinistreDetail() {
                 </CardContent>
               </Card>
 
-              <Card className="border-blue-200">
-                <CardHeader className="pb-3 bg-blue-50">
-                  <CardTitle className="flex items-center gap-2 text-lg text-blue-800">
-                    <Hammer className="w-5 h-5" />
-                    Travaux réalisés et couverture contractuelle
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="pt-4">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="w-[300px]">Description des travaux</TableHead>
-                        <TableHead className="w-[200px]">Adresse</TableHead>
-                        <TableHead className="w-[120px]">Coût</TableHead>
-                        <TableHead className="w-[120px]">Date</TableHead>
-                        <TableHead className="w-[200px]">Activité contrat</TableHead>
-                        <TableHead className="w-[100px]">Couverture</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {sinistre.travauxRealises.map((travail, index) => (
-                        <TableRow key={index}>
-                          <TableCell className="font-medium">
-                            {travail.description}
-                          </TableCell>
-                          <TableCell className="text-sm text-gray-600">
-                            <div className="flex items-center gap-1">
-                              <MapPin className="w-3 h-3" />
-                              {travail.adresse}
-                            </div>
-                          </TableCell>
-                          <TableCell className="font-semibold">
-                            <div className="flex items-center gap-1">
-                              <Euro className="w-3 h-3" />
-                              {travail.cout}
-                            </div>
-                          </TableCell>
-                          <TableCell className="text-sm text-gray-600">
-                            {travail.dateRealisation}
-                          </TableCell>
-                          <TableCell className="text-sm">
-                            {travail.activiteContrat}
-                          </TableCell>
-                          <TableCell>
-                            {travail.estCouvert ? (
-                              <Badge className="bg-green-100 text-green-800 text-xs">
-                                <CheckCircle className="w-3 h-3 mr-1" />
-                                Couvert
-                              </Badge>
-                            ) : (
-                              <Badge className="bg-red-100 text-red-800 text-xs">
-                                <AlertCircle className="w-3 h-3 mr-1" />
-                                Non couvert
-                              </Badge>
-                            )}
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                  
-                  <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="text-center">
-                        <p className="text-sm font-medium text-gray-600">Total des travaux</p>
-                        <p className="text-xl font-bold text-gray-900">87 000 € HT</p>
-                      </div>
-                      <div className="text-center">
-                        <p className="text-sm font-medium text-green-600">Travaux couverts</p>
-                        <p className="text-xl font-bold text-green-700">78 500 € HT</p>
-                      </div>
-                      <div className="text-center">
-                        <p className="text-sm font-medium text-red-600">Travaux non couverts</p>
-                        <p className="text-xl font-bold text-red-700">8 500 € HT</p>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+              
 
               <Card className="border-blue-200">
                 <CardHeader className="bg-blue-50">
@@ -847,8 +719,7 @@ export default function SinistreDetail() {
                   </div>
 
                   <div className="space-y-4">
-                    {sinistre.desordres.map((desordre, index) => (
-                      <div key={desordre.id} className={`border-l-4 rounded-lg p-4 ${getGraviteColor(desordre.gravite)}`}>
+                    {sinistre.desordres.map((desordre, index) => <div key={desordre.id} className={`border-l-4 rounded-lg p-4 ${getGraviteColor(desordre.gravite)}`}>
                         <div className="flex items-start justify-between mb-3">
                           <div className="flex-1">
                             <div className="flex items-center gap-3 mb-2">
@@ -886,12 +757,10 @@ export default function SinistreDetail() {
                               Responsabilités engagées
                             </h4>
                             <ul className="space-y-1">
-                              {desordre.responsabilites.map((resp, idx) => (
-                                <li key={idx} className="text-sm text-gray-700 flex items-center gap-2">
+                              {desordre.responsabilites.map((resp, idx) => <li key={idx} className="text-sm text-gray-700 flex items-center gap-2">
                                   <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
                                   {resp}
-                                </li>
-                              ))}
+                                </li>)}
                             </ul>
                           </div>
                         </div>
@@ -916,8 +785,7 @@ export default function SinistreDetail() {
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      </div>)}
                   </div>
                 </CardContent>
               </Card>
@@ -944,8 +812,7 @@ export default function SinistreDetail() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {autresIntervenants.map((intervenant, index) => (
-                        <TableRow key={index}>
+                      {autresIntervenants.map((intervenant, index) => <TableRow key={index}>
                           <TableCell className="font-medium">
                             <div>
                               <p className="font-semibold text-gray-900">{intervenant.nom}</p>
@@ -976,8 +843,7 @@ export default function SinistreDetail() {
                               {getStatusText(intervenant.statusAssuranceDO)}
                             </Badge>
                           </TableCell>
-                        </TableRow>
-                      ))}
+                        </TableRow>)}
                     </TableBody>
                   </Table>
                 </CardContent>
@@ -995,8 +861,7 @@ export default function SinistreDetail() {
                 </CardHeader>
                 <CardContent className="pt-4">
                   <div className="space-y-6">
-                    {sinistresChantier.map((sinistre, index) => (
-                      <div key={sinistre.id} className="border border-gray-200 rounded-lg p-4 bg-white shadow-sm">
+                    {sinistresChantier.map((sinistre, index) => <div key={sinistre.id} className="border border-gray-200 rounded-lg p-4 bg-white shadow-sm">
                         <div className="flex items-center justify-between mb-4">
                           <div className="flex items-center gap-3">
                             <div>
@@ -1006,10 +871,7 @@ export default function SinistreDetail() {
                               </p>
                             </div>
                           </div>
-                          <Badge className={`${
-                            sinistre.statut === "En cours" ? "bg-orange-100 text-orange-800" : 
-                            sinistre.statut === "Fermé" ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"
-                          }`}>
+                          <Badge className={`${sinistre.statut === "En cours" ? "bg-orange-100 text-orange-800" : sinistre.statut === "Fermé" ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"}`}>
                             {sinistre.statut}
                           </Badge>
                         </div>
@@ -1020,12 +882,10 @@ export default function SinistreDetail() {
                             Garanties et reste à payer
                           </h4>
                           {sinistre.garanties.map((garantie, gIndex) => {
-                            const pourcentageUtilise = (garantie.engage + garantie.reserve) / garantie.plafond * 100;
-                            const pourcentageEngage = garantie.engage / garantie.plafond * 100;
-                            const pourcentageReserve = garantie.reserve / garantie.plafond * 100;
-                            
-                            return (
-                              <div key={gIndex} className="bg-gray-50 rounded-lg p-4">
+                        const pourcentageUtilise = (garantie.engage + garantie.reserve) / garantie.plafond * 100;
+                        const pourcentageEngage = garantie.engage / garantie.plafond * 100;
+                        const pourcentageReserve = garantie.reserve / garantie.plafond * 100;
+                        return <div key={gIndex} className="bg-gray-50 rounded-lg p-4">
                                 <div className="flex items-center justify-between mb-3">
                                   <h5 className="font-medium text-gray-900">{garantie.nom}</h5>
                                   <div className="text-right">
@@ -1040,21 +900,16 @@ export default function SinistreDetail() {
                                 
                                 <div className="space-y-2">
                                   <div className="relative h-4 bg-gray-200 rounded-full overflow-hidden">
-                                    <div 
-                                      className="absolute left-0 h-full bg-red-500"
-                                      style={{ width: `${pourcentageEngage}%` }}
-                                    ></div>
-                                    <div 
-                                      className="absolute h-full bg-orange-500"
-                                      style={{ 
-                                        left: `${pourcentageEngage}%`,
-                                        width: `${pourcentageReserve}%` 
-                                      }}
-                                    ></div>
-                                    <div 
-                                      className="absolute right-0 h-full bg-green-500"
-                                      style={{ width: `${100 - pourcentageUtilise}%` }}
-                                    ></div>
+                                    <div className="absolute left-0 h-full bg-red-500" style={{
+                                width: `${pourcentageEngage}%`
+                              }}></div>
+                                    <div className="absolute h-full bg-orange-500" style={{
+                                left: `${pourcentageEngage}%`,
+                                width: `${pourcentageReserve}%`
+                              }}></div>
+                                    <div className="absolute right-0 h-full bg-green-500" style={{
+                                width: `${100 - pourcentageUtilise}%`
+                              }}></div>
                                   </div>
                                   
                                   <div className="flex items-center justify-between text-xs">
@@ -1083,12 +938,10 @@ export default function SinistreDetail() {
                                     </span>
                                   </div>
                                 </div>
-                              </div>
-                            );
-                          })}
+                              </div>;
+                      })}
                         </div>
-                      </div>
-                    ))}
+                      </div>)}
                   </div>
                   
                   <div className="mt-6 p-4 bg-blue-50 rounded-lg">
@@ -1104,25 +957,19 @@ export default function SinistreDetail() {
                       <div className="text-center">
                         <p className="text-sm font-medium text-red-600">Total engagé</p>
                         <p className="text-xl font-bold text-red-700">
-                          {sinistresChantier.reduce((acc, s) => 
-                            acc + s.garanties.reduce((gAcc, g) => gAcc + g.engage, 0), 0
-                          ).toLocaleString()} €
+                          {sinistresChantier.reduce((acc, s) => acc + s.garanties.reduce((gAcc, g) => gAcc + g.engage, 0), 0).toLocaleString()} €
                         </p>
                       </div>
                       <div className="text-center">
                         <p className="text-sm font-medium text-orange-600">Total réserves</p>
                         <p className="text-xl font-bold text-orange-700">
-                          {sinistresChantier.reduce((acc, s) => 
-                            acc + s.garanties.reduce((gAcc, g) => gAcc + g.reserve, 0), 0
-                          ).toLocaleString()} €
+                          {sinistresChantier.reduce((acc, s) => acc + s.garanties.reduce((gAcc, g) => gAcc + g.reserve, 0), 0).toLocaleString()} €
                         </p>
                       </div>
                       <div className="text-center">
                         <p className="text-sm font-medium text-green-600">Reste disponible</p>
                         <p className="text-xl font-bold text-green-700">
-                          {sinistresChantier.reduce((acc, s) => 
-                            acc + s.garanties.reduce((gAcc, g) => gAcc + g.resteAPayer, 0), 0
-                          ).toLocaleString()} €
+                          {sinistresChantier.reduce((acc, s) => acc + s.garanties.reduce((gAcc, g) => gAcc + g.resteAPayer, 0), 0).toLocaleString()} €
                         </p>
                       </div>
                     </div>
@@ -1226,15 +1073,13 @@ export default function SinistreDetail() {
                         Activités déclarées dans le sinistre
                       </h4>
                       <div className="space-y-2">
-                        {activitesAnalysis.declared.map((activity, index) => (
-                          <div key={index} className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
+                        {activitesAnalysis.declared.map((activity, index) => <div key={index} className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
                             <div className="flex items-center gap-2">
                               {getActivityStatusIcon(activity.status, activity.coverage)}
                               <span className="text-sm font-medium text-gray-900">{activity.activity}</span>
                             </div>
                             <Badge className="bg-green-100 text-green-800 text-xs">Couvert</Badge>
-                          </div>
-                        ))}
+                          </div>)}
                       </div>
                     </div>
 
@@ -1244,21 +1089,15 @@ export default function SinistreDetail() {
                         Activités garanties au contrat
                       </h4>
                       <div className="space-y-2">
-                        {activitesAnalysis.guaranteed.map((activity, index) => (
-                          <div key={index} className={`flex items-center justify-between p-3 rounded-lg border ${
-                            activity.coverage === "active" ? "bg-blue-50 border-blue-200" : "bg-gray-50 border-gray-200"
-                          }`}>
+                        {activitesAnalysis.guaranteed.map((activity, index) => <div key={index} className={`flex items-center justify-between p-3 rounded-lg border ${activity.coverage === "active" ? "bg-blue-50 border-blue-200" : "bg-gray-50 border-gray-200"}`}>
                             <div className="flex items-center gap-2">
                               {getActivityStatusIcon(activity.status, activity.coverage)}
                               <span className="text-sm font-medium text-gray-900">{activity.activity}</span>
                             </div>
-                            <Badge className={`text-xs ${
-                              activity.coverage === "active" ? "bg-blue-100 text-blue-800" : "bg-gray-100 text-gray-600"
-                            }`}>
+                            <Badge className={`text-xs ${activity.coverage === "active" ? "bg-blue-100 text-blue-800" : "bg-gray-100 text-gray-600"}`}>
                               {activity.coverage === "active" ? "Mobilisée" : "Disponible"}
                             </Badge>
-                          </div>
-                        ))}
+                          </div>)}
                       </div>
                     </div>
                   </div>
@@ -1297,8 +1136,7 @@ export default function SinistreDetail() {
                 </CardHeader>
                 <CardContent className="pt-6">
                   <div className="space-y-4">
-                    {dossiersAssocies.map((dossier, index) => (
-                      <div key={dossier.id} className="border border-gray-200 rounded-lg p-4 bg-white shadow-sm">
+                    {dossiersAssocies.map((dossier, index) => <div key={dossier.id} className="border border-gray-200 rounded-lg p-4 bg-white shadow-sm">
                         <div className="flex items-center justify-between mb-3">
                           <div className="flex items-center gap-3">
                             <div>
@@ -1329,29 +1167,22 @@ export default function SinistreDetail() {
                           </div>
                         </div>
 
-                        {dossier.probabilite >= 80 && (
-                          <div className="mt-3 p-3 bg-red-50 rounded border-l-4 border-red-500">
+                        {dossier.probabilite >= 80 && <div className="mt-3 p-3 bg-red-50 rounded border-l-4 border-red-500">
                             <p className="text-sm text-red-800">
                               <strong>Risque élevé :</strong> Surveillance active recommandée. Constitution de provision conseillée.
                             </p>
-                          </div>
-                        )}
-                        {dossier.probabilite >= 60 && dossier.probabilite < 80 && (
-                          <div className="mt-3 p-3 bg-orange-50 rounded border-l-4 border-orange-500">
+                          </div>}
+                        {dossier.probabilite >= 60 && dossier.probabilite < 80 && <div className="mt-3 p-3 bg-orange-50 rounded border-l-4 border-orange-500">
                             <p className="text-sm text-orange-800">
                               <strong>Risque modéré :</strong> Suivi régulier nécessaire. Évaluation périodique du risque.
                             </p>
-                          </div>
-                        )}
-                        {dossier.probabilite < 60 && (
-                          <div className="mt-3 p-3 bg-green-50 rounded border-l-4 border-green-500">
+                          </div>}
+                        {dossier.probabilite < 60 && <div className="mt-3 p-3 bg-green-50 rounded border-l-4 border-green-500">
                             <p className="text-sm text-green-800">
                               <strong>Risque faible :</strong> Surveillance de routine suffisante.
                             </p>
-                          </div>
-                        )}
-                      </div>
-                    ))}
+                          </div>}
+                      </div>)}
                   </div>
 
                   <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border border-blue-200">
@@ -1393,43 +1224,28 @@ export default function SinistreDetail() {
                 </CardHeader>
                 <CardContent className="pt-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <Button
-                      variant="destructive"
-                      className="flex items-center gap-2 h-12"
-                      onClick={() => {
-                        console.log("Supprimer le sinistre");
-                      }}
-                    >
+                    <Button variant="destructive" className="flex items-center gap-2 h-12" onClick={() => {
+                    console.log("Supprimer le sinistre");
+                  }}>
                       <Trash className="w-4 h-4" />
                       Supprimer
                     </Button>
                     
-                    <Button
-                      variant="outline"
-                      className="flex items-center gap-2 h-12"
-                      onClick={() => {
-                        console.log("Transférer à une autre équipe");
-                      }}
-                    >
+                    <Button variant="outline" className="flex items-center gap-2 h-12" onClick={() => {
+                    console.log("Transférer à une autre équipe");
+                  }}>
                       <ArrowRight className="w-4 h-4" />
                       Transférer à une autre équipe
                     </Button>
                     
-                    <Button
-                      variant="secondary"
-                      className="flex items-center gap-2 h-12"
-                      onClick={() => {
-                        console.log("Prendre position");
-                      }}
-                    >
+                    <Button variant="secondary" className="flex items-center gap-2 h-12" onClick={() => {
+                    console.log("Prendre position");
+                  }}>
                       <CheckCircle className="w-4 h-4" />
                       Prendre position
                     </Button>
                     
-                    <Button
-                      className="flex items-center gap-2 h-12 bg-blue-600 hover:bg-blue-700"
-                      onClick={() => navigate('/sinistre/declaration')}
-                    >
+                    <Button className="flex items-center gap-2 h-12 bg-blue-600 hover:bg-blue-700" onClick={() => navigate('/sinistre/declaration')}>
                       <FolderOpen className="w-4 h-4" />
                       Ouvrir le sinistre
                     </Button>
@@ -1446,6 +1262,5 @@ export default function SinistreDetail() {
           </Tabs>
         </div>
       </main>
-    </div>
-  );
+    </div>;
 }
