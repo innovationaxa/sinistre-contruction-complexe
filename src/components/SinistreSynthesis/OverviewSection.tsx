@@ -2,14 +2,12 @@ import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { AlertTriangle, CheckCircle, Sparkles, Scale, Clock, TrendingUp, Bot, Info, FileText } from "lucide-react";
 import { ActeContentieux, AlerteIA, NextAction } from "@/types/sinistre";
-
 interface OverviewSectionProps {
   syntheseIA: string;
   actesContentieux: ActeContentieux[];
   alertesIA: AlerteIA[];
   nextActions: NextAction[];
 }
-
 export function OverviewSection({
   syntheseIA,
   actesContentieux,
@@ -26,7 +24,6 @@ export function OverviewSection({
         return <TrendingUp className="h-4 w-4 text-blue-600" />;
     }
   };
-
   const getAlertColor = (type: string) => {
     switch (type) {
       case "urgent":
@@ -37,7 +34,6 @@ export function OverviewSection({
         return "bg-blue-50";
     }
   };
-
   const getAlertExplanation = (id: number) => {
     switch (id) {
       case 1:
@@ -50,7 +46,6 @@ export function OverviewSection({
         return "Analyse automatique basée sur les données du dossier et les règles métier configurées.";
     }
   };
-
   const getPriorityColor = (priorite: string) => {
     switch (priorite) {
       case "haute":
@@ -63,31 +58,37 @@ export function OverviewSection({
   };
 
   // Données des sinistres antérieurs
-  const sinistresAnterieurs = [
-    {
-      annee: "2023",
-      garanties: [
-        { nom: "RC Décennale", montant: "12 000€", franchise: "500€" },
-        { nom: "Dommages Ouvrage", montant: "8 500€", franchise: "750€" }
-      ]
-    },
-    {
-      annee: "2022", 
-      garanties: [
-        { nom: "RC Décennale", montant: "15 200€", franchise: "500€" },
-        { nom: "RC Exploitation", montant: "3 400€", franchise: "300€" }
-      ]
-    },
-    {
-      annee: "2021",
-      garanties: [
-        { nom: "RC Décennale", montant: "9 800€", franchise: "500€" }
-      ]
-    }
-  ];
-
-  return (
-    <TooltipProvider>
+  const sinistresAnterieurs = [{
+    annee: "2023",
+    garanties: [{
+      nom: "RC Décennale",
+      montant: "12 000€",
+      franchise: "500€"
+    }, {
+      nom: "Dommages Ouvrage",
+      montant: "8 500€",
+      franchise: "750€"
+    }]
+  }, {
+    annee: "2022",
+    garanties: [{
+      nom: "RC Décennale",
+      montant: "15 200€",
+      franchise: "500€"
+    }, {
+      nom: "RC Exploitation",
+      montant: "3 400€",
+      franchise: "300€"
+    }]
+  }, {
+    annee: "2021",
+    garanties: [{
+      nom: "RC Décennale",
+      montant: "9 800€",
+      franchise: "500€"
+    }]
+  }];
+  return <TooltipProvider>
       <div className="space-y-6">
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
           <div className="flex items-center gap-2 mb-6">
@@ -177,42 +178,7 @@ export function OverviewSection({
         </div>
 
         {/* Nouvelle section - Sinistres antérieurs */}
-        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-          <div className="flex items-center gap-2 mb-6">
-            <div className="w-2 h-2 rounded-full bg-orange-500"></div>
-            <h2 className="text-lg font-semibold text-gray-900">Information sur les sinistres antérieurs</h2>
-            <div className="flex-1 h-px bg-gray-200 ml-4"></div>
-          </div>
-
-          <div className="space-y-4">
-            {sinistresAnterieurs.map((annee, index) => (
-              <div key={annee.annee} className="border border-gray-200 rounded-lg overflow-hidden">
-                <div className="bg-blue-50 px-4 py-2 border-b border-gray-200">
-                  <h3 className="font-semibold text-gray-900">Année {annee.annee}</h3>
-                </div>
-                
-                <div className="divide-y divide-gray-200">
-                  <div className="grid grid-cols-3 gap-4 px-4 py-2 bg-gray-50 font-medium text-sm text-gray-700">
-                    <div>Garantie</div>
-                    <div>Montant réglé par année et par garantie</div>
-                    <div>Montant de franchise réglé par l'assuré</div>
-                  </div>
-                  
-                  {annee.garanties.map((garantie, gIndex) => (
-                    <div key={gIndex} className="grid grid-cols-3 gap-4 px-4 py-3 text-sm">
-                      <div className="font-medium text-gray-900">{garantie.nom}</div>
-                      <div className="text-gray-700">{garantie.montant}</div>
-                      <div className={`font-medium ${gIndex === 0 && index === 0 ? 'bg-yellow-200' : ''} px-2 py-1 rounded`}>
-                        {garantie.franchise}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        
       </div>
-    </TooltipProvider>
-  );
+    </TooltipProvider>;
 }
