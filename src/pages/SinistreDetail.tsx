@@ -10,7 +10,6 @@ import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { ArrowLeft, FileText, User, Building, Calendar, AlertTriangle, Sparkles, Shield, Clock, TrendingUp, CheckCircle, Bot, Tag, FileCheck, Star, AlertCircle, Users, MapPin, Euro, Hammer, Brain, Target, Zap, Trash, ArrowRight, FolderOpen, Search, Eye } from "lucide-react";
 import { useState } from "react";
-import { SinistresAnterieurs } from "@/components/SinistreDetail/SinistresAnterieurs";
 
 interface SinistreData {
   id: string;
@@ -718,7 +717,52 @@ export default function SinistreDetail() {
                   </div>
                 </CardContent>
               </Card>
+            </TabsContent>
 
+            <TabsContent value="contrat" className="space-y-6">
+              {/* Section Informations sur le chantier */}
+              <Card className="border-blue-200">
+                <CardHeader className="pb-3 bg-blue-50">
+                  <CardTitle className="flex items-center gap-2 text-lg text-blue-800">
+                    <Building className="w-5 h-5" />
+                    Informations sur le chantier
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-4">
+                      <div className="flex justify-between py-2 border-b border-gray-100">
+                        <span className="text-sm font-medium text-gray-600">Nature de l'ouvrage:</span>
+                        <span className="text-sm text-gray-900">{sinistre.sinistre.typeChantier}</span>
+                      </div>
+                      <div className="flex justify-between py-2 border-b border-gray-100">
+                        <span className="text-sm font-medium text-gray-600">Coût de la construction:</span>
+                        <span className="text-sm text-gray-900">87 000 € HT</span>
+                      </div>
+                      <div className="flex justify-between py-2 border-b border-gray-100">
+                        <span className="text-sm font-medium text-gray-600">Montant du marché des travaux:</span>
+                        <span className="text-sm text-gray-900">87 000 € HT</span>
+                      </div>
+                    </div>
+                    <div className="space-y-4">
+                      <div className="flex justify-between py-2 border-b border-gray-100">
+                        <span className="text-sm font-medium text-gray-600">Code postal du chantier:</span>
+                        <span className="text-sm text-gray-900">69002</span>
+                      </div>
+                      <div className="flex justify-between py-2 border-b border-gray-100">
+                        <span className="text-sm font-medium text-gray-600">Adresse du chantier:</span>
+                        <span className="text-sm text-gray-900">{sinistre.sinistre.adresseTravaux}</span>
+                      </div>
+                      <div className="flex justify-between py-2 border-b border-gray-100">
+                        <span className="text-sm font-medium text-gray-600">Nature de l'intervention:</span>
+                        <span className="text-sm text-gray-900">Rénovation complète tous corps d'état</span>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Section Informations sur les désordres */}
               <Card className="border-orange-200">
                 <CardHeader className="pb-3 bg-orange-50">
                   <CardTitle className="flex items-center gap-2 text-lg text-orange-800">
@@ -773,9 +817,6 @@ export default function SinistreDetail() {
                   </div>
                 </CardContent>
               </Card>
-
-              {/* Nouvelle section Sinistres antérieurs */}
-              <SinistresAnterieurs />
             </TabsContent>
 
             <TabsContent value="documents" className="space-y-6">
