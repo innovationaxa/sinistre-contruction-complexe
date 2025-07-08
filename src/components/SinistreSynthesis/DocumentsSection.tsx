@@ -1,11 +1,12 @@
 
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DocumentViewer } from "./DocumentViewer";
-import { DocumentChat } from "./DocumentChat";
 import { DocumentSynthesis } from "./DocumentSynthesis";
-import { FileText, Download } from "lucide-react";
+import { FileText, Download, Search, Eye, FileImage, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 interface Document {
   id: string;
@@ -20,96 +21,166 @@ interface DocumentsSectionProps {
   documents: Document[];
 }
 
-export const DocumentsSection = ({
-  documents
-}: DocumentsSectionProps) => {
-  const [selectedDocument, setSelectedDocument] = useState<Document | null>(documents[0] || null);
-  const [isChatOpen, setIsChatOpen] = useState(false);
+export function DocumentsSection({ documents }: DocumentsSectionProps) {
+  const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredDocuments = documents.filter(doc => 
+    doc.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    doc.description.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const getFileIcon = (type: string) => {
+    switch (type.toLowerCase()) {
+      case 'pdf':
+        return <FileText className="h-5 w-5 text-red-600" />;
+      case 'jpg':
+      case 'jpeg':
+      case 'png':
+        return <FileImage className="h-5 w-5 text-blue-600" />;
+      default:
+        return <FileText className="h-5 w-5 text-gray-600" />;
+    }
+  };
+
+  // Données des sinistres antérieurs
+  const sinistresAnterieurs = [
+    {
+      annee: "2023",
+      garanties: [
+        { nom: "RC Décennale", montant: "12 000€", franchise: "500€" },
+        { nom: "Dommages Ouvrage", montant: "8 500€", franchise: "750€" }
+      ]
+    },
+    {
+      annee: "2022", 
+      garanties: [
+        { nom: "RC Décennale", montant: "15 200€", franchise: "500€" },
+        { nom: "RC Exploitation", montant: "3 400€", franchise: "300€" }
+      ]
+    },
+    {
+      annee: "2021",
+      garanties: [
+        { nom: "RC Décennale", montant: "9 800€", franchise: "500€" }
+      ]
+    }
+  ];
 
   return (
-    <div className="grid grid-cols-12 gap-6 min-h-[600px]">
-      {/* Liste des documents à gauche */}
-      <div className="col-span-3">
-        <Card className="h-fit">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-lg font-semibold">Documents ({documents.length})</CardTitle>
-          </CardHeader>
-          <CardContent className="p-0">
-            <div className="max-h-[500px] overflow-y-auto">
-              {documents.map(doc => (
+    <div className="space-y-6">
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
+        <div className="p-6 border-b border-gray-200">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+              <h2 className="text-lg font-semibold text-gray-900">Documents du dossier</h2>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="relative">
+                <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <Input
+                  placeholder="Rechercher un document..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10 w-64"
+                />
+              </div>
+              <Button variant="outline" size="sm">
+                <Filter className="h-4 w-4 mr-2" />
+                Filtrer
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        <Tabs defaultValue="liste" className="w-full">
+          <TabsList className="grid w-full grid-cols-3 bg-gray-50 m-0 rounded-none border-b">
+            <TabsTrigger value="liste">Liste des documents</TabsTrigger>
+            <TabsTrigger value="synthese">Chantier et désordre</TabsTrigger>
+            <TabsTrigger value="visionneuse">Visionneuse</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="liste" className="p-6">
+            <div className="space-y-3">
+              {filteredDocuments.map((doc) => (
                 <div
                   key={doc.id}
+                  className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
                   onClick={() => setSelectedDocument(doc)}
-                  className={`p-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 transition-colors ${
-                    selectedDocument?.id === doc.id ? 'bg-blue-50 border-l-4 border-l-blue-500' : ''
-                  }`}
                 >
-                  <div className="flex items-start gap-3">
-                    <div className="p-2 bg-red-100 rounded">
-                      <FileText className="w-4 h-4 text-red-600" />
+                  <div className="flex items-center gap-3">
+                    {getFileIcon(doc.type)}
+                    <div>
+                      <h3 className="font-medium text-gray-900">{doc.nom}</h3>
+                      <p className="text-sm text-gray-600">{doc.description}</p>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-medium text-sm text-gray-900 truncate">{doc.nom}</h4>
-                      <p className="text-xs text-gray-600 mt-1">{doc.description}</p>
-                      <div className="flex justify-between items-center mt-2">
-                        <span className="text-xs text-gray-500">Modifié le {doc.dateModification}</span>
-                        <span className="text-xs text-gray-500">{doc.taille}</span>
-                      </div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <div className="text-right">
+                      <p className="text-sm text-gray-600">{doc.dateModification}</p>
+                      <p className="text-xs text-gray-500">{doc.taille}</p>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button variant="ghost" size="sm">
+                        <Eye className="h-4 w-4" />
+                      </Button>
+                      <Button variant="ghost" size="sm">
+                        <Download className="h-4 w-4" />
+                      </Button>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
-          </CardContent>
-        </Card>
-      </div>
+          </TabsContent>
 
-      {/* Visionneuse au centre */}
-      <div className="col-span-6">
-        <Card className="h-fit min-h-[600px]">
-          <CardHeader className="pb-3 border-b">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-lg font-semibold">
-                {selectedDocument ? selectedDocument.nom : 'Sélectionnez un document'}
-              </CardTitle>
-              <div className="flex items-center gap-2">
-                {selectedDocument && (
-                  <Button variant="outline" size="sm">
-                    <Download className="w-4 h-4 mr-2" />
-                    Télécharger
-                  </Button>
-                )}
+          <TabsContent value="synthese" className="p-6 space-y-6">
+            <DocumentSynthesis />
+            
+            {/* Section Sinistres antérieurs */}
+            <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+              <div className="flex items-center gap-2 mb-6">
+                <div className="w-2 h-2 rounded-full bg-orange-500"></div>
+                <h2 className="text-lg font-semibold text-gray-900">Information sur les sinistres antérieurs</h2>
+                <div className="flex-1 h-px bg-gray-200 ml-4"></div>
+              </div>
+
+              <div className="space-y-4">
+                {sinistresAnterieurs.map((annee, index) => (
+                  <div key={annee.annee} className="border border-gray-200 rounded-lg overflow-hidden">
+                    <div className="bg-blue-50 px-4 py-2 border-b border-gray-200">
+                      <h3 className="font-semibold text-gray-900">Année {annee.annee}</h3>
+                    </div>
+                    
+                    <div className="divide-y divide-gray-200">
+                      <div className="grid grid-cols-3 gap-4 px-4 py-2 bg-gray-50 font-medium text-sm text-gray-700">
+                        <div>Garantie</div>
+                        <div>Montant réglé par année et par garantie</div>
+                        <div>Montant de franchise réglé par l'assuré</div>
+                      </div>
+                      
+                      {annee.garanties.map((garantie, gIndex) => (
+                        <div key={gIndex} className="grid grid-cols-3 gap-4 px-4 py-3 text-sm">
+                          <div className="font-medium text-gray-900">{garantie.nom}</div>
+                          <div className="text-gray-700">{garantie.montant}</div>
+                          <div className={`font-medium ${gIndex === 0 && index === 0 ? 'bg-yellow-200' : ''} px-2 py-1 rounded`}>
+                            {garantie.franchise}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
-          </CardHeader>
-          <CardContent className="p-0 min-h-[550px]">
-            {selectedDocument ? (
-              <DocumentViewer document={selectedDocument} />
-            ) : (
-              <div className="flex items-center justify-center h-full text-gray-500">
-                <div className="text-center">
-                  <FileText className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-                  <p>Sélectionnez un document pour le visualiser</p>
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
+          </TabsContent>
 
-      {/* Synthèse IA à droite */}
-      <div className="col-span-3">
-        <DocumentSynthesis document={selectedDocument} />
+          <TabsContent value="visionneuse" className="p-6">
+            <DocumentViewer selectedDocument={selectedDocument} />
+          </TabsContent>
+        </Tabs>
       </div>
-
-      {/* Chat IA modal/overlay */}
-      {isChatOpen && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl h-[600px]">
-            <DocumentChat document={selectedDocument} onClose={() => setIsChatOpen(false)} />
-          </div>
-        </div>
-      )}
     </div>
   );
-};
+}
