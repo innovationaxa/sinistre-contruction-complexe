@@ -20,7 +20,8 @@ import {
   Sparkles,
   Search,
   FileIcon,
-  Download
+  Download,
+  Clock
 } from "lucide-react";
 import { DocumentViewer } from "@/components/SinistreDetail/DocumentViewer";
 
@@ -220,6 +221,22 @@ const SinistreDetail = () => {
                         {alerte.message} ({alerte.type})
                       </li>
                     ))}
+                  </ul>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="pb-3 bg-blue-50">
+                  <CardTitle className="flex items-center gap-2 text-lg text-blue-800">
+                    <Clock className="w-5 h-5" />
+                    Dates clés
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-4">
+                  <ul>
+                    <li>Ouverture: 15/03/2024</li>
+                    <li>Expertise: 22/03/2024</li>
+                    <li>Consolidation: 15/04/2024</li>
+                    <li>Clôture: 30/04/2024</li>
                   </ul>
                 </CardContent>
               </Card>
